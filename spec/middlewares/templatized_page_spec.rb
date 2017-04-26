@@ -1,0 +1,69 @@
+require 'spec_helper'
+
+RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
+
+  let(:resource)            { nil }
+  let(:customer)            { nil }
+  let(:template)            { nil }
+  let(:site)                { instance_double('Site') }
+  let(:page)                { instance_double('Page', not_found?: true) }
+  let(:services)            { instance_double('Services', page_finder: page_finder_service) }
+  let(:page_finder_service) { instance_double('PageFinder', by_handle: template) }
+  let(:algolia_service)     { instance_double('AlgoliaService', find_by_key_among_indices: resource) }
+  let(:services)            { instance_double('Services', page_finder: page_finder_service, algolia: algolia_service) }
+  let(:app)                 { ->(env) { [200, env] } }
+  let(:middleware)          { described_class.new(app) }
+
+  subject do
+    env = env_for('http://models.example.com', {
+      'steam.services'        => services,
+      'steam.site'            => site,
+      'steam.page'            => page,
+      'steam.path'            => 'algolia-product-or-category-key',
+      'steam.locale'          => 'fr',
+      'steam.liquid_assigns'  => {},
+      'authenticated_entry'   => customer
+    })
+    code, env = middleware.call(env)
+    env
+  end
+
+  context 'the resource exists' do
+
+    let(:template)  { instance_double('Template', title: 'Category template', not_found?: false) }
+    let(:resource)  { {
+      name:     'category',
+      template: 'category',
+      data: { 'name' => 'Téléphones Portables et Tablettes' }
+    } }
+
+    it 'assigns the category in liquid' do
+      expect(subject['steam.liquid_assigns'].dig('category', 'name')).to eq('Téléphones Portables et Tablettes')
+    end
+
+    it 'finds the page used as a template' do
+      expect(subject['steam.page'].title).to eq 'Category template'
+      expect(subject['steam.page'].not_found?).to eq false
+    end
+
+    context "the template doesn't exist" do
+
+      let(:template) { nil }
+
+      it 'renders the 404 page' do
+        expect(subject['steam.page'].not_found?).to eq true
+      end
+
+    end
+
+  end
+
+  context "the resource doesn't exist" do
+
+    it 'renders the 404 page' do
+      expect(subject['steam.page'].not_found?).to eq true
+    end
+
+  end
+
+end
