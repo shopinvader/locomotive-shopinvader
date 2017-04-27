@@ -13,7 +13,10 @@ module ShopInvader
 
             # replace the 404 page by the right (product/category/...) template
             if page = page_finder.by_handle(resource[:template])
+              log "Found page \"#{page.title}\" [#{page.fullpath}]"
               env['steam.page'] = page
+            else
+              log "Unknown template #{resource[:template]} for the Algolia resource"
             end
           end
         end
