@@ -1,38 +1,88 @@
 # ShopInvader
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/wagon_shop_invader`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
-
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your Wagon site's Gemfile:
 
 ```ruby
-gem 'wagon_shop_invader'
+group :misc do
+  gem 'shop_invader', path: '<local version of the ShopInvader gem>'
+end
 ```
+
+**Very important**. Use the very last commits of both Wagon and Steam.
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
+Modify the `config/site.yml` to include Algolia's settings:
 
-    $ gem install wagon_shop_invader
+```
+metafields:
+  algolia:
+    application_id: '<YOUR ALGOLIA APPLICATION ID>'
+    api_key: '<YOUR ALGOLIA API KEY>'
+    public_role: >
+      [
+        { "name": "category", "index": "category", "template_handle": "category" },
+        { "name": "product", "index": "public_tax_inc", "template_handle": "product" }
+      ]
+
+```
+
+**Notes:**
+
+- your customer content type should have a role attribute (possible values: public, pro, ...etc).
+- the template_handle is not required. If blank, the name attribute will be used as the template handle.
+- put the product/category/... templates in the `app/views/templates` folder.
 
 ## Usage
 
-TODO: Write usage instructions here
+### Templatized page
 
-## Development
+If you request the http://mysite.com/<URL_KEY> page and no Locomotive page matches this url, then the gem will look for Algolia resources based on their `url_key` and `redirect_url_key` properties.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+- if Algolia returns a category, a `category` liquid global variable will be available in the liquid template.
+- if Algolia returns a product, a `product` liquid global variable will be available in the liquid template.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+### Liquid
+
+#### List all the categories
+
+```liquid
+{% for category in store.category %}
+  <h2>{{ category.name }}</h2>
+{% endfor %}
+```
+
+#### List the products and filter them
+
+```liquid
+{% with_scope rating_value.gt: 4.7 %}
+  {% for product in store.product %}
+    <h2>{{ product.name }}</h2>
+  {% endfor %}
+{% endwith_scope %}
+```
+
+#### Paginate a list of products belonging to a category
+
+```liquid
+{% with_scope categories_ids: [category.objectID] %}
+  {% paginate store.product by 3 %}
+    {% for product in paginate.collection %}
+      <h2>{{ product.name }}</h2>
+      <img src="{{ product.images.first.medium }}" />
+      {{ product.short_description }}
+    {% endfor %}
+  {% endpaginate %}
+{% endwith_scope %}
+```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/did/wagon_shop_invader.
+Bug reports and pull requests are welcome on GitHub at https://github.com/did/shop_invader.
 
 
 ## License
