@@ -30,7 +30,7 @@ RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
 
   context 'the resource exists' do
 
-    let(:template)  { instance_double('Template', title: 'Category template', not_found?: false) }
+    let(:template)  { instance_double('Template', title: 'Category template', not_found?: false, fullpath: '/template/category') }
     let(:resource)  { {
       name:     'category',
       template: 'category',

@@ -35,6 +35,8 @@ RSpec.describe ShopInvader::AlgoliaService do
         expect(subject[:size]).to eq(15)
       end
 
+    end
+
     describe 'filtering by many attributes (numeric and facet filters)' do
 
       let(:conditions) { { 'rating_value' => 5, 'categories_ids.in' => [590, 588] } }

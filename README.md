@@ -35,7 +35,7 @@ metafields:
 
 - your customer content type should have a role attribute (possible values: public, pro, ...etc).
 - the template_handle is not required. If blank, the name attribute will be used as the template handle.
-- put the product/category/... templates in the `app/views/templates` folder.
+- put the product/category/... templates in the `app/views/pages/templates` folder.
 
 ## Usage
 
