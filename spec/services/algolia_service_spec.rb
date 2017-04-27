@@ -14,6 +14,39 @@ RSpec.describe ShopInvader::AlgoliaService do
   let(:locale)    { 'fr' }
   let(:service)   { described_class.new(site, customer, locale) }
 
+  describe '#find_all' do
+
+    let(:roles)       { { 'public_role' => '[{ "name": "product", "index": "public_tax_inc", "template_handle": "product" }]' } }
+    let(:name)        { 'product' }
+    let(:conditions)  { nil }
+
+    subject { service.find_all(name, conditions: conditions) }
+
+    it 'returns the first 20 items by default' do
+      expect(subject[:data].size).to eq(20)
+      expect(subject[:size]).to eq(198)
+    end
+
+    describe 'filtering by one attribute' do
+
+      let(:conditions) { { 'categories_ids.in' => [590, 588] } }
+
+      it 'returns a list filtered by the conditions' do
+        expect(subject[:size]).to eq(15)
+      end
+
+    describe 'filtering by many attributes (numeric and facet filters)' do
+
+      let(:conditions) { { 'rating_value' => 5, 'categories_ids.in' => [590, 588] } }
+
+      it 'returns a list filtered by the conditions' do
+        expect(subject[:size]).to eq(2)
+      end
+
+    end
+
+  end
+
   describe '#find_by_key_among_indices' do
 
     subject { service.find_by_key_among_indices(key) }
