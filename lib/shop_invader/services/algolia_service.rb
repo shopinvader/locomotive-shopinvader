@@ -73,6 +73,7 @@ module ShopInvader
 
     def build_index(settings)
       name  = settings['index']
+      Locomotive::Common::Logger.debug "[Algolia] build index #{@locale}_#{name}"
       index = Algolia::Index.new("#{@locale}_#{name}", @client)
     end
 
