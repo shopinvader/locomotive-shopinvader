@@ -49,7 +49,7 @@ describe ShopInvader::Liquid::Drops::AlgoliaCollection do
     it 'calls the algolia service to get a paginated list' do
       expect(services.algolia).to receive(:find_all).with('product',
         conditions: nil,
-        page: 1,
+        page: 0,
         per_page: 4).and_return('paginated list')
       is_expected.to eq('paginated list')
     end

@@ -24,10 +24,10 @@ module ShopInvader
           fetch_collection(page: page, per_page: per_page)
         end
 
-        def fetch_collection(page: 0, per_page: 20)
+        def fetch_collection(page: 1, per_page: 20)
           service.find_all(@name,
             conditions: @context['with_scope'],
-            page:       page,
+            page:       page.to_i - 1,
             per_page:   per_page
           )
         end

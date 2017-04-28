@@ -54,10 +54,20 @@ module ShopInvader
         restrictSearchableAttributes: KEY_ATTRIBUTES
       })
 
-      response['hits'].detect do |hit|
-        hit['url_key'] == key ||
-        (hit['redirect_url_key'] || []).include?(key)
+      resource = nil
+
+      # look for the main product/category AND its variants
+      response['hits'].each do |hit|
+        next if hit['url_key'] != key && !(hit['redirect_url_key'] || []).include?(key)
+
+        if hit['url_key'] == key && resource.nil?
+          resource = hit
+        else
+          (resource['variants'] ||= []) << hit
+        end
       end
+
+      resource
     end
 
     def find_index(name)

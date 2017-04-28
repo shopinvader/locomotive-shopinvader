@@ -29,20 +29,20 @@ RSpec.describe ShopInvader::AlgoliaService do
 
     describe 'filtering by one attribute' do
 
-      let(:conditions) { { 'categories_ids.in' => [590, 588] } }
+      let(:conditions) { { 'categories_ids.in' => [590, 588], 'main' => true } }
 
       it 'returns a list filtered by the conditions' do
-        expect(subject[:size]).to eq(15)
+        expect(subject[:size]).to eq(3)
       end
 
     end
 
     describe 'filtering by many attributes (numeric and facet filters)' do
 
-      let(:conditions) { { 'rating_value' => 5, 'categories_ids.in' => [590, 588] } }
+      let(:conditions) { { 'rating_value' => 5, 'categories_ids.in' => [590, 588], 'main' => true } }
 
       it 'returns a list filtered by the conditions' do
-        expect(subject[:size]).to eq(2)
+        expect(subject[:size]).to eq(1)
       end
 
     end
@@ -103,6 +103,12 @@ RSpec.describe ShopInvader::AlgoliaService do
         expect(subject.dig(:data, 'name')).to eq('Adaptateur Prise Anglaise')
         expect(subject.dig(:data, 'url_key')).to eq('adaptateur-prise-anglaise-us-tronic')
         expect(subject.dig(:data, 'pricelist', 'values')[0]['price']).to eq(14.91)
+      end
+
+      it 'returns the variants of the product' do
+        expect(subject.dig(:data, 'variants').size).to eq 6
+        expect(subject.dig(:data, 'variants')[0]['name']).to eq 'Adaptateur Prise Anglaise'
+        expect(subject.dig(:data, 'variants')[0]['objectID']).not_to eq subject.dig(:data, 'objectID')
       end
 
       context 'the customer is a PRO' do

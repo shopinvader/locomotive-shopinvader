@@ -85,8 +85,10 @@ If you request the http://mysite.com/<URL_KEY> page and no Locomotive page match
 - [x] redirect 301 (redirect_url_key)
 - [] attach variants to a product (same url_key)
 - [] different routes to display a product or a category
+- [] liquid helper to build the path to a product or a category
 - [] ERP proxy
 - [] ERP liquid tags/drops/filters
+- [] explain in the README how to set up the different indices in Algolia (Sebastien)
 
 ## Contributing
 
