@@ -15,16 +15,7 @@ RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
   let(:middleware)          { described_class.new(app) }
 
   subject do
-    env = env_for('http://models.example.com', {
-      'steam.services'        => services,
-      'steam.site'            => site,
-      'steam.page'            => page,
-      'steam.path'            => 'algolia-product-or-category-key',
-      'steam.locale'          => 'fr',
-      'steam.liquid_assigns'  => {},
-      'authenticated_entry'   => customer
-    })
-    code, env = middleware.call(env)
+    code, env = middleware.call(build_env)
     env
   end
 
@@ -56,6 +47,29 @@ RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
 
     end
 
+    context 'the path matches one of the redirect_url_key but not the url_key itself' do
+
+      let(:resource)  { {
+        name:     'category',
+        template: 'category',
+        data: {
+          'name'    => 'Téléphones Portables et Tablettes',
+          'url_key' => 'new-algolia-product-or-category-key',
+          'redirect_url_key' => ['algolia-product-or-category-key']
+        }
+      } }
+
+      subject do
+        code, env = middleware.call(build_env)
+        [code, env['Location']]
+      end
+
+      it 'redirects to the url_key (301)' do
+        is_expected.to eq [301, '/new-algolia-product-or-category-key']
+      end
+
+    end
+
   end
 
   context "the resource doesn't exist" do
@@ -64,6 +78,20 @@ RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
       expect(subject['steam.page'].not_found?).to eq true
     end
 
+  end
+
+  def build_env
+    env_for('http://models.example.com', {
+      'steam.services'        => services,
+      'steam.site'            => site,
+      'steam.page'            => page,
+      'steam.path'            => 'algolia-product-or-category-key',
+      'steam.locale'          => 'fr',
+      'steam.liquid_assigns'  => {},
+      'authenticated_entry'   => customer
+    }).tap do |env|
+      env['steam.request'] = Rack::Request.new(env)
+    end
   end
 
 end

@@ -80,6 +80,14 @@ If you request the http://mysite.com/<URL_KEY> page and no Locomotive page match
 {% endwith_scope %}
 ```
 
+## TODO
+
+- [x] redirect 301 (redirect_url_key)
+- [] attach variants to a product (same url_key)
+- [] different routes to display a product or a category
+- [] ERP proxy
+- [] ERP liquid tags/drops/filters
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/did/shop_invader.
