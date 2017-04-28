@@ -19,7 +19,7 @@ module ShopInvader
           if is_algolia_collection?(meth)
             AlgoliaCollection.new(meth)
           else
-            nil
+            ErpCollection.new(meth)
           end
         end
 

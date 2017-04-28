@@ -6,10 +6,13 @@ require 'shop_invader/version'
 require 'shop_invader/steam_patches'
 require 'shop_invader/services'
 require 'shop_invader/services/algolia_service'
+require 'shop_invader/services/erp_service'
 require 'shop_invader/middlewares/templatized_page'
+require 'shop_invader/middlewares/erp_proxy'
 require 'shop_invader/middlewares/store'
-
 require_relative_all %w(. drops filters tags), 'shop_invader/liquid'
+require 'byebug'
+require 'faraday'
 
 module ShopInvader
 
@@ -25,6 +28,7 @@ module ShopInvader
     Locomotive::Steam.configure do |config|
       config.middleware.insert_after Locomotive::Steam::Middlewares::TemplatizedPage, ShopInvader::Middlewares::TemplatizedPage
       config.middleware.insert_after ShopInvader::Middlewares::TemplatizedPage, ShopInvader::Middlewares::Store
+      config.middleware.insert_after Locomotive::Steam::Middlewares::Path, ShopInvader::Middlewares::ErpProxy
     end
   end
 
