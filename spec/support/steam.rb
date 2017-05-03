@@ -12,8 +12,10 @@ def build_services_for_algolia(application_id: '42', api_key: '42', roles: {})
   Locomotive::Steam::Services.build_instance(request)
 end
 
-def build_services_for_erp(api_url: 'http://models.example.com/shopinvader', api_key: '42')
-  request = instance_double('Request', env: {})
+def build_services_for_erp(api_url: 'http://models.example.com/shopinvader', api_key: '42', session: session)
+  request = instance_double('Request', env: {
+      'rack.session' => session,
+      })
   site    = instance_double('Site', metafields: {
     'erp' => {
       'api_url'  => api_url,

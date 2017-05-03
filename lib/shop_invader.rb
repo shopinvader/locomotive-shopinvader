@@ -11,7 +11,6 @@ require 'shop_invader/middlewares/templatized_page'
 require 'shop_invader/middlewares/erp_proxy'
 require 'shop_invader/middlewares/store'
 require_relative_all %w(. drops filters tags), 'shop_invader/liquid'
-require 'byebug'
 require 'faraday'
 
 module ShopInvader
