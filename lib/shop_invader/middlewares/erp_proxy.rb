@@ -5,12 +5,14 @@ module ShopInvader
       include Locomotive::Steam::Middlewares::Helpers
 
       def _call
-        params = env['rack.request.form_hash']
-        puts params && params.include?('action_proxy')
         if params && params.include?('action_proxy')
-          method = env['REQUEST_METHOD']
+          if params.include?('action_method')
+            method = params.delete('action_method').upcase
+          else
+            method = env['REQUEST_METHOD']
+          end
           path = params.delete('action_proxy')
-          erp.call(env['REQUEST_METHOD'], path, params)
+          erp.call(method, path, params)
         end
       end
 

@@ -4,13 +4,17 @@ module ShopInvader
     attr_reader :session
 
     def initialize(site, session, customer, locale)
+      headers = {
+        api_key: site.metafields['erp']['api_key'],
+        lang: ShopInvader::LOCALES[locale.to_s]
+      }
+      if customer && customer.email
+          headers[:partner_email] = customer.email
+      end
       @site         = site
       @client       = Faraday.new(
                           url: site.metafields['erp']['api_url'],
-                          headers: {
-                              'API_KEY' => site.metafields['erp']['api_key'],
-                              'PARTNER_EMAIL' => customer && customer.email,
-                              'LANG' => ShopInvader::LOCALES[locale.to_s]})
+                          headers: headers)
       @session      = session
     end
 
@@ -24,7 +28,7 @@ module ShopInvader
         elsif method == 'PUT'
           response = client.put path, params
         elsif method == 'DELETE'
-          response = client.delete path
+          response = client.delete path, params
         end
         parse_response(response)
     end
@@ -52,7 +56,7 @@ module ShopInvader
       res = JSON.parse(response.body)
       if res.include?('set_session')
           res['set_session'].each do |key, val|
-            session['erp' + key] = val
+            session['erp_' + key] = val
           end
       end
       if res.include?('store_data')
@@ -66,10 +70,11 @@ module ShopInvader
         if session
           session.each do |key, val|
             if key.start_with?('erp_')
-                headers['SESS_' + key.sub('erp_', '')] = val.to_s
+                headers[('sess_' + key.sub('erp_', '')).to_sym] = val.to_s
             end
           end
        end
+
        headers
     end
 

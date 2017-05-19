@@ -18,7 +18,7 @@ module ShopInvader
 
         def collection
           if service.is_cached?(@name)
-            @collection ||= service.read_from_cache(@name)
+            @collection ||= service.read_from_cache(@name) || {}
           else
             @collection ||= fetch_collection[:data]
           end
