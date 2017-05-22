@@ -68,9 +68,9 @@ module ShopInvader
     def extract_session()
         headers = {}
         if session
-          session.each do |key, val|
+          session.keys.each do |key|
             if key.start_with?('erp_')
-                headers[('sess_' + key.sub('erp_', '')).to_sym] = val.to_s
+                headers[('sess_' + key.sub('erp_', '')).to_sym] = session[key].to_s
             end
           end
        end
