@@ -30,4 +30,8 @@ module ShopInvader
 
 end
 
-ShopInvader.setup
+# The Rails app must call the setup itself.
+unless defined?(Rails)
+  # context here: Wagon site
+  ShopInvader.setup
+end

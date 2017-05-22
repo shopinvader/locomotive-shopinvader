@@ -2,6 +2,8 @@
 
 ## Installation
 
+### Wagon
+
 Add this line to your Wagon site's Gemfile:
 
 ```ruby
@@ -36,6 +38,34 @@ metafields:
 - your customer content type should have a role attribute (possible values: public, pro, ...etc).
 - the template_handle is not required. If blank, the name attribute will be used as the template handle.
 - put the product/category/... templates in the `app/views/pages/templates` folder.
+
+### Locomotive Engine (Rails app)
+
+Add this line to your Rails app's Gemfile:
+
+```ruby
+gem 'shop_invader', path: '<local version of the ShopInvader gem>'
+```
+
+Inside your `config/application.rb` file, add the following lines.
+
+```ruby
+module MyApp
+  class Application < Rails::Application
+
+    ...
+
+    # Steam
+    initializer 'station.steam', after: 'steam' do |app|
+      Locomotive::Steam.configure do |config|
+        ShopInvader.setup
+      end
+    end
+
+    ...
+  end
+end
+```
 
 ## Usage
 
@@ -83,9 +113,11 @@ If you request the http://mysite.com/<URL_KEY> page and no Locomotive page match
 ## TODO
 
 - [x] redirect 301 (redirect_url_key)
-- [] attach variants to a product (same url_key)
+- [x] attach variants to a product (same url_key)
 - [] different routes to display a product or a category
 - [] liquid helper to build the path to a product or a category
+- [] replace AND by OR when searching for a product by a category
+- [] SEO
 - [] ERP proxy
 - [] ERP liquid tags/drops/filters
 - [] explain in the README how to set up the different indices in Algolia (Sebastien)

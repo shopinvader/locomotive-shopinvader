@@ -2,14 +2,22 @@ require 'spec_helper'
 
 RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
 
+  let(:metafields) { { 'algolia' => { 'routes' => <<-JSON
+      [
+        ["cart/*", { "index": "product", "template_handle": "product_in_cart" }],
+        ["*", { "index": "category", "tempate_handle": "category" } ],
+        ["*", { "index": "product", "tempate_handle": "product" } ]
+      ]
+    JSON
+  } } }
   let(:resource)            { nil }
   let(:customer)            { nil }
   let(:template)            { nil }
-  let(:site)                { instance_double('Site') }
+  let(:site)                { instance_double('Site', metafields: metafields) }
   let(:page)                { instance_double('Page', not_found?: true) }
   let(:services)            { instance_double('Services', page_finder: page_finder_service) }
   let(:page_finder_service) { instance_double('PageFinder', by_handle: template) }
-  let(:algolia_service)     { instance_double('AlgoliaService', find_by_key_among_indices: resource) }
+  let(:algolia_service)     { instance_double('AlgoliaService', find_by_key: resource) }
   let(:services)            { instance_double('Services', page_finder: page_finder_service, algolia: algolia_service) }
   let(:app)                 { ->(env) { [200, env] } }
   let(:middleware)          { described_class.new(app) }
@@ -22,11 +30,7 @@ RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
   context 'the resource exists' do
 
     let(:template)  { instance_double('Template', title: 'Category template', not_found?: false, fullpath: '/template/category') }
-    let(:resource)  { {
-      name:     'category',
-      template: 'category',
-      data: { 'name' => 'Téléphones Portables et Tablettes' }
-    } }
+    let(:resource)  { { 'name' => 'Téléphones Portables et Tablettes' } }
 
     it 'assigns the category in liquid' do
       expect(subject['steam.liquid_assigns'].dig('category', 'name')).to eq('Téléphones Portables et Tablettes')
@@ -50,13 +54,9 @@ RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
     context 'the path matches one of the redirect_url_key but not the url_key itself' do
 
       let(:resource)  { {
-        name:     'category',
-        template: 'category',
-        data: {
-          'name'    => 'Téléphones Portables et Tablettes',
-          'url_key' => 'new-algolia-product-or-category-key',
-          'redirect_url_key' => ['algolia-product-or-category-key']
-        }
+        'name'    => 'Téléphones Portables et Tablettes',
+        'url_key' => 'new-algolia-product-or-category-key',
+        'redirect_url_key' => ['algolia-product-or-category-key']
       } }
 
       subject do

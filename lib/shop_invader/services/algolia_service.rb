@@ -34,22 +34,13 @@ module ShopInvader
       { data: response['hits'], size: response['nbHits'] }
     end
 
-    def find_by_key_among_indices(key)
-      each_index do |index, settings|
-        if resource = find_by_key(index, key)
-          return {
-            name:     settings['name'].underscore,
-            data:     resource,
-            template: settings['template_handle'] || settings['name'].underscore
-          }
-        end
-      end
-      nil
+    def find_by_key(name, key)
+      _find_by_key(find_index(name), key)
     end
 
     private
 
-    def find_by_key(index, key)
+    def _find_by_key(index, key)
       response = index.search(key, {
         restrictSearchableAttributes: KEY_ATTRIBUTES
       })
@@ -73,12 +64,6 @@ module ShopInvader
     def find_index(name)
       settings = @indices.detect { |settings| settings['name'] == name }
       build_index(settings)
-    end
-
-    def each_index
-      @indices.each do |settings|
-        yield(build_index(settings), settings)
-      end
     end
 
     def build_index(settings)

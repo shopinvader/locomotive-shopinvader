@@ -22,9 +22,19 @@ module ShopInvader
 
       private
 
-      def redirect_to_main_variant?(resource)
-        _resource = resource[:data]
-        !_resource['url_key'].blank? && _resource['url_key'] != env['steam.path']
+      def find_resource
+        match_routes.each do |route|
+          rules = route.try(:last)
+
+          if rules && data = algolia.find_by_key(rules['index'], env['steam.path'])
+            return {
+              name:     rules['index'],
+              data:     data,
+              template: rules['template_handle'] || rules['index']
+            }
+          end
+        end
+        nil
       end
 
       def find_and_set_page(resource)
@@ -36,8 +46,18 @@ module ShopInvader
         end
       end
 
-      def find_resource
-        algolia.find_by_key_among_indices(env['steam.path'])
+      def redirect_to_main_variant?(resource)
+        _resource = resource[:data]
+        !_resource['url_key'].blank? && _resource['url_key'] != env['steam.path']
+      end
+
+      def match_routes
+        routes = JSON.parse(site.metafields.dig('algolia', 'routes'))
+
+        routes.find_all do |(path, _)|
+          regexp = Regexp.new("\\A#{path.gsub('*', '.*')}\\Z")
+          regexp.match(env['steam.path'])
+        end
       end
 
       def page_finder
