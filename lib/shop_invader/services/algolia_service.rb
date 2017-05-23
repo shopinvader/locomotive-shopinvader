@@ -16,9 +16,8 @@ module ShopInvader
     def initialize(site, customer, locale)
       @site         = site
       @customer     = customer
-      @role         = customer.try(:[], 'role') || 'public'
       @locale       = ShopInvader::LOCALES[locale.to_s]
-      @indices      = JSON.parse(site.metafields.dig('algolia', "#{@role}_role") || '[]')
+      @indices      = JSON.parse(site.metafields.dig('algolia', "indices") || '[]')
       @credentials  = site.metafields['algolia'].slice('application_id', 'api_key').symbolize_keys
       @client       = Algolia::Client.new(@credentials)
     end
@@ -41,17 +40,16 @@ module ShopInvader
     private
 
     def _find_by_key(index, key)
-      response = index.search(key, {
-        restrictSearchableAttributes: KEY_ATTRIBUTES
+      response = index.search('', {
+        filters: "(url_key:#{key} OR redirect_url_key:#{key})"
       })
-
       resource = nil
-
       # look for the main product/category AND its variants
       response['hits'].each do |hit|
-        next if hit['url_key'] != key && !(hit['redirect_url_key'] || []).include?(key)
+        hit['redirect_url_key'] ||= []
+        next if hit['url_key'] != key && !(hit['redirect_url_key']).include?(key)
 
-        if hit['url_key'] == key && resource.nil?
+        if hit['url_key'] == key || hit['redirect_url_key'].include?(key) && resource.nil?
           resource = hit
         else
           (resource['variants'] ||= []) << hit

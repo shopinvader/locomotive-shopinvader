@@ -4,12 +4,13 @@ RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
 
   let(:metafields) { { 'algolia' => { 'routes' => <<-JSON
       [
-        ["cart/*", { "index": "product", "template_handle": "product_in_cart" }],
-        ["*", { "index": "category", "tempate_handle": "category" } ],
-        ["*", { "index": "product", "tempate_handle": "product" } ]
+        ["cart/*", { "name": "product", "template_handle": "product_in_cart", "index": "products" }],
+        ["*", { "name": "category", "tempate_handle": "category", "index": "categories" } ],
+        ["*", { "name": "product", "tempate_handle": "product", "index": "products" } ]
       ]
     JSON
   } } }
+  let(:indices)             { [{ "name": "product", "index": "public_tax_inc"}] }
   let(:resource)            { nil }
   let(:customer)            { nil }
   let(:template)            { nil }

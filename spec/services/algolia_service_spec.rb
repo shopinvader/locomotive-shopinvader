@@ -2,12 +2,13 @@ require 'spec_helper'
 
 RSpec.describe ShopInvader::AlgoliaService do
 
-  let(:roles)       { {} }
+  let(:indices)       { '[]' }
   let(:metafields)  { {
     'algolia' => {
       'application_id'  => 'ID7BZRXF2I',
-      'api_key'         => 'ce69775382075f4a2ade09b0aa1b0277'
-    }.merge(roles)
+      'api_key'         => 'ce69775382075f4a2ade09b0aa1b0277',
+      'indices'         => indices,
+    }
   } }
   let(:site)      { instance_double('Site', metafields: metafields) }
   let(:customer)  { nil }
@@ -16,7 +17,7 @@ RSpec.describe ShopInvader::AlgoliaService do
 
   describe '#find_all' do
 
-    let(:roles)       { { 'public_role' => '[{ "name": "product", "index": "public_tax_inc", "template_handle": "product" }]' } }
+    let(:indices)       { '[{ "name": "product", "index": "public_tax_inc"}]' }
     let(:name)        { 'product' }
     let(:conditions)  { nil }
 
@@ -56,7 +57,7 @@ RSpec.describe ShopInvader::AlgoliaService do
     describe 'looking for a category' do
 
       let(:name)  { 'category' }
-      let(:roles) { { 'public_role' => '[{ "name": "category", "index": "category", "template_handle": "category-template" }]' } }
+      let(:indices) { '[{ "name": "category", "index": "category"}]' }
       let(:key)   { 'accessoires-telephones-portables-et-tablettes' }
 
       it 'returns an Algolia hit' do
@@ -89,14 +90,7 @@ RSpec.describe ShopInvader::AlgoliaService do
     describe 'looking for a product' do
 
       let(:name) { 'product' }
-      let(:roles) { {
-        'public_role' => '[
-          { "name": "product", "index": "public_tax_exc", "template_handle": "product" }
-        ]',
-        'pro_role' => '[
-          { "name": "product", "index": "pro_tax_exc", "template_handle": "product" }
-        ]'
-      } }
+      let(:indices) { '[{ "name": "product", "index": "public_tax_exc"}]' }
       let(:key) { 'adaptateur-prise-anglaise-us-tronic' }
 
       it 'returns the product' do

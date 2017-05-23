@@ -7,6 +7,7 @@ module ShopInvader
       def _call
         if env['steam.page'].not_found? && resource = find_resource
           if redirect_to_main_variant?(resource)
+            # TODO FIXME issue with local
             redirect_to('/' + resource[:data]['url_key'], 301)
             return
           end
@@ -14,7 +15,6 @@ module ShopInvader
           # the liquid template needs to have access
           # to either the product or the category
           liquid_assigns[resource[:name]] = resource[:data]
-
           # replace the 404 page by the right (product/category/...) template
           find_and_set_page(resource)
         end
@@ -28,9 +28,9 @@ module ShopInvader
 
           if rules && data = algolia.find_by_key(rules['index'], env['steam.path'])
             return {
-              name:     rules['index'],
+              name:     rules['name'],
               data:     data,
-              template: rules['template_handle'] || rules['index']
+              template: rules['template_handle'] || rules['name']
             }
           end
         end
