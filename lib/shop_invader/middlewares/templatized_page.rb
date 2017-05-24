@@ -38,7 +38,7 @@ module ShopInvader
       end
 
       def find_and_set_page(resource)
-        if page = page_finder.by_handle(resource[:template])
+        if page = page_finder.by_handle(resource[:template], false)
           log "Found page \"#{page.title}\" [#{page.fullpath}]"
           env['steam.page'] = page
         else
