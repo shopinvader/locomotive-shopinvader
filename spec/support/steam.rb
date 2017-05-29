@@ -1,10 +1,11 @@
-def build_services_for_algolia(application_id: '42', api_key: '42', roles: {})
+def build_services_for_algolia(application_id: '42', api_key: '42', indices: [])
   request = instance_double('Request', env: {})
   site    = instance_double('Site', metafields: {
     'algolia' => {
       'application_id'  => application_id,
-      'api_key'         => api_key
-    }.merge(roles)
+      'api_key'         => api_key,
+      'indices'         => indices
+    }
   })
 
   allow_any_instance_of(Locomotive::Steam::SiteFinderService).to receive(:find).and_return(site)
