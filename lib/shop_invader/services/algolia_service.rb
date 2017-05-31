@@ -70,11 +70,21 @@ module ShopInvader
       index = Algolia::Index.new("#{@locale}_#{name}", @client)
     end
 
+    def build_attr(name, value)
+       if value.is_a?(Hash)
+          key, val = value.first
+          name = "#{name}.#{key}"
+          build_attr(name, val)
+       else
+          [name, value]
+       end
+    end
+
     def build_params(conditions)
       { numericFilters: [], facetFilters: [] }.tap do |params|
         conditions.each do |key, value|
           name, op = key.split('.')
-
+          name, value = build_attr(name, value)
           if value.is_a?(Numeric)
             params[:numericFilters] << "#{name} #{NUMERIC_OPERATORS[op] || '='} #{value}"
           else
