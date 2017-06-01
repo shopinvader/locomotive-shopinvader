@@ -56,6 +56,7 @@ module ShopInvader
       response = index.search('', {
         filters: "(url_key:#{key} OR redirect_url_key:#{key})"
       })
+      response = _parse_response(response)
       resource = nil
       # look for the main product/category AND its variants
       response['hits'].each do |hit|
