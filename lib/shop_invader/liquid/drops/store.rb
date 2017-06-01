@@ -32,7 +32,6 @@ module ShopInvader
         end
 
         def is_algolia_collection?(name)
-          puts 'service', service.indices, name
           service.indices.any? { |index| index['name'] == name }
         end
 
