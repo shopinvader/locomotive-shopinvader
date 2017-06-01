@@ -29,7 +29,7 @@ module ShopInvader
           hitsPerPage:  per_page
         })
       )
-
+      response = _parse_response(response)
       { data: response['hits'], size: response['nbHits'] }
     end
 
@@ -38,6 +38,19 @@ module ShopInvader
     end
 
     private
+
+    def _parse_response(response)
+      if @customer
+        role = @customer.role
+      end
+      role ||= @site['metafields']['erp']['default_pricelist']
+      response['hits'].each do |hit|
+        if hit.include?('price')
+          hit['price'] = hit['price'][role]
+        end
+      end
+      response
+    end
 
     def _find_by_key(index, key)
       response = index.search('', {
