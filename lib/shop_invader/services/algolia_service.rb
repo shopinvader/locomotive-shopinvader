@@ -80,8 +80,8 @@ module ShopInvader
 
     def build_index(settings)
       name  = settings['index']
-      Locomotive::Common::Logger.debug "[Algolia] build index #{@locale}_#{name}"
-      index = Algolia::Index.new("#{@locale}_#{name}", @client)
+      Locomotive::Common::Logger.debug "[Algolia] build index #{name}_#{@locale}"
+      index = Algolia::Index.new("#{name}_#{@locale}", @client)
     end
 
     def build_attr(name, value)
