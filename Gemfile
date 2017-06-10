@@ -5,5 +5,7 @@ gemspec
 
 # gem 'locomotivecms_steam',  path: '/Users/didier/Documents/LocomotiveCMS/gems/steam'
 gem 'locomotivecms_steam', '~> 1.3.0.rc1'
+gem 'faraday'
 
 gem 'simplecov', require: false, group: :test
+gem 'byebug', require: false, group: :test

@@ -18,12 +18,18 @@ module ShopInvader
         def before_method(meth)
           if is_algolia_collection?(meth)
             AlgoliaCollection.new(meth)
+          elsif is_plural?(meth)
+            ErpCollection.new(meth)
           else
-            nil
+            ErpItem.new(meth)
           end
         end
 
         private
+
+        def is_plural?(value)
+            value.singularize != value
+        end
 
         def is_algolia_collection?(name)
           service.indices.any? { |index| index['name'] == name }

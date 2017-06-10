@@ -16,9 +16,8 @@ module ShopInvader
     def initialize(site, customer, locale)
       @site         = site
       @customer     = customer
-      @role         = customer.try(:[], 'role') || 'public'
       @locale       = ShopInvader::LOCALES[locale.to_s]
-      @indices      = JSON.parse(site.metafields.dig('algolia', "#{@role}_role") || '[]')
+      @indices      = JSON.parse(site.metafields.dig('algolia', "indices") || '[]')
       @credentials  = site.metafields['algolia'].slice('application_id', 'api_key').symbolize_keys
       @client       = Algolia::Client.new(@credentials)
     end
@@ -30,7 +29,7 @@ module ShopInvader
           hitsPerPage:  per_page
         })
       )
-
+      response = _parse_response(response)
       { data: response['hits'], size: response['nbHits'] }
     end
 
@@ -40,18 +39,31 @@ module ShopInvader
 
     private
 
+    def _parse_response(response)
+      if @customer
+        role = @customer.role
+      end
+      role ||= @site['metafields']['erp']['default_pricelist']
+      response['hits'].each do |hit|
+        if hit.include?('price')
+          hit['price'] = hit['price'][role]
+        end
+      end
+      response
+    end
+
     def _find_by_key(index, key)
-      response = index.search(key, {
-        restrictSearchableAttributes: KEY_ATTRIBUTES
+      response = index.search('', {
+        filters: "(url_key:#{key} OR redirect_url_key:#{key})"
       })
-
+      response = _parse_response(response)
       resource = nil
-
       # look for the main product/category AND its variants
       response['hits'].each do |hit|
-        next if hit['url_key'] != key && !(hit['redirect_url_key'] || []).include?(key)
+        hit['redirect_url_key'] ||= []
+        next if hit['url_key'] != key && !(hit['redirect_url_key']).include?(key)
 
-        if hit['url_key'] == key && resource.nil?
+        if hit['url_key'] == key || hit['redirect_url_key'].include?(key) && resource.nil?
           resource = hit
         else
           (resource['variants'] ||= []) << hit
@@ -68,15 +80,25 @@ module ShopInvader
 
     def build_index(settings)
       name  = settings['index']
-      Locomotive::Common::Logger.debug "[Algolia] build index #{@locale}_#{name}"
-      index = Algolia::Index.new("#{@locale}_#{name}", @client)
+      Locomotive::Common::Logger.debug "[Algolia] build index #{name}_#{@locale}"
+      index = Algolia::Index.new("#{name}_#{@locale}", @client)
+    end
+
+    def build_attr(name, value)
+       if value.is_a?(Hash)
+          key, val = value.first
+          name = "#{name}.#{key}"
+          build_attr(name, val)
+       else
+          [name, value]
+       end
     end
 
     def build_params(conditions)
       { numericFilters: [], facetFilters: [] }.tap do |params|
         conditions.each do |key, value|
           name, op = key.split('.')
-
+          name, value = build_attr(name, value)
           if value.is_a?(Numeric)
             params[:numericFilters] << "#{name} #{NUMERIC_OPERATORS[op] || '='} #{value}"
           else
