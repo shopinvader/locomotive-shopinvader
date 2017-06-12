@@ -30,11 +30,14 @@ module ShopInvader
         })
       )
       response = _parse_response(response)
-      { data: response['hits'], size: response['nbHits'] }
+      {
+        data: response['hits'].map { |hit| hit['index_name'] = name; hit },
+        size: response['nbHits']
+      }
     end
 
     def find_by_key(name, key)
-      _find_by_key(find_index(name), key)
+      _find_by_key(find_index(name), name, key)
     end
 
     private
@@ -52,7 +55,7 @@ module ShopInvader
       response
     end
 
-    def _find_by_key(index, key)
+    def _find_by_key(index, name, key)
       response = index.search('', {
         filters: "(url_key:#{key} OR redirect_url_key:#{key})"
       })
@@ -60,6 +63,8 @@ module ShopInvader
       resource = nil
       # look for the main product/category AND its variants
       response['hits'].each do |hit|
+        hit['index_name'] = name
+
         hit['redirect_url_key'] ||= []
         next if hit['url_key'] != key && !(hit['redirect_url_key']).include?(key)
 
@@ -79,19 +84,9 @@ module ShopInvader
     end
 
     def build_index(settings)
-      name  = settings['index']
+      name = settings['index']
       Locomotive::Common::Logger.debug "[Algolia] build index #{name}_#{@locale}"
-      index = Algolia::Index.new("#{name}_#{@locale}", @client)
-    end
-
-    def build_attr(name, value)
-       if value.is_a?(Hash)
-          key, val = value.first
-          name = "#{name}.#{key}"
-          build_attr(name, val)
-       else
-          [name, value]
-       end
+      Algolia::Index.new("#{name}_#{@locale}", @client)
     end
 
     def build_params(conditions)
@@ -107,6 +102,16 @@ module ShopInvader
             end
           end
         end
+      end
+    end
+
+    def build_attr(name, value)
+      if value.is_a?(Hash)
+        key, val = value.first
+        name = "#{name}.#{key}"
+        build_attr(name, val)
+      else
+        [name, value]
       end
     end
 

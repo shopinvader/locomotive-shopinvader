@@ -20,6 +20,7 @@ RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
   let(:page_finder_service) { instance_double('PageFinder', by_handle: template) }
   let(:algolia_service)     { instance_double('AlgoliaService', find_by_key: resource) }
   let(:services)            { instance_double('Services', page_finder: page_finder_service, algolia: algolia_service) }
+  let(:path)                { 'algolia-product-or-category-key' }
   let(:app)                 { ->(env) { [200, env] } }
   let(:middleware)          { described_class.new(app) }
 
@@ -71,6 +72,21 @@ RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
 
     end
 
+    context 'the url_key includes slashes' do
+
+      let(:path)      { 'new/algolia-product-url-key' }
+      let(:resource)  { {
+        'name'    => '[NEW] Téléphones Portables et Tablettes',
+        'url_key' => 'new/algolia-product-url-key',
+        'redirect_url_key' => []
+      } }
+
+      it 'assigns the category in liquid' do
+        expect(subject['steam.liquid_assigns'].dig('category', 'name')).to eq('[NEW] Téléphones Portables et Tablettes')
+      end
+
+    end
+
   end
 
   context "the resource doesn't exist" do
@@ -86,7 +102,7 @@ RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
       'steam.services'        => services,
       'steam.site'            => site,
       'steam.page'            => page,
-      'steam.path'            => 'algolia-product-or-category-key',
+      'steam.path'            => path,
       'steam.locale'          => 'fr',
       'steam.liquid_assigns'  => {},
       'authenticated_entry'   => customer

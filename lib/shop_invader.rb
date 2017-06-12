@@ -3,14 +3,14 @@ require 'locomotive/steam/server'
 require 'algoliasearch'
 
 require 'shop_invader/version'
-require 'shop_invader/steam_patches'
 require 'shop_invader/services'
 require 'shop_invader/services/algolia_service'
 require 'shop_invader/services/erp_service'
 require 'shop_invader/middlewares/templatized_page'
 require 'shop_invader/middlewares/erp_proxy'
 require 'shop_invader/middlewares/store'
-require_relative_all %w(. drops filters tags), 'shop_invader/liquid'
+require_relative_all %w(. drops filters tags tags/concerns), 'shop_invader/liquid'
+require 'shop_invader/steam_patches'
 require 'faraday'
 
 module ShopInvader

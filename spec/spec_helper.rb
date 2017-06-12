@@ -16,6 +16,7 @@ require 'shop_invader'
 
 require_relative 'support/request'
 require_relative 'support/steam'
+require_relative 'support/liquid'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
