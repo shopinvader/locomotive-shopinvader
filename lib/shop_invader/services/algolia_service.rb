@@ -64,17 +64,12 @@ module ShopInvader
       # look for the main product/category AND its variants
       response['hits'].each do |hit|
         hit['index_name'] = name
-
-        hit['redirect_url_key'] ||= []
-        next if hit['url_key'] != key && !(hit['redirect_url_key']).include?(key)
-
-        if hit['url_key'] == key || hit['redirect_url_key'].include?(key) && resource.nil?
+        if resource.nil?
           resource = hit
         else
           (resource['variants'] ||= []) << hit
         end
       end
-
       resource
     end
 
