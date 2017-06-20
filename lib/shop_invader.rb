@@ -29,6 +29,17 @@ module ShopInvader
       config.middleware.insert_after ShopInvader::Middlewares::TemplatizedPage, ShopInvader::Middlewares::Store
       config.middleware.insert_after Locomotive::Steam::Middlewares::Path, ShopInvader::Middlewares::ErpProxy
     end
+
+    subscribe_to_steam_notifications
+  end
+
+  def self.subscribe_to_steam_notifications
+    # new signups
+    ActiveSupport::Notifications.subscribe('steam.auth.signup') do |name, start, finish, id, payload|
+      # TODO: plug into the ERP
+      puts payload[:site]
+      puts payload[:entry]
+    end
   end
 
 end

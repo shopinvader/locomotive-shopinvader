@@ -1,21 +1,22 @@
 module ShopInvader
   class ErpService
+
     attr_reader :client
     attr_reader :session
 
     def initialize(site, session, customer, locale)
       headers = {
-        api_key: site.metafields['erp']['api_key'],
-        lang: ShopInvader::LOCALES[locale.to_s]
+        api_key:  site.metafields['erp']['api_key'],
+        lang:     ShopInvader::LOCALES[locale.to_s]
       }
       if customer && customer.email
-          headers[:partner_email] = customer.email
+        headers[:partner_email] = customer.email
       end
-      @site         = site
-      @client       = Faraday.new(
-                          url: site.metafields['erp']['api_url'],
-                          headers: headers)
-      @session      = session
+      @site     = site
+      @session  = session
+      @client   = Faraday.new(
+        url: site.metafields['erp']['api_url'],
+        headers: headers)
     end
 
     def call(method, path, params)
