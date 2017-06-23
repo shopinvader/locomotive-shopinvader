@@ -16,7 +16,9 @@ module ShopInvader
       class Store < ::Liquid::Drop
 
         def before_method(meth)
-          if is_algolia_collection?(meth)
+          if store[meth]
+            read_from_store(meth)
+          elsif is_algolia_collection?(meth)
             AlgoliaCollection.new(meth)
           elsif is_plural?(meth)
             ErpCollection.new(meth)
@@ -28,7 +30,7 @@ module ShopInvader
         private
 
         def is_plural?(value)
-            value.singularize != value
+          value.singularize != value
         end
 
         def is_algolia_collection?(name)
@@ -39,6 +41,32 @@ module ShopInvader
           @context.registers[:services].algolia
         end
 
+        def read_from_store(meth)
+          # Exemple of configuration of store
+          # that allow to use store.available_countries
+		  # _store:
+          #     available_countries: >
+          #         {"fr": [
+          #             { "name": "France", "id": 74 },
+          #             { "name": "Belgique", "id": 20 },
+          #             { "name": "Espagne", "id": 67 }
+          #             ]
+          #         }
+          data = JSON.parse(store[meth])
+          if data.is_a?(Hash) and data[locale]
+            data[locale]
+          else
+            data
+          end
+        end
+
+        def store
+          @store ||= @context.registers[:site][:metafields][:_store] || {}
+        end
+
+        def locale
+          @locale ||= @context.registers[:locale].to_s
+        end
       end
 
     end
