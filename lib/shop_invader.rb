@@ -36,9 +36,20 @@ module ShopInvader
   def self.subscribe_to_steam_notifications
     # new signups
     ActiveSupport::Notifications.subscribe('steam.auth.signup') do |name, start, finish, id, payload|
-      # TODO: plug into the ERP
-      puts payload[:site]
-      puts payload[:entry]
+      request = payload[:request]
+      entry = payload[:entry]
+      service = Locomotive::Steam::Services.build_instance(payload[:request])
+      if request.params.include?('anonymous_token')
+        data = service.erp.call('POST', 'anonymous/register', request.params)
+      else
+        params = request.params.clone
+        params.update({
+            'external_id': entry._id,
+            'email': entry.email,
+            })
+        data = service.erp.call('POST', 'customer', params)
+      end
+      entry.role = data[:data]['role']
     end
   end
 
