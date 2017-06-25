@@ -63,6 +63,11 @@ module ShopInvader
       if res.include?('store_data')
         session['store_' + res['store_data']] = JSON.dump(res['data'])
       end
+      if res.include?('store_clear')
+        res['store_clear'].each do | key |
+          session['store_' + key] = '{}'
+        end
+      end
       { data: res['data'], size: res['size'] }
     end
 
@@ -75,7 +80,6 @@ module ShopInvader
             end
           end
        end
-
        headers
     end
 

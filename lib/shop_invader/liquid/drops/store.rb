@@ -1,7 +1,7 @@
 module ShopInvader
   module Liquid
     module Drops
-
+      ONLY_SESSION_STORE = %w(last_sale)
       # Examples:
       #
       # {{ store.category.size }}
@@ -16,8 +16,10 @@ module ShopInvader
       class Store < ::Liquid::Drop
 
         def before_method(meth)
-          if store[meth]
-            read_from_store(meth)
+          if ONLY_SESSION_STORE.include?(meth)
+            service.erp.is_cached?(meth) && service.erp.read_from_cache(meth)
+          elsif store[meth]
+            read_from_site(meth)
           elsif is_algolia_collection?(meth)
             AlgoliaCollection.new(meth)
           elsif is_plural?(meth)
@@ -34,14 +36,14 @@ module ShopInvader
         end
 
         def is_algolia_collection?(name)
-          service.indices.any? { |index| index['name'] == name }
+          service.algolia.indices.any? { |index| index['name'] == name }
         end
 
         def service
-          @context.registers[:services].algolia
+          @context.registers[:services]
         end
 
-        def read_from_store(meth)
+        def read_from_site(meth)
           # Exemple of configuration of store
           # that allow to use store.available_countries
 		  # _store:
