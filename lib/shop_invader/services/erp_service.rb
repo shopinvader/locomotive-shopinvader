@@ -22,16 +22,13 @@ module ShopInvader
     def call(method, path, params)
         headers = extract_session()
         client.headers.update(headers)
-        if method == 'GET'
-          response = client.get path, params
-        elsif method == 'POST'
-          response = client.post path, params
-        elsif method == 'PUT'
-          response = client.put path, params
-        elsif method == 'DELETE'
-          response = client.delete path, params
-        end
+        response = client.send(method.downcase, path, params)
         parse_response(response)
+    end
+
+    def find_one(name)
+      path = name.sub('_', '/')
+      call('GET', path, nil)
     end
 
     def find_all(name, conditions: nil, page: 1, per_page: 20)
@@ -60,12 +57,9 @@ module ShopInvader
             session['erp_' + key] = val
           end
       end
-      if res.include?('store_data')
-        session['store_' + res['store_data']] = JSON.dump(res['data'])
-      end
-      if res.include?('store_clear')
-        res['store_clear'].each do | key |
-          session['store_' + key] = '{}'
+      if res.include?('store_cache')
+        res['store_cache'].each do | key, value |
+          session['store_' + key] = JSON.dump(value)
         end
       end
       { data: res['data'], size: res['size'] }

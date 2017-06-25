@@ -20,9 +20,8 @@ module ShopInvader
           if service.is_cached?(@name)
             @resource ||= service.read_from_cache(@name) || {}
           else
-            @resource ||= service.find_all(@name)[:data]
+            @resource ||= service.find_one(@name)[:data]
           end
-
         end
 
         def service
