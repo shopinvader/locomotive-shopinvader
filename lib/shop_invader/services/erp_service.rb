@@ -53,16 +53,16 @@ module ShopInvader
     def parse_response(response)
       res = JSON.parse(response.body)
       if res.include?('set_session')
-          res['set_session'].each do |key, val|
+          res.delete('set_session').each do |key, val|
             session['erp_' + key] = val
           end
       end
       if res.include?('store_cache')
-        res['store_cache'].each do | key, value |
+        res.delete('store_cache').each do | key, value |
           session['store_' + key] = JSON.dump(value)
         end
       end
-      { data: res['data'], size: res['size'] }
+      res
     end
 
     def extract_session()

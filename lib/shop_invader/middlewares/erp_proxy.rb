@@ -9,7 +9,7 @@ module ShopInvader
           path = env['steam.path'].sub('_store/', '')
           response = call_erp(env['REQUEST_METHOD'], path, params)
           render_response(JSON.dump(response), 200, 'application/json')
-        else params && params.include?('action_proxy')
+        elsif params && params.include?('action_proxy')
           if params.include?('action_method')
             method = params.delete('action_method').upcase
           else
