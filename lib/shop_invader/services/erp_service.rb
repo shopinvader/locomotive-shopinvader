@@ -48,6 +48,14 @@ module ShopInvader
       JSON.parse(session['store_' + name])
     end
 
+    def download(path)
+      # TODO: give the right url + right headers
+      # https://github.com/lostisland/faraday
+      conn = Faraday.new(url: 'http://via.placeholder.com')
+      response = conn.get(path)
+      response.status == 200 ? response : nil
+    end
+
     private
 
     def parse_response(response)
