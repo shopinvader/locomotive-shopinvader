@@ -52,7 +52,7 @@ module ShopInvader
             })
         data = service.erp.call('POST', 'customer', params)
       end
-      entry.role = data[:data]['role']
+      entry.role = data['data']['role']
     end
   end
 
