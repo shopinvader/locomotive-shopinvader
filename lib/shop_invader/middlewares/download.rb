@@ -4,9 +4,12 @@ module ShopInvader
 
       include Locomotive::Steam::Middlewares::Helpers
 
+      BASE_STRING = '/_store/download/'.freeze
+      PATH_REGEXP = /#{BASE_STRING}(.*)/mo.freeze
+
       def _call
-        if path.start_with?('_store/download/')
-          attachment_path = path.match(/_store\/download\/(.*)/)[1]
+        if path.start_with?(BASE_STRING)
+          attachment_path = path.match(PATH_REGEXP)[1]
           filename        = File.basename(path)
 
           if response = service.download(attachment_path)
@@ -24,6 +27,10 @@ module ShopInvader
       end
 
       private
+
+      def path
+        request.path_info
+      end
 
       def service
         services.erp

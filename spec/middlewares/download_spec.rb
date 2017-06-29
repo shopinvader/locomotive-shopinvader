@@ -40,10 +40,12 @@ RSpec.describe ShopInvader::Middlewares::Download do
   end
 
   def build_env
-    env_for('http://models.example.com', {
+    env_for("http://models.example.com/#{path}", {
       'steam.path'      => path,
       'steam.services'  => services
-    })
+    }).tap do |env|
+      env['steam.request'] = Rack::Request.new(env)
+    end
   end
 
 end
