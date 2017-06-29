@@ -11,7 +11,7 @@ module ShopInvader
         end
 
         def total_entries
-          fetch_collection[:size]
+          fetch_collection["size"]
         end
 
         private
@@ -20,7 +20,7 @@ module ShopInvader
           if service.is_cached?(@name)
             @collection ||= service.read_from_cache(@name) || {}
           else
-            @collection ||= fetch_collection[:data]
+            @collection ||= fetch_collection["data"]
           end
         end
 
