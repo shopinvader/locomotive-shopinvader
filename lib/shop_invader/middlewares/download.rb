@@ -5,7 +5,9 @@ module ShopInvader
       include Locomotive::Steam::Middlewares::Helpers
 
       def _call
-        if path.start_with?('_store/download/')
+        # TODO FIXME
+        if false
+        #if env['steam.path'].start_with?('_store/download/')
           attachment_path = path.match(/_store\/download\/(.*)/)[1]
           filename        = File.basename(path)
 
