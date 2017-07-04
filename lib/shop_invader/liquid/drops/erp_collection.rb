@@ -11,7 +11,7 @@ module ShopInvader
         end
 
         def total_entries
-          fetch_collection["size"]
+          fetch_collection[:size]
         end
 
         private
@@ -20,7 +20,7 @@ module ShopInvader
           if service.is_cached?(@name)
             @collection ||= service.read_from_cache(@name) || {}
           else
-            @collection ||= fetch_collection["data"]
+            @collection ||= fetch_collection[:data]
           end
         end
 
@@ -29,11 +29,12 @@ module ShopInvader
         end
 
         def fetch_collection(page: 1, per_page: 20)
-          service.find_all(@name,
+          res = service.find_all(@name,
             conditions: @context['with_scope'],
             page:       page,
             per_page:   per_page
           )
+          res.symbolize_keys
         end
 
         def service
