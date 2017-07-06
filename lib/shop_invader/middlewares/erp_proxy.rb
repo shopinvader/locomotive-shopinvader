@@ -16,7 +16,14 @@ module ShopInvader
             method = env['REQUEST_METHOD']
           end
           path = params.delete('action_proxy')
-          erp.call(method, path, params)
+          response = erp.call(method, path, params)
+          if not response.include?('error')
+            if response.include?('redirect_to')
+              redirect_to response['redirect_to'], 302
+            elsif params.include?('redirect_success_to')
+              redirect_to params['redirect_success_to'], 302
+            end
+          end
         end
       end
 

@@ -93,7 +93,11 @@ module ShopInvader
 
     def catch_error(response)
         res = JSON.load(response.body)
-        res['error'] = true
+        res.update(
+            data: [],
+            size: 0,
+            'error': true
+        )
         if response.status == 500
           log_error 'Odoo Error: server have an internal error, active maintenance mode'
           session['store_maintenance'] = 'true'
