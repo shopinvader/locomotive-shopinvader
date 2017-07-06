@@ -22,8 +22,18 @@ module ShopInvader
     def call(method, path, params)
         headers = extract_session()
         client.headers.update(headers)
-        response = client.send(method.downcase, path, params)
-        parse_response(response)
+        begin
+          response = client.send(method.downcase, path, params)
+          if response.status == 200
+            parse_response(response)
+          else
+            catch_error(response)
+          end
+        rescue
+          log_error 'Odoo Error: server is not available, active maintenance mode'
+          session['store_maintenance'] = 'true'
+          {'error': true}
+        end
     end
 
     def find_one(name)
@@ -48,6 +58,10 @@ module ShopInvader
       JSON.parse(session['store_' + name])
     end
 
+    def clear_cache(name)
+      session.delete('store_' + name)
+    end
+
     def download(path)
       # TODO: give the right url + right headers
       # https://github.com/lostisland/faraday
@@ -57,6 +71,10 @@ module ShopInvader
     end
 
     private
+
+    def log_error(msg)
+      Locomotive::Common::Logger.error msg
+    end
 
     def parse_response(response)
       res = JSON.parse(response.body)
@@ -71,6 +89,22 @@ module ShopInvader
         end
       end
       res
+    end
+
+    def catch_error(response)
+        res = JSON.load(response.body)
+        res['error'] = true
+        if response.status == 500
+          log_error 'Odoo Error: server have an internal error, active maintenance mode'
+          session['store_maintenance'] = 'true'
+        else
+          log_error 'Odoo Error: controler raise en error'
+          session['store_notifications'] = JSON.dump([{
+            'type': 'danger',
+            'message': res['description'],
+            }])
+        end
+        res
     end
 
     def extract_session()

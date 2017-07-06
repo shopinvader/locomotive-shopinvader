@@ -7,7 +7,7 @@ module ShopInvader
       def _call
         if env['steam.path'].start_with?('_store/')
           path = env['steam.path'].sub('_store/', '')
-          response = call_erp(env['REQUEST_METHOD'], path, params)
+          response = erp.call(env['REQUEST_METHOD'], path, params)
           render_response(JSON.dump(response), 200, 'application/json')
         elsif params && params.include?('action_proxy')
           if params.include?('action_method')
@@ -16,7 +16,7 @@ module ShopInvader
             method = env['REQUEST_METHOD']
           end
           path = params.delete('action_proxy')
-          call_erp(method, path, params)
+          erp.call(method, path, params)
         end
       end
 
@@ -24,10 +24,6 @@ module ShopInvader
 
       def erp
         services.erp
-      end
-
-      def call_erp(method, path, params)
-        erp.call(method, path, params)
       end
 
     end

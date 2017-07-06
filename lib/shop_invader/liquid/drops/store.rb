@@ -1,7 +1,8 @@
 module ShopInvader
   module Liquid
     module Drops
-      ONLY_SESSION_STORE = %w(last_sale)
+      ONLY_SESSION_STORE = %w(last_sale notifications maintenance)
+      ONLY_ONE_TIME = %w(notifications maintenance)
       # Examples:
       #
       # {{ store.category.size }}
@@ -18,6 +19,9 @@ module ShopInvader
         def before_method(meth)
           if ONLY_SESSION_STORE.include?(meth)
             service.erp.is_cached?(meth) && service.erp.read_from_cache(meth)
+            if ONLY_ONE_TIME.include?(meth)
+              service.erp.clear_cache(meth)
+            end
           elsif store[meth]
             read_from_site(meth)
           elsif is_algolia_collection?(meth)
