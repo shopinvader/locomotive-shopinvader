@@ -10,11 +10,9 @@ module Locomotive
 
       def define_built_in_functions(context, liquid_context)
         orig_define_built_in_functions(context, liquid_context)
-        puts '2'
         SHOPINVADER_BUILT_IN_FUNCTIONS.each do |name|
           context.define_function name, &send(:"#{name.underscore}_lambda", liquid_context)
         end
-        puts '3'
       end
 
       def store_call_lambda(liquid_context)
