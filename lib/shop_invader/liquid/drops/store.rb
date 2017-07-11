@@ -18,10 +18,11 @@ module ShopInvader
 
         def before_method(meth)
           if ONLY_SESSION_STORE.include?(meth)
-            service.erp.is_cached?(meth) && service.erp.read_from_cache(meth)
+            data = service.erp.is_cached?(meth) && service.erp.read_from_cache(meth)
             if ONLY_ONE_TIME.include?(meth)
               service.erp.clear_cache(meth)
             end
+            data
           elsif store[meth]
             read_from_site(meth)
           elsif is_algolia_collection?(meth)
