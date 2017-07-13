@@ -30,9 +30,8 @@ module ShopInvader
             catch_error(response)
           end
         rescue
-          log_error 'Odoo Error: server is not available, active maintenance mode'
-          session['store_maintenance'] = 'true'
-          {'error': true}
+          log_error 'Odoo Error: server have an internal error, active maintenance mode'
+          raise ShopInvader::ErpMaintenance.new('ERP under maintenance')
         end
     end
 
@@ -100,7 +99,7 @@ module ShopInvader
         )
         if response.status == 500
           log_error 'Odoo Error: server have an internal error, active maintenance mode'
-          session['store_maintenance'] = 'true'
+          raise ShopInvader::ErpMaintenance.new('ERP under maintenance')
         else
           log_error 'Odoo Error: controler raise en error'
           session['store_notifications'] = JSON.dump([{

@@ -17,7 +17,11 @@ module Locomotive
 
       def store_call_lambda(liquid_context)
         erp = liquid_context.registers[:services].erp
-        -> (method, path, params) { erp.call(method, path, params) }
+        if liquid_context['store_maintenance']
+          -> (method, path, params) { {} }
+        else
+          -> (method, path, params) { erp.call(method, path, params) }
+        end
       end
     end
   end

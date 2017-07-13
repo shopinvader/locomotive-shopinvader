@@ -16,7 +16,12 @@ module ShopInvader
             method = env['REQUEST_METHOD']
           end
           path = params.delete('action_proxy')
-          response = erp.call(method, path, params)
+          begin
+            response = erp.call(method, path, params)
+          rescue ShopInvader::ErpMaintenance => e
+            env['steam.liquid_assigns']['store_maintenance'] = true
+            response = {error: true}
+          end
           if not response.include?(:error)
             if response.include?('redirect_to')
               redirect_to response['redirect_to'], 302

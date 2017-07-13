@@ -9,9 +9,7 @@ module ShopInvader
         end
 
         def before_method(meth)
-          if fetch_resource
-            fetch_resource[meth]
-          end
+          fetch_resource[meth]
         end
 
         private
@@ -20,7 +18,11 @@ module ShopInvader
           if service.is_cached?(@name)
             @resource ||= service.read_from_cache(@name) || {}
           else
-            @resource ||= service.find_one(@name)['data']
+            if @context['store_maintenance']
+              {}
+            else
+              @resource ||= service.find_one(@name)['data']
+            end
           end
         end
 

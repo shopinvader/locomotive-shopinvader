@@ -20,7 +20,11 @@ module ShopInvader
           if service.is_cached?(@name)
             @collection ||= service.read_from_cache(@name) || {}
           else
-            @collection ||= fetch_collection[:data]
+            if @context['store_maintenance']
+              {data: {}, size:0}
+            elsif
+              @collection ||= fetch_collection[:data]
+            end
           end
         end
 
