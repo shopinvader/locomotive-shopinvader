@@ -1,7 +1,7 @@
 module ShopInvader
   module Liquid
     module Drops
-      ONLY_SESSION_STORE = %w(last_sale notifications maintenance)
+      ONLY_SESSION_STORE = %w(last_sale notifications maintenance cart)
       ONLY_ONE_TIME = %w(notifications maintenance)
       # Examples:
       #
