@@ -40,7 +40,7 @@ module ShopInvader
 
   def self.subscribe_to_steam_notifications
     # new signups
-    ActiveSupport::Notifications.subscribe('steam.auth.signup') do |name, start, finish, id, payload|
+    ActiveSupport::Notifications.subscribe('steam.auth.signed_up') do |name, start, finish, id, payload|
       request = payload[:request]
       entry = payload[:entry]
       service = Locomotive::Steam::Services.build_instance(payload[:request])
@@ -52,12 +52,44 @@ module ShopInvader
             'external_id': entry._id,
             'email': entry.email,
             })
-        data = service.erp.call('POST', 'customer', params)
+        begin
+          data = service.erp.call('POST', 'customer', params)
+        rescue ShopInvader::ErpMaintenance => e
+          request.env['steam.liquid_assigns']['store_maintenance'] = true
+          data = {error: true}
+        end
       end
-      entry.role = data['data']['role']
+      if data[:error]
+        puts 'TODO drop entry and drop session'
+      else
+        entry.role = data['data']['role']
+      end
+    end
+
+    ActiveSupport::Notifications.subscribe('steam.auth.signed_in') do |name, start, finish, id, payload|
+      # After signed in
+      # - affect the customer to the current cart if exist
+      # - or search for an existing cart on erp side
+      service = Locomotive::Steam::Services.build_instance(payload[:request])
+      payload[:request].env['authenticated_entry'] = payload[:entry]
+      session = payload[:request].env['rack.session']
+      if session['erp_cart_id']
+        service.erp.call('PUT', 'cart', {'assign_partner': true})
+      else
+        service.erp.call('GET', 'cart', {})
+      end
+    end
+
+    ActiveSupport::Notifications.subscribe('steam.auth.signed_out') do |name, start, finish, id, payload|
+      # After signed out, drop the erp / store session
+      session = payload[:request].env['rack.session']
+      session.each do | key, value |
+        if key.start_with?('erp_') || key.start_with?('store_')
+          session.delete(key)
+        end
+      end
     end
   end
-
 end
 
 # The Rails app must call the setup itself.

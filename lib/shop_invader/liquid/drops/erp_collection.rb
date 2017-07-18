@@ -21,11 +21,12 @@ module ShopInvader
             @collection ||= service.read_from_cache(@name) || {}
           else
             if @context['store_maintenance']
-              {data: {}, size:0}
+              @collection ||= {data: {}, size:0}
             elsif
               @collection ||= fetch_collection[:data]
             end
           end
+          @collection
         end
 
         def paginate(page, per_page)
