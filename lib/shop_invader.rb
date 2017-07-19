@@ -62,7 +62,7 @@ module ShopInvader
       if data[:error]
         puts 'TODO drop entry and drop session'
       else
-        entry.role = data['data']['role']
+        service.content_entry.update_decorated_entry(entry, {role: data['data']['role']})
       end
     end
 
