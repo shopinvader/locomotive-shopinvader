@@ -60,7 +60,10 @@ module ShopInvader
         end
       end
       if data[:error]
-        puts 'TODO drop entry and drop session'
+        # Drop the content created (no rollback on mongodb)
+        service.content_entry.delete(entry.content_type_slug, entry._id)
+        # Add a fake error field to avoid content authentification
+        entry.errors.add('error', 'Fail to create')
       else
         service.content_entry.update_decorated_entry(entry, {role: data['data']['role']})
       end
