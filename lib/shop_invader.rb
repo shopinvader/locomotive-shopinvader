@@ -44,20 +44,21 @@ module ShopInvader
       request = payload[:request]
       entry = payload[:entry]
       service = Locomotive::Steam::Services.build_instance(payload[:request])
-      if request.params.include?('anonymous_token')
-        data = service.erp.call('POST', 'anonymous/register', request.params)
-      else
-        params = request.params.clone
-        params.update({
+      begin
+        if request.params.include?('anonymous_token')
+          request.params.update({'external_id': entry._id})
+          data = service.erp.call('POST', 'anonymous/register', request.params)
+        else
+          params = request.params.clone
+          params.update({
             'external_id': entry._id,
             'email': entry.email,
             })
-        begin
           data = service.erp.call('POST', 'customer', params)
-        rescue ShopInvader::ErpMaintenance => e
-          request.env['steam.liquid_assigns']['store_maintenance'] = true
-          data = {error: true}
         end
+      rescue ShopInvader::ErpMaintenance => e
+        request.env['steam.liquid_assigns']['store_maintenance'] = true
+        data = {error: true}
       end
       if data[:error]
         # Drop the content created (no rollback on mongodb)
