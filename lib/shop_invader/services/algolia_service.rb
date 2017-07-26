@@ -11,15 +11,31 @@ module ShopInvader
       'ne'  => '!='
     }.freeze
 
-    attr_reader :indices
+    attr_reader :indices, :site
 
     def initialize(site, customer, locale)
       @site         = site
       @customer     = customer
       @locale       = ShopInvader::LOCALES[locale.to_s]
-      @indices      = JSON.parse(site.metafields.dig('algolia', "indices") || '[]')
+      @indices      = JSON.parse(site.metafields.dig('algolia', 'indices') || '[]')
       @credentials  = site.metafields['algolia'].slice('application_id', 'api_key').symbolize_keys
       @client       = Algolia::Client.new(@credentials)
+    end
+
+    def find_all_products_and_categories
+      indices.map do |config|
+        {}.tap do |records|
+          site.locales.each do |locale|
+            index   = Algolia::Index.new("#{config['index']}_#{ShopInvader::LOCALES[locale]}", @client)
+            results = index.search('', { 'attributesToRetrieve' => 'name,objectID,url_key', 'hitsPerPage' => 1000 })
+
+            results['hits'].each do |hit|
+              record = records[hit['objectID']] ||= {}
+              record[locale] = { name: hit['name'], url: find_route(config['name']).gsub('*', hit['url_key']) }
+            end
+          end
+        end.values
+      end.flatten
     end
 
     def find_all(name, conditions: nil, page: 1, per_page: 20)
@@ -108,6 +124,11 @@ module ShopInvader
       else
         [name, value]
       end
+    end
+
+    def find_route(index_name)
+      @routes ||= JSON.parse(site.metafields.dig('algolia', 'routes')  || '[]')
+      (@routes.find { |(route, rule)| rule['index'] == index_name }).try(:first)
     end
 
   end

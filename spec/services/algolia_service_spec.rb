@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe ShopInvader::AlgoliaService do
 
-  let(:indices)       { '[]' }
+  let(:indices)     { '[]' }
   let(:metafields)  { {
     'algolia' => {
       'application_id'  => 'ID7BZRXF2I',
@@ -10,10 +10,33 @@ RSpec.describe ShopInvader::AlgoliaService do
       'indices'         => indices,
     }
   } }
-  let(:site)      { instance_double('Site', metafields: metafields) }
+  let(:site)      { instance_double('Site', metafields: metafields, locales: ['en']) }
   let(:customer)  { nil }
   let(:locale)    { 'fr' }
   let(:service)   { described_class.new(site, customer, locale) }
+
+  describe '#find_all_products_and_categories' do
+
+    let(:indices)     { '[{ "name": "products", "index": "spacediscount_product" }, { "name": "categories", "index": "spacediscount_category" }]' }
+    let(:routes)      { '[["*", { "index": "categories" } ], ["*", {"index": "products" } ]]'}
+    let(:metafields)  { {
+      'algolia' => {
+        'application_id'  => 'GH41KF783Z',
+        'api_key'         => '75575d3910b3ac55428bcdfa1b0e6784',
+        'indices'         => indices,
+        'routes'          => routes
+      }
+    } }
+
+    subject { service.find_all_products_and_categories }
+
+    it 'returns all the products and categories in all the site locales' do
+      expect(subject.size).to eq(69)
+      expect(subject.first.keys).to eq(['en'])
+      expect(subject.first['en'].keys).to eq([:name, :url])
+    end
+
+  end
 
   describe '#find_all' do
 

@@ -22,6 +22,18 @@ module Locomotive::Steam::Models
   end
 end
 
+# Middlewares
+
+require 'locomotive/steam/middlewares/sitemap'
+
+module Locomotive::Steam::Middlewares
+  class Sitemap < ThreadSafe
+    include ShopInvader::Middlewares::Concerns::Sitemap::Algolia
+  end
+end
+
+# Liquid
+
 require 'locomotive/steam/liquid/tags/path_to'
 require 'locomotive/steam/liquid/tags/link_to'
 
