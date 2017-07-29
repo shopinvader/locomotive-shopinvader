@@ -26,8 +26,18 @@ module ShopInvader
       indices.map do |config|
         {}.tap do |records|
           site.locales.each do |locale|
-            index   = Algolia::Index.new("#{config['index']}_#{ShopInvader::LOCALES[locale]}", @client)
-            results = index.search('', { 'attributesToRetrieve' => 'name,objectID,url_key', 'hitsPerPage' => 1000 })
+            index   = Algolia::Index.new("#{config['index']}_#{ShopInvader::LOCALES[locale.to_s]}", @client)
+            filters = ''
+
+            if config['have_variant']
+                filter = 'main: true'
+            end
+
+            results = index.search('', {
+                'attributesToRetrieve' => 'name,objectID,url_key',
+                'hitsPerPage' => 1000,
+                'filters' => filter,
+            })
 
             results['hits'].each do |hit|
               record = records[hit['objectID']] ||= {}
