@@ -12,6 +12,7 @@ module ShopInvader
       if customer && customer.email
         headers[:partner_email] = customer.email
       end
+      @customer = customer
       @site     = site
       @session  = session
       @client   = Faraday.new(
@@ -20,19 +21,12 @@ module ShopInvader
     end
 
     def call(method, path, params)
-        headers = extract_session()
-        client.headers.update(headers)
-        begin
-          response = client.send(method.downcase, path, params)
-          if response.status == 200
-            parse_response(response)
-          else
-            catch_error(response)
-          end
-        rescue
-          log_error 'Odoo Error: server have an internal error, active maintenance mode'
-          raise ShopInvader::ErpMaintenance.new('ERP under maintenance')
+        if @customer && ! is_cached?('customer')
+            # initialisation not have been done maybe odoo was not
+            # available, init it before applying the request
+            initialize_customer
         end
+        _call(method, path, params)
     end
 
     def find_one(name)
@@ -67,6 +61,10 @@ module ShopInvader
       conn = Faraday.new(url: 'http://via.placeholder.com')
       response = conn.get(path)
       response.status == 200 ? response : nil
+    end
+
+    def initialize_customer
+      _call('GET', 'sign', {})
     end
 
     private
@@ -120,6 +118,22 @@ module ShopInvader
           end
        end
        headers
+    end
+
+    def _call(method, path, params)
+        headers = extract_session()
+        client.headers.update(headers)
+        begin
+          response = client.send(method.downcase, path, params)
+          if response.status == 200
+            parse_response(response)
+          else
+            catch_error(response)
+          end
+        rescue
+          log_error 'Odoo Error: server have an internal error, active maintenance mode'
+          raise ShopInvader::ErpMaintenance.new('ERP under maintenance')
+        end
     end
 
   end

@@ -45,18 +45,18 @@ module ShopInvader
       request = payload[:request]
       entry = payload[:entry]
       service = Locomotive::Steam::Services.build_instance(payload[:request])
+      params = request.params.clone
+      params.update({
+          'external_id': entry._id,
+          'email': entry.email
+          })
+      if params.include?('anonymous_token')
+          method = 'PUT'
+      else
+          method = 'POST'
+      end
       begin
-        if request.params.include?('anonymous_token')
-          request.params.update({'external_id': entry._id})
-          data = service.erp.call('POST', 'anonymous/register', request.params)
-        else
-          params = request.params.clone
-          params.update({
-            'external_id': entry._id,
-            'email': entry.email,
-            })
-          data = service.erp.call('POST', 'customer', params)
-        end
+        data = service.erp.call(method, 'sign', params)
       rescue ShopInvader::ErpMaintenance => e
         request.env['steam.liquid_assigns']['store_maintenance'] = true
         data = {error: true}
@@ -72,16 +72,22 @@ module ShopInvader
     end
 
     ActiveSupport::Notifications.subscribe('steam.auth.signed_in') do |name, start, finish, id, payload|
-      # After signed in
-      # - affect the customer to the current cart if exist
-      # - or search for an existing cart on erp side
       service = Locomotive::Steam::Services.build_instance(payload[:request])
       payload[:request].env['authenticated_entry'] = payload[:entry]
-      session = payload[:request].env['rack.session']
-      if session['erp_cart_id']
-        service.erp.call('PUT', 'cart', {'assign_partner': true})
-      else
-        service.erp.call('GET', 'cart', {})
+      begin
+        service.erp.initialize_customer
+      rescue ShopInvader::ErpMaintenance => e
+        # TODO add special logging
+      end
+    end
+
+    ActiveSupport::Notifications.subscribe('steam.auth.reset_password') do |name, start, finish, id, payload|
+      service = Locomotive::Steam::Services.build_instance(payload[:request])
+      payload[:request].env['authenticated_entry'] = payload[:entry]
+      begin
+        service.erp.initialize_customer
+      rescue ShopInvader::ErpMaintenance => e
+        # TODO add special logging
       end
     end
 
