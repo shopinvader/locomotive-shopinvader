@@ -114,12 +114,13 @@ module ShopInvader
       { numericFilters: [], facetFilters: [] }.tap do |params|
         conditions.each do |key, value|
           name, op = key.split('.')
-          name, value = build_attr(name, value)
-          if value.is_a?(Numeric)
-            params[:numericFilters] << "#{name} #{NUMERIC_OPERATORS[op] || '='} #{value}"
-          else
-            [*value].each do |_value|
-              params[:facetFilters] << "#{op == 'nin' ? 'NOT ' : ''}#{name}:#{_value}"
+          build_attr(name, value).each do | name, value |
+            if value.is_a?(Numeric)
+              params[:numericFilters] << "#{name} #{NUMERIC_OPERATORS[op] || '='} #{value}"
+            else
+              [*value].each do |_value|
+                params[:facetFilters] << "#{op == 'nin' ? 'NOT ' : ''}#{name}:#{_value}"
+              end
             end
           end
         end
@@ -128,11 +129,14 @@ module ShopInvader
 
     def build_attr(name, value)
       if value.is_a?(Hash)
-        key, val = value.first
-        name = "#{name}.#{key}"
-        build_attr(name, val)
+        result = []
+        value.each do | key, val |
+           subname = "#{name}.#{key}"
+           result.concat(build_attr(subname, val))
+        end
+        result
       else
-        [name, value]
+        [[name, value]]
       end
     end
 
