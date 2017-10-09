@@ -17,9 +17,15 @@ module ShopInvader
       @site         = site
       @customer     = customer
       @locale       = ShopInvader::LOCALES[locale.to_s]
-      @indices      = JSON.parse(site.metafields.dig('algolia', 'indices') || '[]')
-      @credentials  = site.metafields['algolia'].slice('application_id', 'api_key').symbolize_keys
-      @client       = Algolia::Client.new(@credentials)
+      if site.metafields['algolia']
+        @indices      = JSON.parse(site.metafields.dig('algolia', 'indices') || '[]')
+        @credentials  = site.metafields['algolia'].slice('application_id', 'api_key').symbolize_keys
+        @client       = Algolia::Client.new(@credentials)
+      else
+        @indices    = []
+        @credentials= nil
+        @client     = nil
+      end
     end
 
     def find_all_products_and_categories
