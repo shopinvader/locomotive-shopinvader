@@ -14,6 +14,10 @@ module ShopInvader
           fetch_collection[:size]
         end
 
+        def as_json(options)
+          fetch_collection.as_json(options)
+        end
+
         private
 
         def collection

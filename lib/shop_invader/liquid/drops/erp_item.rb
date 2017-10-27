@@ -12,6 +12,10 @@ module ShopInvader
           fetch_resource[meth]
         end
 
+        def as_json(options)
+          fetch_resource.as_json(options)
+        end
+
         private
 
         def fetch_resource
