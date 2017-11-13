@@ -52,11 +52,16 @@ module ShopInvader
       end
 
       def match_routes
-        routes = JSON.parse(site.metafields.dig('algolia', 'routes'))
+        routes = site.metafields.dig('algolia', 'routes')
+        if routes
+          routes = JSON.parse(routes)
 
-        routes.find_all do |(path, _)|
-          regexp = Regexp.new("\\A#{path.gsub('*', '.*')}\\Z")
-          regexp.match(env['steam.path'])
+          routes.find_all do |(path, _)|
+            regexp = Regexp.new("\\A#{path.gsub('*', '.*')}\\Z")
+            regexp.match(env['steam.path'])
+          end
+        else
+          []
         end
       end
 
