@@ -13,10 +13,12 @@ RSpec.describe ShopInvader::ErpService do
   let(:headers)             { {} }
   let(:data)                { {'name' => 'SO00042'} }
   let(:erp_response)        { {'data' => data, 'size' => 1} }
-  let(:parsed_response)     { {data: data, size: 1} }
+  let(:erp_response_status) { 200 }
+  let(:erp_response_headers){ {'content-type' => 'application/json'} }
+  let(:parsed_response)     { {'data' => data, 'size' => 1, 'content-type' => 'application/json'} }
   let(:jsondata )           { JSON.dump(data) }
   let(:client)              { instance_double('FaradayClient', get: response, headers: headers) }
-  let(:response)            { instance_double('Response', body: JSON.dump(erp_response)) }
+  let(:response)            { instance_double('Response', body: JSON.dump(erp_response), status: erp_response_status, headers: erp_response_headers) }
   let(:client)              { instance_double('FaradayClient', get: response, headers: headers) }
 
   let(:metafields)  { {
@@ -40,7 +42,7 @@ RSpec.describe ShopInvader::ErpService do
       it 'should call the erp with the method, the path and the params' do
         expect(client).to receive(:get).with('orders', params).and_return(response)
         is_expected.to eq(parsed_response)
-        expect(client.headers['SESS_cart_id']).to eq '42'
+        expect(client.headers[:sess_cart_id]).to eq '42'
         expect(session).to eq(expected_session)
       end
     end
@@ -49,7 +51,7 @@ RSpec.describe ShopInvader::ErpService do
       let(:expected_session)   { {'erp_cart_id' => 42, 'store_cart' => jsondata} }
       let(:erp_response)       { {'data' => {'name' => 'SO00042'},
                                   'size' => 1,
-                                  'store_data' => 'cart'} }
+                                  'store_cache' => {'cart': {'name' => 'SO00042'}}} }
 
       it 'should call the erp and store the data in the session' do
         expect(client).to receive(:get).with('orders', params).and_return(response)
