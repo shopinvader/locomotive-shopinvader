@@ -74,18 +74,30 @@ module ShopInvader
     end
 
     def parse_response(response)
-      res = JSON.parse(response.body)
-      if res.include?('set_session')
-          res.delete('set_session').each do |key, val|
-            session['erp_' + key] = val
+      if response['content-type'] == 'application/json'
+          res = JSON.parse(response.body)
+          if res.include?('set_session')
+              res.delete('set_session').each do |key, val|
+                session['erp_' + key] = val
+              end
           end
+          if res.include?('store_cache')
+            res.delete('store_cache').each do | key, value |
+              session['store_' + key] = JSON.dump(value)
+            end
+          end
+          res['content-type'] = 'application/json'
+        res
+      else
+        {
+            'body': response.body,
+            'headers': {
+                'Content-Type': response['content-type'],
+                'Content-Disposition': response['content-disposition'],
+                'Content-Length': response['content-length'],
+            }
+        }
       end
-      if res.include?('store_cache')
-        res.delete('store_cache').each do | key, value |
-          session['store_' + key] = JSON.dump(value)
-        end
-      end
-      res
     end
 
     def catch_error(response)

@@ -10,8 +10,10 @@ module ShopInvader
           response = erp.call(env['REQUEST_METHOD'], path, params)
           if response.include?('redirect_to')
             redirect_to response['redirect_to'], 302
-          else
+          elsif response['content-type'] == 'application/json'
             render_response(JSON.dump(response), 200, 'application/json')
+          else
+            @next_response = [200, response[:headers].stringify_keys, [response[:body]]]
           end
         elsif params && params.include?('action_proxy')
           if params.include?('action_method')
