@@ -1,5 +1,8 @@
 # ShopInvader
 
+[![Build Status](https://travis-ci.org/akretion/locomotive_shopinvader.svg?branch=master)](https://travis-ci.org/akretion/locomotive_shopinvader) [![Code Climate](https://codeclimate.com/github/akretion/locomotive_shopinvader/badges/gpa.svg)](https://codeclimate.com/github/akretion/locomotive_shopinvader)
+
+
 ## Installation
 
 ### Wagon
