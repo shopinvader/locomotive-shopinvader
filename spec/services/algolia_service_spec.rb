@@ -2,13 +2,16 @@ require 'spec_helper'
 
 RSpec.describe ShopInvader::AlgoliaService do
 
-  let(:indices)     { '[]' }
+  let(:indices)     { '[{ "name": "products", "index": "locomotive_shopinvader_product" }, { "name": "categories", "index": "locomotive_shopinvader_category" }]' }
+  let(:routes)      { '[]' }
   let(:metafields)  { {
     'algolia' => {
-      'application_id'  => 'ID7BZRXF2I',
-      'api_key'         => 'ce69775382075f4a2ade09b0aa1b0277',
+      'application_id'  => ENV['ALGOLIA_APP_ID'],
+      'api_key'         => ENV['ALGOLIA_API_KEY'],
       'indices'         => indices,
-    }
+      'routes'          => routes
+    },
+    'erp' => { 'default_pricelist' => 'public_tax_inc' }
   } }
   let(:site)      { instance_double('Site', metafields: metafields, locales: ['en']) }
   let(:customer)  { nil }
@@ -17,21 +20,12 @@ RSpec.describe ShopInvader::AlgoliaService do
 
   describe '#find_all_products_and_categories' do
 
-    let(:indices)     { '[{ "name": "products", "index": "spacediscount_product" }, { "name": "categories", "index": "spacediscount_category" }]' }
     let(:routes)      { '[["*", { "index": "categories" } ], ["*", {"index": "products" } ]]'}
-    let(:metafields)  { {
-      'algolia' => {
-        'application_id'  => 'GH41KF783Z',
-        'api_key'         => '75575d3910b3ac55428bcdfa1b0e6784',
-        'indices'         => indices,
-        'routes'          => routes
-      }
-    } }
 
     subject { service.find_all_products_and_categories }
 
     it 'returns all the products and categories in all the site locales' do
-      expect(subject.size).to eq(69)
+      expect(subject.size).to eq(78)
       expect(subject.first.keys).to eq(['en'])
       expect(subject.first['en'].keys).to eq([:name, :url])
     end
@@ -39,21 +33,19 @@ RSpec.describe ShopInvader::AlgoliaService do
   end
 
   describe '#find_all' do
-
-    let(:indices)       { '[{ "name": "product", "index": "public_tax_inc"}]' }
-    let(:name)        { 'product' }
+    let(:name)        { 'products' }
     let(:conditions)  { nil }
 
     subject { service.find_all(name, conditions: conditions) }
 
     it 'returns the first 20 items by default' do
       expect(subject[:data].size).to eq(20)
-      expect(subject[:size]).to eq(198)
+      expect(subject[:size]).to eq(71)
     end
 
     describe 'filtering by one attribute' do
 
-      let(:conditions) { { 'categories_ids.in' => [590, 588], 'main' => true } }
+      let(:conditions) { { 'categories' => {'id': 21}, 'main' => true } }
 
       it 'returns a list filtered by the conditions' do
         expect(subject[:size]).to eq(3)
@@ -63,10 +55,10 @@ RSpec.describe ShopInvader::AlgoliaService do
 
     describe 'filtering by many attributes (numeric and facet filters)' do
 
-      let(:conditions) { { 'rating_value' => 5, 'categories_ids.in' => [590, 588], 'main' => true } }
+      let(:conditions) { { 'rating' => {'reviews.rating': 5} , 'categories' => {'id': 21}, 'main' => true } }
 
       it 'returns a list filtered by the conditions' do
-        expect(subject[:size]).to eq(1)
+        expect(subject[:size]).to eq(2)
       end
 
     end
@@ -75,17 +67,15 @@ RSpec.describe ShopInvader::AlgoliaService do
 
   describe '#find_by_key' do
 
+    let(:name)  { 'categories' }
     subject { service.find_by_key(name, key) }
 
     describe 'looking for a category' do
-
-      let(:name)  { 'category' }
-      let(:indices) { '[{ "name": "category", "index": "category"}]' }
-      let(:key)   { 'accessoires-telephones-portables-et-tablettes' }
+      let(:key)   { 'all/saleable/accessories' }
 
       it 'returns an Algolia hit' do
-        expect(subject['name']).to eq('Téléphones Portables et Tablettes')
-        expect(subject['url_key']).to eq('accessoires-telephones-portables-et-tablettes')
+        expect(subject['name']).to eq('Accessories')
+        expect(subject['url_key']).to eq('all/saleable/accessories')
       end
 
       context "the category doesn't exist" do
@@ -100,7 +90,7 @@ RSpec.describe ShopInvader::AlgoliaService do
 
       context 'the requested category url looks like an existing one' do
 
-        let(:key) { 'accessoires-telephones-portables-et-tablettes-old' }
+        let(:key) { 'all/saleable/accessories-old' }
 
         it 'returns nil' do
           is_expected.to eq nil
@@ -112,39 +102,38 @@ RSpec.describe ShopInvader::AlgoliaService do
 
     describe 'looking for a product' do
 
-      let(:name) { 'product' }
-      let(:indices) { '[{ "name": "product", "index": "public_tax_exc"}]' }
-      let(:key) { 'adaptateur-prise-anglaise-us-tronic' }
+      let(:name)  { 'products' }
+      let(:key) { 'ipad-retina-display-A2323' }
 
       it 'returns the product' do
-        expect(subject['name']).to eq('Adaptateur Prise Anglaise')
-        expect(subject['url_key']).to eq('adaptateur-prise-anglaise-us-tronic')
-        expect(subject.dig('pricelist', 'values')[0]['price']).to eq(14.91)
+        expect(subject['model_name']).to eq('iPad Retina Display')
+        expect(subject['url_key']).to eq(key)
+        expect(subject.dig('price', 'value')).to eq(750)
       end
 
       it 'returns the variants of the product' do
-        expect(subject['variants'].size).to eq 6
-        expect(subject['variants'][0]['name']).to eq 'Adaptateur Prise Anglaise'
+        expect(subject['variants'].size).to eq 2
+        expect(subject['variants'][0]['model_name']).to eq 'iPad Retina Display'
+        expect(subject['variants'][0]['main']).to eq false
         expect(subject['variants'][0]['objectID']).not_to eq subject.dig(:data, 'objectID')
       end
 
       context 'the customer is a PRO' do
-
-        let(:customer) { { 'name' => 'John Doe', 'role' => 'pro' } }
+        let(:customer) { instance_double('Customer', role: 'pro_tax_exc', name: 'John Doe') }
 
         it 'assigns the product (with different price from a simple visitor) in liquid' do
-          expect(subject['name']).to eq('Adaptateur Prise Anglaise')
-          expect(subject.dig('pricelist', 'values')[0]['price']).to eq(12.91)
+          expect(subject['model_name']).to eq('iPad Retina Display')
+          expect(subject.dig('price', 'value')).to eq(600)
         end
 
       end
 
       context 'the customer has no role' do
 
-        let(:customer) { { 'name' => 'John Doe' } }
+        let(:customer) { instance_double('Customer', role: nil, name: 'John Doe') }
 
         it 'uses the public role to assign the product' do
-          expect(subject.dig('pricelist', 'values')[0]['price']).to eq(14.91)
+          expect(subject.dig('price', 'value')).to eq(750)
         end
 
       end
@@ -152,49 +141,5 @@ RSpec.describe ShopInvader::AlgoliaService do
     end
 
   end
-
-  # describe '#find_by_key_among_indices' do
-
-  #   subject { service.find_by_key_among_indices(key) }
-
-  #   context 'looking for a category' do
-
-  #     let(:roles) { { 'public_role' => '[{ "name": "category", "index": "category", "template_handle": "category-template" }]' } }
-  #     let(:key)   { 'accessoires-telephones-portables-et-tablettes' }
-
-  #     it 'returns the category and the information attached to the matching index' do
-  #       expect(subject[:name]).to eq('category')
-  #       expect(subject[:template]).to eq('category-template')
-  #       expect(subject.dig(:data, 'name')).to eq('Téléphones Portables et Tablettes')
-  #       expect(subject.dig(:data, 'url_key')).to eq('accessoires-telephones-portables-et-tablettes')
-  #     end
-
-  #     context "the category doesn't exist" do
-
-  #       let(:key) { 'not-an-existing-category' }
-
-  #       it 'returns nil' do
-  #         is_expected.to eq nil
-  #       end
-
-  #     end
-
-  #     context 'the requested category url looks like an existing one' do
-
-  #       let(:key) { 'accessoires-telephones-portables-et-tablettes-old' }
-
-  #       it 'returns nil' do
-  #         is_expected.to eq nil
-  #       end
-
-  #     end
-
-  #   end
-
-  #   context 'looking for a product' do
-
-
-
-  # end
 
 end

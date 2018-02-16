@@ -1,5 +1,8 @@
 # ShopInvader
 
+[![Build Status](https://travis-ci.org/akretion/locomotive_shopinvader.svg?branch=master)](https://travis-ci.org/akretion/locomotive_shopinvader) [![Code Climate](https://codeclimate.com/github/akretion/locomotive_shopinvader/badges/gpa.svg)](https://codeclimate.com/github/akretion/locomotive_shopinvader)
+
+
 ## Installation
 
 ### Wagon
@@ -121,6 +124,7 @@ If you request the http://mysite.com/<URL_KEY> page and no Locomotive page match
 - [] ERP proxy
 - [] ERP liquid tags/drops/filters
 - [] explain in the README how to set up the different indices in Algolia (Sebastien)
+- [] we should review the way to build the "with_scope" filter current syntax in 'categories': {'id': 5} maybe something like 'categories.id': 5 will be more explicit
 
 ## Contributing
 

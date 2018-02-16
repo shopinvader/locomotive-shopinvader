@@ -74,7 +74,8 @@ module ShopInvader
     end
 
     def parse_response(response)
-      if response['content-type'] == 'application/json'
+      headers = response.headers
+      if headers['content-type'] == 'application/json'
           res = JSON.parse(response.body)
           if res.include?('set_session')
               res.delete('set_session').each do |key, val|
@@ -92,9 +93,9 @@ module ShopInvader
         {
             'body': response.body,
             'headers': {
-                'Content-Type': response['content-type'],
-                'Content-Disposition': response['content-disposition'],
-                'Content-Length': response['content-length'],
+                'Content-Type': headers['content-type'],
+                'Content-Disposition': headers['content-disposition'],
+                'Content-Length': headers['content-length'],
             }
         }
       end

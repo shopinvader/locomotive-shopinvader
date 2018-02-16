@@ -68,7 +68,7 @@ module ShopInvader
         end
 
         def store
-          @store ||= @context.registers[:site][:metafields][:_store] || {}
+          @store ||= @context.registers[:site].metafields[:_store] || {}
         end
 
         def locale

@@ -3,9 +3,11 @@ require 'spec_helper'
 describe ShopInvader::Liquid::Drops::Store do
 
   let(:indices)   { '[]' }
-  let(:routes)   { '[]' }
+  let(:routes)    { '[]' }
+  let(:metafields){ {'_store' => {}} }
   let(:services)  { build_services_for_algolia(indices: indices) }
-  let(:context)   { ::Liquid::Context.new({}, {}, { services: services }) }
+  let(:site)      { instance_double('Site', metafields: metafields) }
+  let(:context)   { ::Liquid::Context.new({}, {}, { services: services, site: site }) }
   let(:drop)      { described_class.new.tap { |d| d.context = context } }
 
   describe 'asking for a store object' do

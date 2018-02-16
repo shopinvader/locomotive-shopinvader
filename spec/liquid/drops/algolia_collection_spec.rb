@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ShopInvader::Liquid::Drops::AlgoliaCollection do
 
-  let(:services)  { build_services_for_algolia(roles: {}) }
+  let(:services)  { build_services_for_algolia(indices: '[]') }
   let(:context)   { ::Liquid::Context.new({}, {}, { services: services }) }
   let(:drop)      { described_class.new('product').tap { |d| d.context = context } }
 
