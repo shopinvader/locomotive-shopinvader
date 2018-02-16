@@ -1,7 +1,6 @@
 # ShopInvader
 
-[![Build Status](https://travis-ci.org/akretion/locomotive_shopinvader.svg?branch=master)](https://travis-ci.org/akretion/locomotive_shopinvader) [![Code Climate](https://codeclimate.com/github/akretion/locomotive_shopinvader/badges/gpa.svg)](https://codeclimate.com/github/akretion/locomotive_shopinvader)
-
+[![Build Status](https://travis-ci.org/akretion/locomotive_shopinvader.svg?branch=master)](https://travis-ci.org/akretion/locomotive_shopinvader) [![Code Climate](https://codeclimate.com/github/akretion/locomotive_shopinvader/badges/gpa.svg)](https://codeclimate.com/github/akretion/locomotive_shopinvader)[![Test Coverage](https://api.codeclimate.com/v1/badges/2aa860bd2b735c93ebd8/test_coverage)](https://codeclimate.com/github/akretion/locomotive_shopinvader/test_coverage)
 
 ## Installation
 
@@ -115,16 +114,13 @@ If you request the http://mysite.com/<URL_KEY> page and no Locomotive page match
 
 ## TODO
 
-- [x] redirect 301 (redirect_url_key)
-- [x] attach variants to a product (same url_key)
-- [] different routes to display a product or a category
-- [] liquid helper to build the path to a product or a category
-- [] replace AND by OR when searching for a product by a category
-- [] SEO
-- [] ERP proxy
-- [] ERP liquid tags/drops/filters
-- [] explain in the README how to set up the different indices in Algolia (Sebastien)
-- [] we should review the way to build the "with_scope" filter current syntax in 'categories': {'id': 5} maybe something like 'categories.id': 5 will be more explicit
+- [ ] we should review the way to build the "with_scope" filter current syntax in 'categories': {'id': 5} maybe something like 'categories.id': 5 will be more explicit
+- [ ] use a pool of connexion for the connecting to Odoo
+- [ ] in product.variants put all of the variant included himself
+- [ ] review API path (with thibault, maybe we should use invader?)
+- [ ] add integration test
+- [ ] have 100 % of coverage
+
 
 ## Contributing
 
