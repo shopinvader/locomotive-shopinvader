@@ -28,7 +28,7 @@ describe 'Authentication' do
         auth_callback:        '/account/register-validation',
         city:                 'Lyon',
         street:               'Rue du gouté',
-        country_id:           76,
+        country:              {id: 76},
         name:                 name,
         zip:                  69004,
         auth_entry: {

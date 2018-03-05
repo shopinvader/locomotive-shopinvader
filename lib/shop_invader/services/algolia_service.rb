@@ -78,7 +78,7 @@ module ShopInvader
       if @customer
         role = @customer.role
       end
-      role ||= @site.metafields['erp']['default_pricelist']
+      role ||= @site.metafields['erp']['default_role']
       response['hits'].each do |hit|
         if hit.include?('price')
           hit['price'] = hit['price'][role]

@@ -76,5 +76,3 @@ describe 'When I am loggin' do
     end
   end
 end
-
-
