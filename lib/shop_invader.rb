@@ -48,13 +48,14 @@ module ShopInvader
           'external_id': entry._id,
           'email': entry.email
           })
-      if params.include?('anonymous_token')
-          method = 'PUT'
-      else
-          method = 'POST'
+
+      %w(auth_action auth_disable_email auth_content_type auth_id_field
+         auth_password_field auth_email_handle auth_callback auth_entry).each do | key |
+        params.delete(key)
       end
+
       begin
-        data = service.erp.call(method, 'sign', params)
+        data = service.erp.call('POST', 'customer', params)
       rescue ShopInvader::ErpMaintenance => e
         request.env['steam.liquid_assigns']['store_maintenance'] = true
         data = {error: true}

@@ -7,7 +7,7 @@ module ShopInvader
     def initialize(site, session, customer, locale)
       headers = {
         api_key:  site.metafields['erp']['api_key'],
-        lang:     ShopInvader::LOCALES[locale.to_s]
+        lang:     ShopInvader::LOCALES[locale.to_s],
       }
       if customer && customer.email
         headers[:partner_email] = customer.email
@@ -35,12 +35,17 @@ module ShopInvader
     end
 
     def find_all(name, conditions: nil, page: 1, per_page: 20)
-      params = {
-          per_page: per_page,
-          page: page,
-          domain: conditions }
+      params = { per_page: per_page, page: page }
+      if conditions
+        params[:scope] = conditions
+      end
       path = name.sub('_', '/')
-      call('GET', path, params)
+      response = call('GET', path, params)
+      if response.status == 200
+        parse_response(response)
+      else
+        catch_error(response)
+      end
     end
 
     def is_cached?(name)
@@ -64,13 +69,7 @@ module ShopInvader
     end
 
     def initialize_customer
-      _call('GET', 'sign', {})
-    end
-
-    private
-
-    def log_error(msg)
-      Locomotive::Common::Logger.error msg
+      _call('POST', 'customer/sign_in', {})
     end
 
     def parse_response(response)
@@ -121,6 +120,12 @@ module ShopInvader
         res
     end
 
+    private
+
+    def log_error(msg)
+      Locomotive::Common::Logger.error msg
+    end
+
     def extract_session()
         headers = {}
         if session
@@ -135,14 +140,16 @@ module ShopInvader
 
     def _call(method, path, params)
         headers = extract_session()
-        client.headers.update(headers)
+        method = method.downcase
         begin
-          response = client.send(method.downcase, path, params)
-          if response.status == 200
-            parse_response(response)
+          if ['post', 'put'].include?(method)
+            headers['Content-Type'] = 'application/json'
+            params = params.to_json
           else
-            catch_error(response)
+            headers['Content-Type'] = 'application/x-www-form-urlencoded'
           end
+          client.headers.update(headers)
+          client.send(method.downcase, path, params)
         rescue
           log_error 'Odoo Error: server have an internal error, active maintenance mode'
           raise ShopInvader::ErpMaintenance.new('ERP under maintenance')

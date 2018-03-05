@@ -6,5 +6,9 @@ gemspec
 gem 'locomotivecms_steam', github: 'akretion/steam', branch: 'pending-pr'
 gem 'faraday'
 
-gem 'simplecov', require: false, group: :test
-gem 'byebug', require: false, group: :test
+group :test do
+  gem 'simplecov',      require: false
+  gem 'byebug',         require: false
+  gem 'rack-test',      '~> 0.8.2'
+  gem 'haml',           '~> 5.0.4'
+end
