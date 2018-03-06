@@ -67,7 +67,10 @@ module ShopInvader
           else
             role = request.env['steam.site'].metafields['erp']['default_role']
           end
-          service.content_entry.update_decorated_entry(entry, {role: role})
+          service.content_entry.update_decorated_entry(entry, {
+              role: role,
+              name: data['name'],
+          })
         else
           rollback = true
         end

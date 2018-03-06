@@ -50,6 +50,7 @@ describe 'Authentication' do
         params[:auth_entry][:email] = 'did@locomotivecms.com'
         sign_up(params, true)
         expect(last_response.body).to include "Your customer account as been succefully created"
+        expect(last_response.body).to include "Didier"
       end
 
       context 'wrong parameters' do
