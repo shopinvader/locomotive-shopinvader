@@ -32,6 +32,11 @@ module ShopInvader
           end
         else
           erp.catch_error(response)
+          if params.include?('invader_error_url')
+            redirect_to params['invader_error_url'], 302
+          else
+            redirect_to env['HTTP_REFERER'], 302
+          end
         end
 
         # TODO process pdf / binary file

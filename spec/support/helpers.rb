@@ -43,7 +43,7 @@ module Spec
 
     def add_an_address(params, referer, follow_redirect = false)
       header 'Referer', referer
-      post '/invader/addresses', params
+      post '/invader/addresses/create', params
       follow_redirect! if follow_redirect
       last_response
     end

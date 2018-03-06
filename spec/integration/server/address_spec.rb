@@ -70,8 +70,8 @@ describe 'When I am loggin' do
       it 'displays the form with the previous params' do
         add_an_address(address_params, '/account/addresses?add=true', true)
         expect(last_response.status).to eq 200
-        expect(last_response.body).to include "Osiris"
-        expect(last_response.body).to include "Rue des treffles"
+        expect(last_response.body).to include "Invalid Form"
+        expect(last_response.body).to include "/account/addresses"
       end
     end
   end

@@ -63,7 +63,6 @@ describe 'Authentication' do
           expect(last_response.body).to include '/account/register'
           expect(last_response.body).to include "doesn't match password"
         end
-
       end
     end
   end
