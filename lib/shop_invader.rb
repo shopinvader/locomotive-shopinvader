@@ -62,15 +62,17 @@ module ShopInvader
       else
         if response.status == 200
           data = service.erp.parse_response(response)['data']
-          if data.include?('role')
-            role = data['role']
-          else
-            role = request.env['steam.site'].metafields['erp']['default_role']
+          unless data.include?('role')
+            data['role'] = request.env['steam.site'].metafields['erp']['default_role']
           end
-          service.content_entry.update_decorated_entry(entry, {
-              role: role,
-              name: data['name'],
-          })
+          vals = {}
+          current_vals = entry.to_hash
+          data.each do |key, val|
+            if current_vals.include?(key) && current_vals[key] != data[key]
+              vals[key] = val
+            end
+          end
+          service.content_entry.update_decorated_entry(entry, vals)
         else
           rollback = true
         end
