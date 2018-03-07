@@ -24,7 +24,8 @@ module ShopInvader
   # might change in Locomotive v4.
   LOCALES = {
     'fr' => 'fr_FR',
-    'en' => 'en_US'
+    'en' => 'en_US',
+    'es' => 'es_ES',
   }
 
   def self.setup
