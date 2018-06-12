@@ -11,7 +11,7 @@ RSpec.describe ShopInvader::AlgoliaService do
       'indices'         => indices,
       'routes'          => routes
     },
-    'erp' => { 'default_pricelist' => 'public_tax_inc' }
+    'erp' => { 'default_role' => 'public_tax_inc' }
   } }
   let(:site)      { instance_double('Site', metafields: metafields, locales: ['en']) }
   let(:customer)  { nil }
@@ -104,6 +104,7 @@ RSpec.describe ShopInvader::AlgoliaService do
 
       let(:name)  { 'products' }
       let(:key) { 'ipad-retina-display-A2323' }
+      let(:customer) { instance_double('Customer', role: 'public_tax_inc', name: 'John Doe') }
 
       it 'returns the product' do
         expect(subject['model_name']).to eq('iPad Retina Display')
