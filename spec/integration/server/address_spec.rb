@@ -21,10 +21,11 @@ describe 'When I am loggin' do
         })
     end
     let(:country) { {id: 74} }
+    let(:invader_error_url) { '/account/addresses-form' }
     let(:address_params) { {
       city: 'Mizérieux',
       country: country,
-      invader_error_url: '/account/addresses?add=true',
+      invader_error_url: invader_error_url,
       invader_success_url: '/account/addresses',
       name: 'Osiris',
       phone: '0000000000',
@@ -39,13 +40,13 @@ describe 'When I am loggin' do
     end
 
     it 'redirects to the success callback' do
-      add_an_address(address_params, '/account/addresses?add=true')
+      add_an_address(address_params, '/account/addresses-form')
       expect(last_response.status).to eq 302
       expect(last_response.location).to eq '/account/addresses'
     end
 
     it 'displays the address created' do
-      add_an_address(address_params, '/account/addresses?add=true', true)
+      add_an_address(address_params, '/account/addresses-form', true)
       expect(last_response.status).to eq 200
       expect(last_response.body).to include "Osiris"
       expect(last_response.body).to include "Rue des treffles"
@@ -55,23 +56,28 @@ describe 'When I am loggin' do
 
       let(:country) { {} }
 
-      it 'redirects to the error callback' do
-        add_an_address(address_params, '/account/addresses?add=true')
+      it 'redirects to the invader_error_url' do
+        add_an_address(address_params, '/account/addresses-fake')
         expect(last_response.status).to eq 302
-        expect(last_response.location).to eq '/account/addresses'
-      end
-
-      it 'redirects to the referer if no callback have been defined' do
-        add_an_address(address_params, '/account/addresses?add=true')
-        expect(last_response.status).to eq 302
-        expect(last_response.location).to eq '/account/addresses'
+        expect(last_response.location).to eq '/account/addresses-form'
       end
 
       it 'displays the form with the previous params' do
-        add_an_address(address_params, '/account/addresses?add=true', true)
+        add_an_address(address_params, '/account/addresses-form', true)
         expect(last_response.status).to eq 200
         expect(last_response.body).to include "Invalid Form"
-        expect(last_response.body).to include "/account/addresses"
+        expect(last_response.body).to include "/account/addresses-form"
+      end
+
+      context 'with no invader_error_url' do
+
+        let(:invader_error_url) { {} }
+
+        it 'redirects to the referer' do
+          add_an_address(address_params, '/account/addresses-form')
+          expect(last_response.status).to eq 302
+          expect(last_response.location).to eq '/account/addresses-form'
+        end
       end
     end
   end

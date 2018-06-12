@@ -47,7 +47,7 @@ describe 'Authentication' do
 
       it 'displays the profile page as described in the params' do
         params[:name]               = 'Didier'
-        params[:auth_entry][:email] = 'did@locomotivecms.com'
+        params[:auth_entry][:email] = 'did+rspec@locomotivecms.com'
         sign_up(params, true)
         expect(last_response.body).to include "Your customer account as been succefully created"
         expect(last_response.body).to include "Didier"
@@ -55,7 +55,7 @@ describe 'Authentication' do
 
       context 'wrong parameters' do
         let(:name)                  { 'Sebastien' }
-        let(:email)                 { 'sebastien.beau@akretion.com' }
+        let(:email)                 { 'sebastien.beau+rspec@akretion.com' }
         let(:password_confirmation) { 'easyone2' }
 
         it 'renders the sign up page with an error message' do
