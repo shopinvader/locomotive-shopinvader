@@ -47,8 +47,7 @@ module Spec
         header 'Content-type', "application/json"
         params = params.to_json
       end
-      post '/invader/addresses/create', params, {'CONTENT_TYPE': "application/json"}
-      require 'byebug'; byebug
+      post '/invader/addresses/create', params
       follow_redirect! if follow_redirect
       last_response
     end

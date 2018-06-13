@@ -17,8 +17,12 @@ module ShopInvader
       end
 
       def _render_json(response)
-        data = erp.parse_response(response)['data']
-        render_response(JSON.dump(data), 200, 'application/json')
+        if response.status == 200
+          data = erp.parse_response(response)['data']
+          render_response(JSON.dump(data), 200, 'application/json')
+        else
+          render_response(response.body, response.status, 'application/json')
+        end
       end
 
       def _render_html(response)
@@ -43,23 +47,6 @@ module ShopInvader
         # TODO process pdf / binary file
         #@next_response = [200, response[:headers].stringify_keys, [response[:body]]]
       end
-
-#
-#          begin
-#            response = erp.call(method, path, params)
-#          rescue ShopInvader::ErpMaintenance => e
-#            env['steam.liquid_assigns']['store_maintenance'] = true
-#            response = {error: true}
-#          end
-#          if not response.include?(:error)
-#            if response.include?('redirect_to')
-#              redirect_to response['redirect_to'], 302
-#            elsif params.include?('redirect_success_to')
-#              redirect_to params['redirect_success_to'], 302
-#            end
-#          end
-#        end
-#      end
 
       private
 
