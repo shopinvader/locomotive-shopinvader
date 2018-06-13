@@ -41,13 +41,26 @@ module Spec
       last_response
     end
 
-    def add_an_address(params, referer, follow_redirect = false)
+    def add_an_address(params, referer, follow_redirect = false, json = false)
       header 'Referer', referer
-      post '/invader/addresses/create', params
+      if json
+        header 'Content-type', "application/json"
+        params = params.to_json
+      end
+      post '/invader/addresses/create', params, {'CONTENT_TYPE': "application/json"}
+      require 'byebug'; byebug
       follow_redirect! if follow_redirect
       last_response
     end
 
+    def remove_addresses
+      header 'Content-type', "application/json"
+      get '/invader/addresses?per_page=200&scope[address_type]=address'
+      addresses = JSON.parse(last_response.body)
+      addresses.each do | address |
+         delete "/invader/addresses/#{address['id']}"
+      end
+    end
 
   end
 end

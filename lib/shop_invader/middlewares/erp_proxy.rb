@@ -8,7 +8,7 @@ module ShopInvader
         if env['steam.path'].start_with?('invader/')
           path = env['steam.path'].sub('invader/', '')
           response = erp.call(env['REQUEST_METHOD'], path, params)
-          if env['CONTENT_TYPE'] == "application/json"
+          if env['CONTENT_TYPE'] == "application/json" || env['REQUEST_METHOD'] == 'GET'
             _render_json(response)
           else
             _render_html(response)
@@ -17,7 +17,8 @@ module ShopInvader
       end
 
       def _render_json(response)
-        render_response(JSON.dump(response), 200, 'application/json')
+        data = erp.parse_response(response)['data']
+        render_response(JSON.dump(data), 200, 'application/json')
       end
 
       def _render_html(response)
