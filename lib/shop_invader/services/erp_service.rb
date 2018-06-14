@@ -1,20 +1,14 @@
 module ShopInvader
   class ErpService
-
+    FORWARD_HEADER = %w(ACCEPT ACCEPT_ENCODING ACCEPT_LANGUAGE HOST REFERER ACCEPT USER_AGENT)
     attr_reader :client
     attr_reader :session
 
-    def initialize(site, session, customer, locale)
-      headers = {
-        api_key:  site.metafields['erp']['api_key'],
-        lang:     ShopInvader::LOCALES[locale.to_s],
-      }
-      if customer && customer.email
-        headers[:partner_email] = customer.email
-      end
+    def initialize(request, site, session, customer, locale)
       @customer = customer
       @site     = site
       @session  = session
+      headers = get_header_for_request(locale, request)
       @client   = Faraday.new(
         url: site.metafields['erp']['api_url'],
         headers: headers)
@@ -126,29 +120,46 @@ module ShopInvader
       Locomotive::Common::Logger.error msg
     end
 
-    def extract_session()
-        headers = {}
-        if session
+    def add_header_info_from_session(headers)
+       if session
           session.keys.each do |key|
             if key.start_with?('erp_')
                 headers[('sess_' + key.sub('erp_', '')).to_sym] = session[key].to_s
             end
           end
        end
-       headers
+    end
+
+    def add_client_header(request, headers)
+      FORWARD_HEADER.each do | key |
+        headers["INVADER_CLIENT_#{key}"] = request.get_header("HTTP_#{key}")
+      end
+      headers["INVADER_CLIENT_IP"] = request.ip
+    end
+
+    def get_header_for_request(locale, request)
+      headers = {
+        api_key:  @site.metafields['erp']['api_key'],
+        lang:     ShopInvader::LOCALES[locale.to_s],
+      }
+      if @customer && @customer.email
+        headers[:partner_email] = @customer.email
+      end
+      add_client_header(request, headers)
+      add_header_info_from_session(headers)
+      headers
     end
 
     def _call(method, path, params)
-        headers = extract_session()
         method = method.downcase
         begin
           if ['post', 'put'].include?(method)
-            headers['Content-Type'] = 'application/json'
+            content_type = 'application/json'
             params = params.to_json
           else
-            headers['Content-Type'] = 'application/x-www-form-urlencoded'
+            content_type = 'application/x-www-form-urlencoded'
           end
-          client.headers.update(headers)
+          client.headers.update({'Content-Type': content_type})
           client.send(method.downcase, path, params)
         rescue
           log_error 'Odoo Error: server have an internal error, active maintenance mode'
