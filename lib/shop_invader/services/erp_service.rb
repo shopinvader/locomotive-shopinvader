@@ -139,8 +139,8 @@ module ShopInvader
 
     def get_header_for_request(locale, request)
       headers = {
-        api_key:  @site.metafields['erp']['api_key'],
-        lang:     ShopInvader::LOCALES[locale.to_s],
+        api_key: @site.metafields['erp']['api_key'],
+        ACCEPT_LANGUAGE: ShopInvader::LOCALES[locale.to_s],
       }
       if @customer && @customer.email
         headers[:partner_email] = @customer.email
