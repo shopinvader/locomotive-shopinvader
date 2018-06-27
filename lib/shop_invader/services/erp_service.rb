@@ -63,7 +63,8 @@ module ShopInvader
     end
 
     def initialize_customer
-      _call('POST', 'customer/sign_in', {})
+      response = _call('POST', 'customer/sign_in', {})
+      parse_response(response)
     end
 
     def parse_response(response)

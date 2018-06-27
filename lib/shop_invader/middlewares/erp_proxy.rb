@@ -27,7 +27,7 @@ module ShopInvader
 
       def _render_html(response)
         if response.status == 200
-          data = erp.parse_response(response)['data']
+          data = erp.parse_response(response)
           if data.include?('redirect_to')
             redirect_to data['redirect_to'], 302
           elsif params.include?('invader_success_url')
