@@ -133,15 +133,15 @@ module ShopInvader
 
     def add_client_header(request, headers)
       FORWARD_HEADER.each do | key |
-        headers["INVADER_CLIENT_#{key}"] = request.get_header("HTTP_#{key}")
+        headers["invader_client_#{key.downcase()}".to_sym] = request.get_header("HTTP_#{key}")
       end
-      headers["INVADER_CLIENT_IP"] = request.ip
+      headers[:invader_client_ip] = request.ip
     end
 
     def get_header_for_request(locale, request)
       headers = {
         api_key: @site.metafields['erp']['api_key'],
-        ACCEPT_LANGUAGE: ShopInvader::LOCALES[locale.to_s],
+        accept_language: ShopInvader::LOCALES[locale.to_s],
       }
       if @customer && @customer.email
         headers[:partner_email] = @customer.email
