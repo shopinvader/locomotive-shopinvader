@@ -1,20 +1,14 @@
 module ShopInvader
   class ErpService
-
+    FORWARD_HEADER = %w(ACCEPT ACCEPT_ENCODING ACCEPT_LANGUAGE HOST REFERER ACCEPT USER_AGENT)
     attr_reader :client
     attr_reader :session
 
-    def initialize(site, session, customer, locale)
-      headers = {
-        api_key:  site.metafields['erp']['api_key'],
-        lang:     ShopInvader::LOCALES[locale.to_s]
-      }
-      if customer && customer.email
-        headers[:partner_email] = customer.email
-      end
+    def initialize(request, site, session, customer, locale)
       @customer = customer
       @site     = site
       @session  = session
+      headers = get_header_for_request(locale, request)
       @client   = Faraday.new(
         url: site.metafields['erp']['api_url'],
         headers: headers)
@@ -35,12 +29,17 @@ module ShopInvader
     end
 
     def find_all(name, conditions: nil, page: 1, per_page: 20)
-      params = {
-          per_page: per_page,
-          page: page,
-          domain: conditions }
+      params = { per_page: per_page, page: page }
+      if conditions
+        params[:scope] = conditions
+      end
       path = name.sub('_', '/')
-      call('GET', path, params)
+      response = call('GET', path, params)
+      if response.status == 200
+        parse_response(response)
+      else
+        catch_error(response)
+      end
     end
 
     def is_cached?(name)
@@ -64,13 +63,8 @@ module ShopInvader
     end
 
     def initialize_customer
-      _call('GET', 'sign', {})
-    end
-
-    private
-
-    def log_error(msg)
-      Locomotive::Common::Logger.error msg
+      response = _call('POST', 'customer/sign_in', {})
+      parse_response(response)
     end
 
     def parse_response(response)
@@ -121,28 +115,53 @@ module ShopInvader
         res
     end
 
-    def extract_session()
-        headers = {}
-        if session
+    private
+
+    def log_error(msg)
+      Locomotive::Common::Logger.error msg
+    end
+
+    def add_header_info_from_session(headers)
+       if session
           session.keys.each do |key|
             if key.start_with?('erp_')
                 headers[('sess_' + key.sub('erp_', '')).to_sym] = session[key].to_s
             end
           end
        end
-       headers
+    end
+
+    def add_client_header(request, headers)
+      FORWARD_HEADER.each do | key |
+        headers["invader_client_#{key.downcase()}".to_sym] = request.get_header("HTTP_#{key}")
+      end
+      headers[:invader_client_ip] = request.ip
+    end
+
+    def get_header_for_request(locale, request)
+      headers = {
+        api_key: @site.metafields['erp']['api_key'],
+        accept_language: ShopInvader::LOCALES[locale.to_s],
+      }
+      if @customer && @customer.email
+        headers[:partner_email] = @customer.email
+      end
+      add_client_header(request, headers)
+      add_header_info_from_session(headers)
+      headers
     end
 
     def _call(method, path, params)
-        headers = extract_session()
-        client.headers.update(headers)
+        method = method.downcase
         begin
-          response = client.send(method.downcase, path, params)
-          if response.status == 200
-            parse_response(response)
+          if ['post', 'put'].include?(method)
+            content_type = 'application/json'
+            params = params.to_json
           else
-            catch_error(response)
+            content_type = 'application/x-www-form-urlencoded'
           end
+          client.headers.update({'Content-Type': content_type})
+          client.send(method.downcase, path, params)
         rescue
           log_error 'Odoo Error: server have an internal error, active maintenance mode'
           raise ShopInvader::ErpMaintenance.new('ERP under maintenance')

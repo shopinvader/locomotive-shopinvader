@@ -12,6 +12,7 @@ require 'shop_invader/middlewares/templatized_page'
 require 'shop_invader/middlewares/erp_proxy'
 require 'shop_invader/middlewares/store'
 require 'shop_invader/middlewares/renderer'
+require 'shop_invader/middlewares/locale'
 require_relative_all %w(concerns concerns/sitemap), 'shop_invader/middlewares'
 require_relative_all %w(. drops filters tags tags/concerns), 'shop_invader/liquid'
 require 'shop_invader/steam_patches'
@@ -24,7 +25,8 @@ module ShopInvader
   # might change in Locomotive v4.
   LOCALES = {
     'fr' => 'fr_FR',
-    'en' => 'en_US'
+    'en' => 'en_US',
+    'es' => 'es_ES',
   }
 
   def self.setup
@@ -48,24 +50,40 @@ module ShopInvader
           'external_id': entry._id,
           'email': entry.email
           })
-      if params.include?('anonymous_token')
-          method = 'PUT'
-      else
-          method = 'POST'
+
+      %w(auth_action auth_disable_email auth_content_type auth_id_field
+         auth_password_field auth_email_handle auth_callback auth_entry).each do | key |
+        params.delete(key)
       end
+      rollback = false
       begin
-        data = service.erp.call(method, 'sign', params)
+        response = service.erp.call('POST', 'customer', params)
       rescue ShopInvader::ErpMaintenance => e
         request.env['steam.liquid_assigns']['store_maintenance'] = true
-        data = {error: true}
+        rollback = true
+      else
+        if response.status == 200
+          data = service.erp.parse_response(response)['data']
+          unless data.include?('role')
+            data['role'] = request.env['steam.site'].metafields['erp']['default_role']
+          end
+          vals = {}
+          current_vals = entry.to_hash
+          data.each do |key, val|
+            if current_vals.include?(key) && current_vals[key] != data[key]
+              vals[key] = val
+            end
+          end
+          service.content_entry.update_decorated_entry(entry, vals)
+        else
+          rollback = true
+        end
       end
-      if data[:error]
+      if rollback
         # Drop the content created (no rollback on mongodb)
         service.content_entry.delete(entry.content_type_slug, entry._id)
         # Add a fake error field to avoid content authentification
         entry.errors.add('error', 'Fail to create')
-      else
-        service.content_entry.update_decorated_entry(entry, {role: data['data']['role']})
       end
     end
 

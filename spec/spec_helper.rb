@@ -12,15 +12,23 @@ SimpleCov.start do
 end
 
 require 'bundler/setup'
-require 'shop_invader'
 
+require_relative 'support/helpers'
 require_relative 'support/request'
 require_relative 'support/steam'
 require_relative 'support/liquid'
 
+require 'shop_invader'
+require_relative '../lib/shop_invader.rb'
+
 RSpec.configure do |config|
+  config.include Spec::Helpers
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = '.rspec_status'
+  config.before(:all) { remove_logs; setup_common }
+  #config.before { reset! }
+  #config.after  { reset! }
+  config.order = :random
 
   config.expect_with :rspec do |c|
     c.syntax = :expect

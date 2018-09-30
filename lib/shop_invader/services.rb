@@ -9,7 +9,7 @@ module Locomotive::Steam::Services
 
     register :erp do
       ShopInvader::ErpService.new(
-          current_site, request.env['rack.session'], request.env['authenticated_entry'], locale)
+          request, current_site, request.env['rack.session'], request.env['authenticated_entry'], locale)
     end
 
   end

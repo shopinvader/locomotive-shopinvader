@@ -38,14 +38,12 @@ module ShopInvader
             if config['have_variant']
                 filter = 'main: true'
             end
-
-            results = index.search('', {
-                'attributesToRetrieve' => 'name,objectID,url_key',
-                'hitsPerPage' => 1000,
-                'filters' => filter,
-            })
-
-            results['hits'].each do |hit|
+            params = {
+               query: '',
+               attributesToRetrieve: 'name,objectID,url_key',
+               filters: filter,
+            }
+            index.browse(params) do |hit|
               record = records[hit['objectID']] ||= {}
               record[locale] = { name: hit['name'], url: find_route(config['name']).gsub('*', hit['url_key']) }
             end
@@ -78,7 +76,7 @@ module ShopInvader
       if @customer
         role = @customer.role
       end
-      role ||= @site.metafields['erp']['default_pricelist']
+      role ||= @site.metafields['erp']['default_role']
       response['hits'].each do |hit|
         if hit.include?('price')
           hit['price'] = hit['price'][role]
