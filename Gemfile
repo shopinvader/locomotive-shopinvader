@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'locomotivecms_steam', github: 'locomotivecms/steam'
+gem 'locomotivecms_common', github: 'locomotivecms/common'
 gem 'faraday'
 
 group :test do
