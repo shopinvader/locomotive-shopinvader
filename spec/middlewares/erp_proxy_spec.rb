@@ -7,12 +7,13 @@ RSpec.describe ShopInvader::Middlewares::ErpProxy do
                                'product_code' => 'char-aku',
                                'product_id' => '252',
                                'item_qty' => '1'} }
-  let(:response)            { {cart: {'name': 'SO00042'},
+  let(:response_data)       { {cart: {'name': 'SO00042'},
                                set_session: {'cart_id': 42},
                                'content-type' => 'application/json'} }
+  let(:response)            { instance_double('Response', body: JSON.dump(response_data), status: 200) }
   let(:session)             { {erp_cart_id: 42} }
   let(:app)                 { ->(env) { [200, env] } }
-  let(:erp_service)         { instance_double('ErpService', call: response)}
+  let(:erp_service)         { instance_double('ErpService', call: response, parse_response: {'body': response_data})}
   let(:services)            { instance_double('Services', erp: erp_service) }
   let(:middleware)          { described_class.new(app) }
 
@@ -32,7 +33,7 @@ RSpec.describe ShopInvader::Middlewares::ErpProxy do
   end
 
   context 'Call Post API' do
-    let(:path)   { '_store/cart/item' }
+    let(:path)   { 'invader/cart/item' }
 
     it 'add item in cart' do
       expect(services.erp).to receive(:call).with(

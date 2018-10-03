@@ -6,6 +6,7 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
+  - rm -rf spec/integration # for now we do not run integration test yet
 before_install: gem install bundler -v 1.14.6
 script: "bundle exec rake spec"
 after_script:

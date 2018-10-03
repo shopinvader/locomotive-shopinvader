@@ -14,9 +14,13 @@ def build_services_for_algolia(application_id: '42', api_key: '42', indices: [])
 end
 
 def build_services_for_erp(api_url: 'http://models.example.com/shopinvader', api_key: '42', session: nil)
-  request = instance_double('Request', env: {
-      'rack.session' => session,
-      })
+  request = instance_double('Request',
+      env: {
+        'rack.session' => session,
+      },
+      get_header: "foo",
+      ip: '42.42.42.42',
+      )
   site    = instance_double('Site', metafields: {
     'erp' => {
       'api_url'  => api_url,
