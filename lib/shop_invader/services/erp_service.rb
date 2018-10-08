@@ -24,8 +24,7 @@ module ShopInvader
     end
 
     def find_one(name)
-      path = name.sub('_', '/')
-      call('GET', path, nil)
+      call('GET', name, nil)
     end
 
     def find_all(name, conditions: nil, page: 1, per_page: 20)
@@ -33,8 +32,7 @@ module ShopInvader
       if conditions
         params[:scope] = conditions
       end
-      path = name.sub('_', '/')
-      response = call('GET', path, params)
+      response = call('GET', name, params)
       if response.status == 200
         parse_response(response)
       else
