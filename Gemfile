@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in shop_invader.gemspec
 gemspec
 
-gem 'locomotivecms_steam', github: 'locomotivecms/steam'
+gem 'locomotivecms_steam', github: 'akretion/steam', branch: 'v1.4.x.shopinvader'
 gem 'faraday'
 
 group :test do
