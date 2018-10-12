@@ -6,7 +6,7 @@ RSpec.describe ShopInvader::ErpService do
   let(:path)                { 'orders' }
   let(:page)                { 1 }
   let(:per_page)            { 5 }
-  let(:params)              { {domain: conditions, page: page, per_page: per_page} }
+  let(:params)              { {page: page, per_page: per_page} }
   let(:conditions)          { nil }
   let(:session)             { nil }
   let(:expected_session)    { session }
@@ -30,36 +30,38 @@ RSpec.describe ShopInvader::ErpService do
   let(:locale)    { 'fr' }
   let(:customer)  { nil }
   let(:site)      { instance_double('Site', metafields: metafields) }
-  let(:service)   { described_class.new(site, session, customer, locale)}
+  let(:request)   { instance_double('Request', get_header: 'foo', ip: '42.42.42.42') }
+  let(:service)   { described_class.new(request, site, session, customer, locale)}
+
 
   describe '#call GET' do
-    let(:session)              { {'erp_cart_id' => 42} }
-
     before { allow(service).to receive(:client).and_return(client) }
     subject { service.call(method, path, params) }
 
     context "The result is not cache in session" do
       it 'should call the erp with the method, the path and the params' do
         expect(client).to receive(:get).with('orders', params).and_return(response)
-        is_expected.to eq(parsed_response)
-        expect(client.headers[:sess_cart_id]).to eq '42'
-        expect(session).to eq(expected_session)
+        is_expected.to eq(response)
       end
     end
+  end
 
-    context "The result is ask for storing it" do
+  describe '#parse response' do
+    before { allow(service).to receive(:client).and_return(client) }
+    subject { service.parse_response(response) }
+
+    context "The result is flag to be cached" do
+      let(:session)   { {'erp_cart_id' => 42} }
       let(:expected_session)   { {'erp_cart_id' => 42, 'store_cart' => jsondata} }
       let(:erp_response)       { {'data' => {'name' => 'SO00042'},
                                   'size' => 1,
                                   'store_cache' => {'cart': {'name' => 'SO00042'}}} }
 
-      it 'should call the erp and store the data in the session' do
-        expect(client).to receive(:get).with('orders', params).and_return(response)
+      it 'should store the data in the session' do
         is_expected.to eq(parsed_response)
         expect(session).to eq(expected_session)
       end
     end
-
   end
 
   describe '#read_from_cache' do
@@ -88,12 +90,12 @@ RSpec.describe ShopInvader::ErpService do
     describe 'filtering by string, boolean, float' do
 
       let(:conditions) { { 'name' => 'SO0042', 'shipped' => true, 'amount.gt' => 42} }
+      let(:params) { {page: page, per_page: per_page, scope: conditions} }
 
       it 'should call the erp with the domain in the params' do
         expect(client).to receive(:get).with('orders', params).and_return(response)
         is_expected.to eq(parsed_response)
       end
-
     end
   end
 
