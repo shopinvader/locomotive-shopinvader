@@ -1,0 +1,25 @@
+services:
+  db:
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_DB=odoodb
+    volumes:
+      - .db/:/var/lib/postgresql/data
+    image: quay.io/akretion/postgresql:10
+  odoo:
+    environment:
+      - VIRTUAL_HOST=shopinvader-odoo.dy
+      - VIRTUAL_PORT=8069
+      - DEMO=True
+    image: quay.io/akretion/shopinvader-odoo:${VERSION}-latest
+    links:
+      - db
+  shopinvader:
+    image: quay.io/akretion/docky-ruby:latest
+    volumes:
+      - .:/workspace
+      - ./bundle:/usr/local/bundle
+      - ./template:/tmp/site
+    links:
+      - odoo
+version: '3'

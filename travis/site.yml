@@ -1,0 +1,113 @@
+# The name of this site
+# This text displays in the back-office and
+# can be used in templates through the site.name global variable
+name: "Shopinvader demo (Shopinvader Demo)"
+
+# An array of domain aliases for the site
+# This option is for sites on multi-site engines
+domains: [example.org]
+
+# An array of locales (languages) the site is available in
+# The locale listed first is the site's default locale
+# Locales are specified using ISO language codes
+# Possible locales include: en, de, fr, pl, pt-BR, it, nl, nb, es, ru, et, ja, zh-CN
+locales: [en, fr]
+
+seo_title: Shopinvader demo | May the discount be with you
+meta_keywords: "the Shopinvader  demo web store"
+meta_description: "the Shopinvader demo web store"
+
+metafields_ui:
+  label:
+    en: Store settings # use a hash for localized versions
+  icon: shopping-cart # FontAwesome icons without the leading "fa-" string.
+  hint: ""
+metafields:
+  store:
+    phone_number: < Your Store Hotline number >
+  google:
+    analytics_id:
+  theme:
+    logo: "/samples/assets/shop-logo.png"
+    noimage: "/samples/assets/no-image.jpg"
+  algolia:
+    application_id: 'GH41KF783Z'
+    api_key: "75575d3910b3ac55428bcdfa1b0e6784"
+    indices: >
+      [
+        { "name": "categories", "index": "demo_site_10_category" },
+        { "name": "products", "index": "demo_site_10_product" }
+      ]
+    routes: >
+      [
+          ["*", { "name": "category", "template_handle": "category", "index": "categories" } ],
+          ["*", { "name": "product", "template_handle": "product", "index": "products" } ]
+      ]
+  erp:
+    api_key: "12345"
+    api_url: http://odoo:8069/shopinvader
+    default_role: default
+  payment:
+    stripe_api_key: < Your stripe API KEY >
+  smtp:
+    sender: < Your sender email address >
+    address: < Your SMTP Server address >
+    port: < Your SMTP Server port >
+    user_name: < Your SMTP user ID >
+    password: < Your SMTP User password >
+    authentication: plain
+    enable_starttls_auto: true
+  _store:
+    available_countries: >
+      {
+        "fr": [
+          { "name": "France", "id": 76 },
+          { "name": "Belgium", "id": 21 },
+          { "name": "Spain", "id": 69 }
+        ],
+        "en": [
+          { "name": "France", "id": 76 },
+          { "name": "Belgium", "id": 21 },
+          { "name": "Spain", "id": 69 }
+        ]
+      }
+    all_filters: >
+      {
+        "fr": [
+        ],
+        "en": [
+        ]
+      }
+    currencies_rate: >
+      {
+        "EUR" : 1,
+        "USD" : 1.17,
+        "CAD" : 1.54
+      }
+    currencies_format: >
+      {
+        "EUR" : {
+          "format": "%n %u",
+          "unit": "€",
+          "separator": ",",
+          "delimiter": " ",
+          "code": "EUR",
+          "default_locale": "fr-FR"
+        },
+        "USD" : {
+          "format": "%u %n",
+          "unit": "$",
+          "separator": ".",
+          "delimiter": " ",
+          "code": "USD",
+          "default_locale": "en-US"
+        },
+        "CAD" : {
+          "format": "%u %n",
+          "unit": "$",
+          "separator": ".",
+          "delimiter": " ",
+          "code": "CAD",
+          "default_locale": "en-EN"
+        }
+      }
