@@ -1,7 +1,10 @@
 require 'simplecov'
+
 SimpleCov.start do
-  formatter SimpleCov::Formatter::MultiFormatter.new([
-    SimpleCov::Formatter::HTMLFormatter])
+  if ENV['TRAVIS']
+    require 'codecov'
+    SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  end
 
   add_filter 'bin/'
   add_filter 'spec/'
