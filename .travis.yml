@@ -2,6 +2,8 @@ sudo: required
 services:
   - docker
 
+language: python
+
 before_install:
   - mkdir .db
   - sudo pip install docker-compose
