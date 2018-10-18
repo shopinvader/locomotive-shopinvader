@@ -7,17 +7,11 @@ module ShopInvader
       def _call
         if env['steam.path'].start_with?('invader/')
           path = env['steam.path'].sub('invader/', '')
-          response = erp.call(env['REQUEST_METHOD'], path, params)
-          # the check_payment path always need to render an html page
-          # as this is the redirection done by the payment provider
-          # if we have some other case with the same need maybe it will be
-          # better to pass an args, but for now we check the path
-          if path.include?('check_payment')
-            _render_html(response)
-          elsif env['CONTENT_TYPE'] == "application/json" || env['REQUEST_METHOD'] == 'GET'
-            _render_json(response)
+          response = erp.call_without_parsing(env['REQUEST_METHOD'], path, params)
+          if force_redirection || html_form_edition
+            _process_redirection(response)
           else
-            _render_html(response)
+            _render_json(response)
           end
         end
       end
@@ -27,11 +21,13 @@ module ShopInvader
           data = erp.parse_response(response)['data']
           render_response(JSON.dump(data), 200, 'application/json')
         else
+          # We do not catch the error here as this should be done
+          # by the code that call this end point
           render_response(response.body, response.status, 'application/json')
         end
       end
 
-      def _render_html(response)
+      def _process_redirection(response)
         if response.status == 200
           data = erp.parse_response(response)
           if data.include?('redirect_to')
@@ -56,8 +52,37 @@ module ShopInvader
 
       private
 
+      def force_redirection
+        # the check_payment path always need to render an html page
+        # as this is the redirection done by the payment provider
+        # we keep it for compatibility reason but it's better to use
+        # the params "force_apply_redirection"
+        params.include?('force_apply_redirection') || path.include?('check_payment')
+      end
+
+      def html_form_edition
+        # if you do a post/put/delete from the browse directly with a basic html form
+        # we process it as an html edition and we will do the redirection
+        # parsing the http_accept is done in a simple way here
+ 		accept = parse_http_accept_header(request.get_header('HTTP_ACCEPT'))
+        if accept.size > 0
+          accept[0][0] == "text/html" && (request.post? || request.delete? || request.put?)
+        end
+      end
+
       def erp
         services.erp
+      end
+
+      def parse_http_accept_header(header)
+        header.to_s.split(/\s*,\s*/).map do |part|
+          attribute, parameters = part.split(/\s*;\s*/, 2)
+          quality = 1.0
+          if parameters and /\Aq=([\d.]+)/ =~ parameters
+            quality = $1.to_f
+          end
+          [attribute, quality]
+        end
       end
 
     end

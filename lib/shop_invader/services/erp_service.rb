@@ -15,12 +15,21 @@ module ShopInvader
     end
 
     def call(method, path, params)
+        response = call_without_parsing(method, path, params)
+        if response.status == 200
+          parse_response(response)
+        else
+          catch_error(response)
+        end
+    end
+
+    def call_without_parsing(method, path, params)
         if @customer && ! is_cached?('customer')
             # initialisation not have been done maybe odoo was not
             # available, init it before applying the request
             initialize_customer
         end
-        _call(method, path, params)
+        response = _call(method, path, params)
     end
 
     def find_one(name)
@@ -32,12 +41,7 @@ module ShopInvader
       if conditions
         params[:scope] = conditions
       end
-      response = call('GET', name, params)
-      if response.status == 200
-        parse_response(response)
-      else
-        catch_error(response)
-      end
+      call('GET', name, params)
     end
 
     def is_cached?(name)
@@ -68,23 +72,33 @@ module ShopInvader
     def parse_response(response)
       headers = response.headers
       if headers['content-type'] == 'application/json'
-          res = JSON.parse(response.body)
-          if res.include?('set_session')
-              res.delete('set_session').each do |key, val|
-                session['erp_' + key] = val
-              end
-          end
-          if res.include?('store_cache')
-            res.delete('store_cache').each do | key, value |
-              session['store_' + key] = JSON.dump(value)
+        res = JSON.parse(response.body)
+        if res.include?('set_session')
+            res.delete('set_session').each do |key, val|
+              session['erp_' + key] = val
             end
+        end
+        if res.include?('store_cache')
+          res.delete('store_cache').each do | key, value |
+            session['store_' + key] = JSON.dump(value)
           end
-          res['content-type'] = 'application/json'
-        res
+        end
+        # TODO we can remove this if when on odoo side we will have moved
+        # the "redirect_to" into data
+        # {'data': {'redirect_to': '...'}}
+        # the size and data in data
+        # {'data': {'items': [], 'size': ..}}
+        if res.include?('redirect_to')
+          {'redirect_to' => res['redirect_to']}
+        elsif res.include?('size')
+          {'data' => res['data'], 'size' => res['size']}
+        else
+          res['data']
+        end
       else
         {
-            'body': response.body,
-            'headers': {
+            body: response.body,
+            headers: {
                 'Content-Type': headers['content-type'],
                 'Content-Disposition': headers['content-disposition'],
                 'Content-Length': headers['content-length'],

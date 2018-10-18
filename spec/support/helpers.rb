@@ -46,6 +46,8 @@ module Spec
       if json
         header 'Content-type', "application/json"
         params = params.to_json
+      else
+        header 'Accept', "text/html,*/*;q=0.01"
       end
       post '/invader/addresses/create', params
       follow_redirect! if follow_redirect
@@ -56,8 +58,10 @@ module Spec
       header 'Content-type', "application/json"
       get '/invader/addresses?per_page=200&scope[address_type]=address'
       addresses = JSON.parse(last_response.body)
-      addresses.each do | address |
-         delete "/invader/addresses/#{address['id']}"
+      if addresses
+        addresses.each do | address |
+          delete "/invader/addresses/#{address['id']}"
+        end
       end
     end
 

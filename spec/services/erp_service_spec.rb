@@ -41,7 +41,7 @@ RSpec.describe ShopInvader::ErpService do
     context "The result is not cache in session" do
       it 'should call the erp with the method, the path and the params' do
         expect(client).to receive(:get).with('orders', params).and_return(response)
-        is_expected.to eq(response)
+        is_expected.to eq(erp_response)
       end
     end
   end
@@ -58,7 +58,7 @@ RSpec.describe ShopInvader::ErpService do
                                   'store_cache' => {'cart': {'name' => 'SO00042'}}} }
 
       it 'should store the data in the session' do
-        is_expected.to eq(parsed_response)
+        is_expected.to eq({"data"=>{"name"=>"SO00042"}, "size"=>1})
         expect(session).to eq(expected_session)
       end
     end
@@ -84,7 +84,7 @@ RSpec.describe ShopInvader::ErpService do
 
     it 'should call the get method on the orders with the params' do
       expect(client).to receive(:get).with('orders', params).and_return(response)
-      is_expected.to eq(parsed_response)
+      is_expected.to eq(erp_response)
     end
 
     describe 'filtering by string, boolean, float' do
@@ -94,7 +94,7 @@ RSpec.describe ShopInvader::ErpService do
 
       it 'should call the erp with the domain in the params' do
         expect(client).to receive(:get).with('orders', params).and_return(response)
-        is_expected.to eq(parsed_response)
+        is_expected.to eq(erp_response)
       end
     end
   end

@@ -57,13 +57,14 @@ module ShopInvader
       end
       rollback = false
       begin
-        response = service.erp.call('POST', 'customer', params)
+        data = service.erp.call('POST', 'customer', params)
       rescue ShopInvader::ErpMaintenance => e
         request.env['steam.liquid_assigns']['store_maintenance'] = true
         rollback = true
       else
-        if response.status == 200
-          data = service.erp.parse_response(response)['data']
+        if data.include?(:error)
+          rollback = true
+        else
           unless data.include?('role')
             data['role'] = request.env['steam.site'].metafields['erp']['default_role']
           end
@@ -75,8 +76,6 @@ module ShopInvader
             end
           end
           service.content_entry.update_decorated_entry(entry, vals)
-        else
-          rollback = true
         end
       end
       if rollback

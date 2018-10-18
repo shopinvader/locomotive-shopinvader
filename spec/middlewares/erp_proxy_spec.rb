@@ -36,7 +36,7 @@ RSpec.describe ShopInvader::Middlewares::ErpProxy do
     let(:path)   { 'invader/cart/item' }
 
     it 'add item in cart' do
-      expect(services.erp).to receive(:call).with(
+      expect(services.erp).to receive(:call_without_parsing).with(
           'POST', 'cart/item', params).and_return(response)
       is_expected.to eq subject
     end
