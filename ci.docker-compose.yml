@@ -1,0 +1,28 @@
+services:
+  db:
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_DB=odoodb
+    volumes:
+      - .db/:/var/lib/postgresql/data
+    image: quay.io/akretion/postgresql:10
+  odoo:
+    environment:
+      - VIRTUAL_HOST=shopinvader-odoo.dy
+      - VIRTUAL_PORT=8069
+      - DEMO=True
+    image: quay.io/akretion/shopinvader-odoo:${VERSION}-latest
+    links:
+      - db
+  shopinvader:
+    image: quay.io/akretion/docky-ruby:latest
+    environment:
+      - ALGOLIA_APP_ID=C04JR8U8Y1
+      - ALGOLIA_API_KEY=610bbcca628ecb66a8e3ec44483c9b33
+    volumes:
+      - .:/workspace
+      - ./bundle:/usr/local/bundle
+      - ./template:/tmp/site
+    links:
+      - odoo
+version: '3'

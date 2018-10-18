@@ -1,13 +1,28 @@
-sudo: false
-language: ruby
-rvm:
-  - 2.3.3
+sudo: required
+services:
+  - docker
+
+language: python
+
+before_install:
+  - mkdir .db
+  - sudo pip install docker-compose
+  - docker-compose -f ci.docker-compose.yml run --rm --service-ports odoo odoo --stop-after-init
+  - git clone https://github.com/akretion/shopinvader-template template
+  - cp travis/site.yml template/config
+  - docker-compose -f ci.docker-compose.yml run --rm --service-ports shopinvader bundle install
+
+env:
+  matrix:
+    - VERSION="10.0"
+
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
-  - rm -rf spec/integration # for now we do not run integration test yet
-before_install: gem install bundler -v 1.14.6
-script: "bundle exec rake spec"
+
+script:
+  - docker-compose -f ci.docker-compose.yml run --rm --service-ports shopinvader rake spec
+
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
