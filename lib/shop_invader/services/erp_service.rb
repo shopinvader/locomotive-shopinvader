@@ -155,8 +155,15 @@ module ShopInvader
         api_key: @site.metafields['erp']['api_key'],
         accept_language: ShopInvader::LOCALES[locale.to_s],
       }
-      if @customer && @customer.email
-        headers[:partner_email] = @customer.email
+      # for the guest mode the email is into the store cache
+      # indeed no session is initialized therefore the service is initialized with a nil customer
+      if not session['store_customer'].nil?
+        customer = read_from_cache('customer')
+        if customer && customer['email']
+          headers[:partner_email] = customer['email']
+        end
+      elsif @customer && @customer.email
+        headers[:partner_email] = customer.email
       end
       add_client_header(request, headers)
       add_header_info_from_session(headers)
