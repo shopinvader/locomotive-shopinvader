@@ -11,9 +11,17 @@ module Locomotive::Steam::Models
 
         collection = source.send(:paginate, @current_page, @per_page)
 
-        @total_entries  = collection[:size]
+        if collection.include?('size')
+          @total_entries  = collection['size']
+        elsif collection.include?(:size)
+          @total_entries  = collection[:size]
+        end
         @total_pages    = (@total_entries.to_f / @per_page).ceil
-        @collection     = collection[:data]
+        if collection.include?('data')
+          @collection     = collection['data']
+        elsif collection.include?(:data)
+          @collection  = collection[:data]
+        end
       else
         initialize_without_algolia(source, page, per_page)
       end

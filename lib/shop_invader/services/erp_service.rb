@@ -92,8 +92,14 @@ module ShopInvader
           {'redirect_to' => res['redirect_to']}
         elsif res.include?('size')
           {'data' => res['data'], 'size' => res['size']}
+        elsif res.include?('data')
+          if !res['data'].kind_of?(Array)
+            res['data']
+          else
+            {'data' => res['data'], 'size' => res['data'].length}
+          end
         else
-          res['data']
+          res
         end
       else
         {

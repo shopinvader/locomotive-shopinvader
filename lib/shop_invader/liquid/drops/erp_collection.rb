@@ -24,9 +24,9 @@ module ShopInvader
           if service.is_cached?(@name)
             @collection ||= service.read_from_cache(@name) || {}
           else
-            @collection ||= fetch_collection['data']
+            @collection ||= fetch_collection
           end
-          @collection
+          @collection['data']
         end
 
         def paginate(page, per_page)
