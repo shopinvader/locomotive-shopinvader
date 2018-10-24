@@ -57,7 +57,15 @@ module ShopInvader
       end
       rollback = false
       begin
-        data = service.erp.call('POST', 'customer', params)
+        if params.include?('auth_guest_signup')
+          register_params = {
+            'external_id': entry._id,
+            'email': entry.email
+          }
+          data = service.erp.call('POST', 'guest/register', register_params)
+        else
+          data = service.erp.call('POST', 'customer', params)
+        end
       rescue ShopInvader::ErpMaintenance => e
         request.env['steam.liquid_assigns']['store_maintenance'] = true
         rollback = true
