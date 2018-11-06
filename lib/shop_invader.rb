@@ -27,6 +27,7 @@ module ShopInvader
     'fr' => 'fr_FR',
     'en' => 'en_US',
     'es' => 'es_ES',
+    'it' => 'it_IT',
   }
 
   def self.setup
