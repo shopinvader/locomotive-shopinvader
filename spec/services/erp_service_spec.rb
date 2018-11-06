@@ -8,7 +8,7 @@ RSpec.describe ShopInvader::ErpService do
   let(:per_page)            { 5 }
   let(:params)              { {page: page, per_page: per_page} }
   let(:conditions)          { nil }
-  let(:session)             { nil }
+  let(:session)             { {} }
   let(:expected_session)    { session }
   let(:headers)             { {} }
   let(:data)                { {'name' => 'SO00042'} }
