@@ -11,6 +11,8 @@ module Locomotive::Steam::Models
 
         collection = source.send(:paginate, @current_page, @per_page)
 
+        # TODO refactor me when we will have a correct
+        # encapsulation response on odoo side
         if collection.include?('size')
           @total_entries  = collection['size']
         elsif collection.include?(:size)

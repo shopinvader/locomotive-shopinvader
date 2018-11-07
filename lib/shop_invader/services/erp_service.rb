@@ -83,8 +83,8 @@ module ShopInvader
             session['store_' + key] = JSON.dump(value)
           end
         end
-        # TODO we can remove this if when on odoo side we will have moved
-        # the "redirect_to" into data
+        # TODO we can remove this if when on odoo side we will have correct
+        # response encapsulation
         # {'data': {'redirect_to': '...'}}
         # the size and data in data
         # {'data': {'items': [], 'size': ..}}

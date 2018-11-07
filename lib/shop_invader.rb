@@ -60,6 +60,8 @@ module ShopInvader
         if params.include?('auth_guest_signup')
           register_params = {
             'external_id': entry._id,
+            # TODO it will be better to not pass this arg, we will discusse about it
+            # on odoo side then remove this comment of teh email here
             'email': entry.email
           }
           data = service.erp.call('POST', 'guest/register', register_params)
