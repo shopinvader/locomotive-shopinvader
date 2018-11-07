@@ -58,13 +58,24 @@ module ShopInvader
       end
       rollback = false
       begin
-        response = service.erp.call('POST', 'customer', params)
+        if params.include?('auth_guest_signup')
+          register_params = {
+            'external_id': entry._id,
+            # TODO it will be better to not pass this arg, we will discusse about it
+            # on odoo side then remove this comment of teh email here
+            'email': entry.email
+          }
+          data = service.erp.call('POST', 'guest/register', register_params)
+        else
+          data = service.erp.call('POST', 'customer', params)
+        end
       rescue ShopInvader::ErpMaintenance => e
         request.env['steam.liquid_assigns']['store_maintenance'] = true
         rollback = true
       else
-        if response.status == 200
-          data = service.erp.parse_response(response)['data']
+        if data.include?(:error)
+          rollback = true
+        else
           unless data.include?('role')
             data['role'] = request.env['steam.site'].metafields['erp']['default_role']
           end
@@ -76,8 +87,6 @@ module ShopInvader
             end
           end
           service.content_entry.update_decorated_entry(entry, vals)
-        else
-          rollback = true
         end
       end
       if rollback

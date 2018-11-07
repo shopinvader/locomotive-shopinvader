@@ -25,7 +25,7 @@ module ShopInvader
             if @context['store_maintenance']
               {}
             else
-              @resource ||= service.find_one(@name)['data']
+              @resource ||= service.find_one(@name)
             end
           end
         end

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../integration_helper'
 
-describe 'When I am loggin' do
+describe 'When I am logged in' do
 
   include Rack::Test::Methods
 

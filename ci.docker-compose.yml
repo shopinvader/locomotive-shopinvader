@@ -15,8 +15,11 @@ services:
     links:
       - db
   shopinvader:
-    image: quay.io/akretion/docky-ruby:latest
+    build: .
     environment:
+      - PGHOST=db
+      - PGUSER=odoo
+      - PGDATABASE=odoodb
       - ALGOLIA_APP_ID=C04JR8U8Y1
       - ALGOLIA_API_KEY=610bbcca628ecb66a8e3ec44483c9b33
     volumes:

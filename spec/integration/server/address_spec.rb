@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../integration_helper'
 
-describe 'When I am loggin' do
+describe 'When I am logged in' do
 
   include Rack::Test::Methods
 
@@ -27,7 +27,7 @@ describe 'When I am loggin' do
       country: country,
       invader_error_url: invader_error_url,
       invader_success_url: '/account/addresses',
-      name: 'Osiris',
+      name: 'Osiris RSPEC',
       phone: '0000000000',
       street:   'Rue des treffles',
       zip: '42110',

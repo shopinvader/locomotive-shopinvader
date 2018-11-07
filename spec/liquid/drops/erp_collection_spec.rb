@@ -6,7 +6,7 @@ describe ShopInvader::Liquid::Drops::ErpCollection do
   let(:services)  { build_services_for_erp(session: session) }
   let(:context)   { ::Liquid::Context.new({}, {}, { services: services }) }
   let(:drop)      { described_class.new('orders').tap { |d| d.context = context } }
-  let(:response)  { {size: 42, data: %w(a b c)} }
+  let(:response)  { {'size' => 42, 'data' => %w(a b c)} }
 
   describe '#total_entries' do
 
