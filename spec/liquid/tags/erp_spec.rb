@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Locomotive::Steam::Liquid::Tags::Consume do
 
   let(:method)    { 'get' }
-  let(:source)    { "{% erp #{method} sale_order %}" }
+  let(:source)    { "{% erp #{method} 'sale_order' %}" }
   let(:session)   { {} }
   let(:assigns)   { {} }
   let(:services)  { build_services_for_erp(session: session) }
@@ -23,34 +23,40 @@ describe Locomotive::Steam::Liquid::Tags::Consume do
       it { is_expected.to eq '' }
     end
 
+    describe 'validates a basic syntax with variable' do
+      let(:source)  { "{% assign service_path = 'sale_order'%}{% erp get service_path as sale %}" }
+      it { expect { subject }.not_to raise_exception }
+      it { is_expected.to eq '' }
+    end
+
     describe 'validates syntax with result' do
-      let(:source)  { '{% erp get sale_order as sale %}' }
+      let(:source)  { "{% erp get 'sale_order' as sale %}" }
       it { expect { subject }.not_to raise_exception }
       it { is_expected.to eq '' }
     end
 
     describe 'validates syntax with result and render it' do
-      let(:source)  { '{% erp get sale_order as sale %}{{ sale }}' }
+      let(:source)  { "{% erp get 'sale_order' as sale %}{{ sale }}" }
       it { expect { subject }.not_to raise_exception }
       it { is_expected.to eq '{"name"=>"SO42", "total"=>42}' }
     end
 
     describe 'validates syntax with params' do
-      let(:source)  { '{% erp get sale_order with 42 %}' }
+      let(:source)  { "{% erp get 'sale_order' with 42 %}" }
       let(:params)    { ['GET', 'sale_order', 42]}
       it { expect { subject }.not_to raise_exception }
       it { is_expected.to eq '' }
     end
 
     describe 'validates syntax with params and result and render it' do
-      let(:source)  { '{% erp get sale_order as sale with 42 %}{{ sale }}' }
+      let(:source)  { "{% erp get 'sale_order' as sale with 42 %}{{ sale }}" }
       let(:params)    { ['GET', 'sale_order', 42]}
       it { expect { subject }.not_to raise_exception }
       it { is_expected.to eq '{"name"=>"SO42", "total"=>42}' }
     end
 
     describe 'raises an error if the syntax is incorrect' do
-      let(:source)  { '{% erp get as sale with 42 %}{{ sale }}' }
+      let(:source)  { "{% erp get as sale with 42 %}{{ sale }}" }
       it { expect { subject }.to raise_exception(Liquid::SyntaxError) }
     end
 
