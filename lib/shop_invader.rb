@@ -13,6 +13,8 @@ require 'shop_invader/middlewares/erp_proxy'
 require 'shop_invader/middlewares/store'
 require 'shop_invader/middlewares/renderer'
 require 'shop_invader/middlewares/locale'
+require 'shop_invader/middlewares/snippet'
+require 'shop_invader/middlewares/helpers'
 require_relative_all %w(concerns concerns/sitemap), 'shop_invader/middlewares'
 require_relative_all %w(. drops filters tags tags/concerns), 'shop_invader/liquid'
 require 'shop_invader/steam_patches'
@@ -33,8 +35,9 @@ module ShopInvader
   def self.setup
     Locomotive::Steam.configure do |config|
       config.middleware.insert_after Locomotive::Steam::Middlewares::TemplatizedPage, ShopInvader::Middlewares::TemplatizedPage
-      config.middleware.insert_after ShopInvader::Middlewares::TemplatizedPage, ShopInvader::Middlewares::Store
+      config.middleware.insert_before Locomotive::Steam::Middlewares::Path, ShopInvader::Middlewares::Store
       config.middleware.insert_after Locomotive::Steam::Middlewares::Path, ShopInvader::Middlewares::ErpProxy
+      config.middleware.insert_after Locomotive::Steam::Middlewares::Path, ShopInvader::Middlewares::SnippetPage
     end
 
     subscribe_to_steam_notifications

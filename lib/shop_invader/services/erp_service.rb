@@ -1,17 +1,19 @@
+require 'digest'
+
 module ShopInvader
   class ErpService
     FORWARD_HEADER = %w(ACCEPT ACCEPT_ENCODING ACCEPT_LANGUAGE HOST REFERER ACCEPT USER_AGENT)
     attr_reader :client
     attr_reader :session
 
-    def initialize(request, site, session, customer, locale)
-      @customer = customer
+    def initialize(request, site, session, customer, locale, cookie_service)
       @site     = site
       @session  = session
       headers = get_header_for_request(locale, request)
       @client   = Faraday.new(
         url: site.metafields['erp']['api_url'],
         headers: headers)
+      @cookie_service = cookie_service
     end
 
     def call(method, path, params)
@@ -80,7 +82,11 @@ module ShopInvader
         end
         if res.include?('store_cache')
           res.delete('store_cache').each do | key, value |
-            session['store_' + key] = JSON.dump(value)
+            json = JSON.dump(value)
+            session['store_' + key] = json
+            # set a specific cookie for the version kept in cache
+            # this allow to vary the content cached by proxy like varnish
+            set_cookie_cache(key, json)
           end
         end
         # TODO we can remove this if when on odoo side we will have correct
@@ -111,6 +117,11 @@ module ShopInvader
             }
         }
       end
+    end
+
+    def set_cookie_cache(key, json)
+      value = Digest::SHA256.hexdigest json
+      @cookie_service.set(key, {value: value, path: '/'})
     end
 
     def catch_error(response)
