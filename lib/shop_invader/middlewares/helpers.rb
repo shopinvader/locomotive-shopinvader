@@ -22,6 +22,15 @@ module Locomotive::Steam
         else
           headers['Cache-Control'] = "max-age=0, private, must-revalidate"
         end
+
+        # Always inject a vary on accept-language for the header
+        # if the site have multiple lang on the home page
+        # indeed home page do not have the lang in the path
+        # and so the content can vary depending of the accept-language
+        if is_index_page? and site.locales.size > 1
+          env['steam.cache_vary'] << "accept-language"
+        end
+
         if env['steam.cache_vary']
           headers['Vary'] = env['steam.cache_vary'].join(",")
         end
@@ -41,6 +50,11 @@ module Locomotive::Steam
       def default_role
         @default_role ||= site.metafields['erp']['default_role']
       end
+
+      def is_index_page?
+        ['/', ''].include?(request.path_info)
+      end
+
     end
   end
 end
