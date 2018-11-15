@@ -11,7 +11,7 @@ module Locomotive
             if not defined?(Rails)
                 # We are using wagon without varnish
                 # esi_include is automatically processed like an include
-                process_esi = ENV['WAGON_ESI'].downcase == "true"
+                process_esi = ENV.fetch('WAGON_ESI', 'false').downcase == "true"
             else
                 process_esi = !@context.registers[:live_editing]
             end
