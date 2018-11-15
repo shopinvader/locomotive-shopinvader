@@ -121,13 +121,8 @@ module ShopInvader
     end
 
     ActiveSupport::Notifications.subscribe('steam.auth.signed_out') do |name, start, finish, id, payload|
-      # After signed out, drop the erp / store session
-      session = payload[:request].env['rack.session']
-      session.keys.each do | key |
-        if key.start_with?('erp_') || key.start_with?('store_')
-          session.delete(key)
-        end
-      end
+      # After signed out, drop the full session
+      session = {}
     end
   end
 end
