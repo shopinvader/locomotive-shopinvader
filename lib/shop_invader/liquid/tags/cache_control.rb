@@ -29,6 +29,8 @@ module Locomotive
             duration = cache_config[@cache_key]
             if duration
               request.env['steam.cache_control'] = "max-age=0,s-maxage=#{duration}"
+            else
+              request.env['steam.cache_control'] = nil
             end
             nil
           end
