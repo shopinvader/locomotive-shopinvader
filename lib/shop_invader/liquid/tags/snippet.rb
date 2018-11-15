@@ -8,8 +8,14 @@ module Locomotive
           def render(context)
             @context = context
             @template_name = evaluate_snippet_name(context)
-            # TODO support live editing
-            if true
+            if not defined?(Rails)
+                # We are using wagon without varnish
+                # esi_include is automatically processed like an include
+                process_esi = ENV['WAGON_ESI'].downcase == "true"
+            else
+                process_esi = !@context.registers[:live_editing]
+            end
+            if process_esi
               "<esi:include src=\"#{snippet_path}\"/>"
             else
               super
