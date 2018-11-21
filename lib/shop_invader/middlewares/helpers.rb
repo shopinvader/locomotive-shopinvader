@@ -24,6 +24,9 @@ module Locomotive::Steam
         # indeed home page do not have the lang in the path
         # and so the content can vary depending of the accept-language
         if is_index_page? and site.locales.size > 1
+          unless env['steam.cache_vary']
+            env['steam.cache_vary'] = []
+          end
           env['steam.cache_vary'] << "accept-language"
         end
 

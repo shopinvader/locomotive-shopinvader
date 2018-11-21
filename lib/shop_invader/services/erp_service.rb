@@ -7,6 +7,7 @@ module ShopInvader
     attr_reader :session
 
     def initialize(request, site, session, customer, locale, cookie_service)
+      @customer = customer
       @site     = site
       @session  = session
       headers = get_header_for_request(locale, request)
@@ -184,7 +185,6 @@ module ShopInvader
           headers[:partner_email] = customer['email']
         end
       end
-
       headers
     end
 
