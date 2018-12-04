@@ -35,14 +35,14 @@ describe 'When I am logged in' do
       get '/invader/addresses'
       expect(last_response.status).to eq 200
       response = JSON.parse(last_response.body)
-      expect(response[0]['name']).to eq 'Osiris'
+      expect(response['data'][0]['name']).to eq 'Osiris'
     end
 
     it 'post on "/invader/addresses" add an address and return it' do
       add_an_address(address_params, '/invader/addresses', follow_redirect=false, json=true)
       expect(last_response.status).to eq 200
       response = JSON.parse(last_response.body)
-      expect(response[0]['name']).to eq 'Osiris'
+      expect(response['data'][0]['name']).to eq 'Osiris'
     end
 
     context 'with missing country' do
