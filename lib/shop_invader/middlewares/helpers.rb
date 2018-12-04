@@ -36,13 +36,15 @@ module Locomotive::Steam
       end
 
       def inject_cookies(headers)
-        role = customer && customer.role
-        if role != default_role
-          # TODO make the max_age configurable maybe we should use the same age as the main cookie
-          request.env['steam.cookies']['role'] = {value: role, path: '/', max_age: 1.year}
-        elsif request.cookies.include?('role')
-          # Delete the role if exist in the request
-          request.env['steam.cookies']['role'] = {value: '', path: '/', max_age: 0}
+        if is_erp_connected_site
+          role = customer && customer.role
+          if role != default_role
+            # TODO make the max_age configurable maybe we should use the same age as the main cookie
+            request.env['steam.cookies']['role'] = {value: role, path: '/', max_age: 1.year}
+          elsif request.cookies.include?('role')
+            # Delete the role if exist in the request
+            request.env['steam.cookies']['role'] = {value: '', path: '/', max_age: 0}
+          end
         end
         orig_inject_cookies(headers)
       end
@@ -53,6 +55,10 @@ module Locomotive::Steam
 
       def default_role
         @default_role ||= site.metafields['erp']['default_role']
+      end
+
+      def is_erp_connected_site
+        site.metafields.include?('erp')
       end
 
       def is_index_page?

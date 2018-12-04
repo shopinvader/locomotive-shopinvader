@@ -105,7 +105,8 @@ RSpec.describe ShopInvader::Middlewares::TemplatizedPage do
       'steam.path'            => path,
       'steam.locale'          => 'fr',
       'steam.liquid_assigns'  => {},
-      'authenticated_entry'   => customer
+      'authenticated_entry'   => customer,
+      'steam.cookies'         => {},
     }).tap do |env|
       env['steam.request'] = Rack::Request.new(env)
     end

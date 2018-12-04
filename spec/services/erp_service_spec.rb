@@ -20,6 +20,7 @@ RSpec.describe ShopInvader::ErpService do
   let(:client)              { instance_double('FaradayClient', get: response, headers: headers) }
   let(:response)            { instance_double('Response', body: JSON.dump(erp_response), status: erp_response_status, headers: erp_response_headers) }
   let(:client)              { instance_double('FaradayClient', get: response, headers: headers) }
+  let(:cookie_service)      { instance_double('CookieService', set: true) }
 
   let(:metafields)  { {
     'erp' => {
@@ -31,7 +32,7 @@ RSpec.describe ShopInvader::ErpService do
   let(:customer)  { nil }
   let(:site)      { instance_double('Site', metafields: metafields) }
   let(:request)   { instance_double('Request', get_header: 'foo', ip: '42.42.42.42') }
-  let(:service)   { described_class.new(request, site, session, customer, locale)}
+  let(:service)   { described_class.new(request, site, session, customer, locale, cookie_service)}
 
 
   describe '#call GET' do
