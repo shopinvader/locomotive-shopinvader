@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe Locomotive::Steam::Middlewares::Sitemap do
 
-  let(:site)            { instance_double('Site', locales: ['en', 'fr'], default_locale: 'en') }
+  let(:site)            { instance_double('Site', locales: ['en', 'fr'], default_locale: 'en', metafields: {}, ) }
   let(:pages)           { [] }
   let(:page_repository) { instance_double('PageRepository', published: pages) }
   let(:records)         { [] }
   let(:algolia)         { instance_double('AlgoliaService', find_all_products_and_categories: records) }
   let(:app)             { ->(env) { [200, env, 'app'] }}
   let(:middleware)      { described_class.new(app) }
-
+  let(:request)         { }
   before do
     allow_any_instance_of(described_class).to receive(:site).and_return(site)
     allow_any_instance_of(described_class).to receive(:base_url).and_return('http://localhost')
@@ -19,13 +19,12 @@ describe Locomotive::Steam::Middlewares::Sitemap do
 
   describe '#call' do
 
-    let(:env) { { 'PATH_INFO' => '/sitemap.xml', 'steam.page' => nil, 'steam.site' => site } }
-    subject { middleware.call(env) }
+    subject { middleware.call(build_env) }
 
     describe 'no pages' do
 
       it 'renders a blank sitemap' do
-        is_expected.to eq [200, { 'Content-Type' => 'text/plain' }, ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url>\n    <loc>http://localhost</loc>\n    <priority>1.0</priority>\n  </url>\n\n</urlset>\n"]]
+        is_expected.to eq [200, { 'Cache-Control' => 'max-age=0, private, must-revalidate', 'Content-Type' => 'text/plain' }, ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url>\n    <loc>http://localhost</loc>\n    <priority>1.0</priority>\n  </url>\n\n</urlset>\n"]]
       end
 
     end
@@ -36,12 +35,23 @@ describe Locomotive::Steam::Middlewares::Sitemap do
 
       it 'renders a sitemap including all the records from Algolia' do
         expect(subject[0]).to eq 200
-        expect(subject[1]).to eq({ 'Content-Type' => 'text/plain' })
+        expect(subject[1]).to eq({ 'Cache-Control' => 'max-age=0, private, must-revalidate', 'Content-Type' => 'text/plain' })
         expect(subject[2].first).to include("<url>\n      <loc>http://localhost/bose-mini-bluetooth-speaker-B3423</loc>\n      <xhtml:link rel=\"alternate\" hreflang=\"fr\" href=\"http://localhost/fr/bose-mini-bluetooth-speaker-B3423-FR\" />\n    </url>")
       end
 
     end
 
+  end
+
+  def build_env
+    env_for('http://models.example.com', {
+      'PATH_INFO' => '/sitemap.xml',
+      'steam.site'            => site,
+      'steam.page'            => nil,
+      'steam.cookies'         => {},
+    }).tap do |env|
+      env['steam.request'] = Rack::Request.new(env)
+    end
   end
 
 end

@@ -59,7 +59,7 @@ module Spec
       get '/invader/addresses?per_page=200&scope[address_type]=address'
       addresses = JSON.parse(last_response.body)
       if addresses
-        addresses.each do | address |
+        addresses['data'].each do | address |
           delete "/invader/addresses/#{address['id']}"
         end
       end

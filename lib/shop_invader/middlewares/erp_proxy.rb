@@ -18,7 +18,7 @@ module ShopInvader
 
       def _render_json(response)
         if response.status == 200
-          data = erp.parse_response(response)['data']
+          data = erp.parse_response(response)
           render_response(JSON.dump(data), 200, 'application/json')
         else
           # We do not catch the error here as this should be done

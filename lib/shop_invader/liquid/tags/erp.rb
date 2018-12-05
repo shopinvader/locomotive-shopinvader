@@ -9,9 +9,9 @@ module Locomotive
           SyntaxWith = /#{Base}\s*with\s*(.*)?/o
           SyntaxAs = /#{Base}\s*as\s*(#{::Liquid::VariableSignature}+)/o
           SyntaxAsWith = /#{Base}\s*as\s*(#{::Liquid::VariableSignature}+)\s*with\s*(.*)?/o
+
           def initialize(tag_name, markup, options)
             syntax_error = false
-
             if markup =~ SyntaxAsWith
               @method_name, service_path, @to = $1, $2, $3
               @params = parse_options_from_string($4)

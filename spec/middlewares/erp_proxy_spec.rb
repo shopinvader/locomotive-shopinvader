@@ -16,15 +16,17 @@ RSpec.describe ShopInvader::Middlewares::ErpProxy do
   let(:erp_service)         { instance_double('ErpService', call: response, parse_response: {'body': response_data})}
   let(:services)            { instance_double('Services', erp: erp_service) }
   let(:middleware)          { described_class.new(app) }
-
+  let(:site)                { instance_double('Site', locales: ['en', 'fr'], default_locale: 'en', metafields: {'erp': {}} ) }
 
 
   subject do
     env = env_for('http://models.example.com', {
+      'steam.site'            => site,
       'steam.services'        => services,
       'steam.path'            => path,
       'REQUEST_METHOD'        => 'POST',
       'steam.locale'          => 'fr',
+      'steam.cookies'         => {},
       params:                    params,
     })
     env['steam.request'] = Rack::Request.new(env)
