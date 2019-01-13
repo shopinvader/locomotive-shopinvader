@@ -122,6 +122,14 @@ module ShopInvader
 
     ActiveSupport::Notifications.subscribe('steam.auth.signed_out') do |name, start, finish, id, payload|
       # After signed out, drop the full session
+      # We should move this code in a dedicated service
+      session = payload[:request].env['rack.session']
+      session.keys.each do | key |
+        if key.start_with?('store_')
+            cookie_key = key.gsub('store_', '')
+            payload[:request].env['steam.cookies'][cookie_key] = {value: '', path: '/', max_age: 0}
+        end
+      end
       session = {}
     end
   end
