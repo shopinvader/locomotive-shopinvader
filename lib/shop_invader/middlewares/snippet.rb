@@ -14,7 +14,15 @@ module ShopInvader
           partial = Locomotive::Steam::Liquid::Template.parse(snippet.liquid_source, {})
           # Set steam.page variable in env to avoid issue when build the liquid_context
           env['steam.page'] = nil
-          content = partial.render(liquid_context)
+          context = liquid_context
+          # TODO it will be better to find a solution to avoid
+          # similare code with middleware/renderer
+          begin
+            content = partial.render(context)
+          rescue ShopInvader::ErpMaintenance => e
+            context['store_maintenance'] = true
+            content = partial.render(context)
+          end
           render_response(content, 200, nil)
         end
       end
