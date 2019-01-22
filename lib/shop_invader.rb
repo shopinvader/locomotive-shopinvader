@@ -24,12 +24,36 @@ module ShopInvader
 
   # Locales mapping table. Locomotive only uses the
   # main locale but not the dialect. This behavior
-  # might change in Locomotive v4.
+  # will change in Locomotive v4.
   LOCALES = {
-    'fr' => 'fr_FR',
     'en' => 'en_US',
+    'de' => 'de_DE',
+    'fr' => 'fr_FR',
+    'bg' => 'bg_BG',
+    'cs' => 'cs_CZ',
+    'da' => 'da_DK',
+    'el' => 'el_GR',
     'es' => 'es_ES',
+    'ca' => 'it_IT',
+    'fa-IR' => 'fa_IR',
+    'fi-FI' => 'fi_FI',
     'it' => 'it_IT',
+    'ja-JP' => 'ja_JP',
+    'lt' => 'lt_LT',
+    'nl' => 'nl_NL',
+    'pl-PL' => 'pl_PL',
+    'pt' => 'pt_PT',
+    'pt-BR' => 'it_IT',
+    'ru' => 'ru_RU',
+    'sv' => 'sv_SE',
+    'uk' => 'uk_UA',
+    'zh-CN' => 'zh_CN',
+    'et' => 'et_EE',
+    'hr' => 'hr_HR',
+    'nb' => 'nb_NO',
+    'sk' => 'sk_SK',
+    'sl' => 'sl_SL',
+    'sr' => 'sr_RS',
   }
 
   def self.setup
