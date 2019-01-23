@@ -10,7 +10,7 @@ RSpec.describe ShopInvader::Middlewares::ErpProxy do
   let(:response_data)       { {cart: {'name': 'SO00042'},
                                set_session: {'cart_id': 42},
                                'content-type' => 'application/json'} }
-  let(:response)            { instance_double('Response', body: JSON.dump(response_data), status: 200) }
+  let(:response)            { instance_double('Response', body: JSON.dump(response_data), status: 200, headers: {})}
   let(:session)             { {erp_cart_id: 42} }
   let(:app)                 { ->(env) { [200, env] } }
   let(:erp_service)         { instance_double('ErpService', call: response, parse_response: {'body': response_data})}
