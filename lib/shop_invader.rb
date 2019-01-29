@@ -21,6 +21,10 @@ require_relative_all %w(. drops filters tags tags/concerns), 'shop_invader/liqui
 require 'shop_invader/steam_patches'
 require 'faraday'
 
+def should_notify_erp(payload)
+  payload[:request].env['steam.site'].metafields.include?('erp') && payload[:entry].content_type.name.downcase == 'customers'
+end
+
 module ShopInvader
 
   # Locales mapping table. Locomotive only uses the
@@ -68,26 +72,38 @@ module ShopInvader
     subscribe_to_steam_notifications
   end
 
+
   def self.subscribe_to_steam_notifications
+
     # new signups
     ActiveSupport::Notifications.subscribe('steam.auth.signed_up') do |name, start, finish, id, payload|
       service = Locomotive::Steam::Services.build_instance(payload[:request])
-      service.erp_auth.signed_up(payload[:entry])
+      if should_notify_erp(payload)
+        service.erp_auth.signed_up(payload[:entry])
+      end
     end
 
     ActiveSupport::Notifications.subscribe('steam.auth.signed_in') do |name, start, finish, id, payload|
       service = Locomotive::Steam::Services.build_instance(payload[:request])
-      service.erp_auth.signed_in(payload[:entry])
+      if should_notify_erp(payload)
+        payload[:request].env['authenticated_entry'] = payload[:entry]
+        service.erp_auth.signed_in(payload[:entry])
+      end
     end
 
     ActiveSupport::Notifications.subscribe('steam.auth.reset_password') do |name, start, finish, id, payload|
       service = Locomotive::Steam::Services.build_instance(payload[:request])
-      service.erp_auth.reset_password(payload[:entry])
+      if should_notify_erp(payload)
+        payload[:request].env['authenticated_entry'] = payload[:entry]
+        service.erp_auth.reset_password(payload[:entry])
+      end
     end
 
     ActiveSupport::Notifications.subscribe('steam.auth.signed_out') do |name, start, finish, id, payload|
       service = Locomotive::Steam::Services.build_instance(payload[:request])
-      service.erp_auth.sign_out(payload[:entry])
+      if should_notify_erp(payload)
+        service.erp_auth.sign_out(payload[:entry])
+      end
     end
   end
 end

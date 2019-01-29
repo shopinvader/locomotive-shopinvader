@@ -99,7 +99,6 @@ module ShopInvader
     end
 
     def initialize_customer(auth_entry)
-      request.env['authenticated_entry'] = auth_entry
       begin
         erp_service.initialize_customer
       rescue ShopInvader::ErpMaintenance => e
