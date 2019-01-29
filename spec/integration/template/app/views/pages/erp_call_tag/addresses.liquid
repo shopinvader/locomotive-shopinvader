@@ -1,0 +1,6 @@
+---
+handle: addresses
+slug: addresses
+---
+{% erp get 'addresses' as my_addresses %}
+{{ my_addresses['data'] | json }}

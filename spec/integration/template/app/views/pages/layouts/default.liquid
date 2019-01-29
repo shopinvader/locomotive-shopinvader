@@ -1,0 +1,40 @@
+---
+title: Default layout
+is_layout: true
+---
+<!DOCTYPE html>
+<html>
+  <head>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+        $(document).ready(function(){
+        $('input[type=text]').addClass('form-control');
+        $('input[type=email]').addClass('form-control');
+      })
+    </script>
+
+      <main class="container pt-5">
+      <div class="alert alert-info">
+          current page: {% path_to page %}
+      </div>
+        {% assign store_notification = store.notifications%}
+        {% if store_notification != null %}
+          {% for notification in store_notification%}
+            <div class="alert alert-{{notification.type}} text-center alert-maintenance">
+            {{notification.message}}
+            </div>
+          {% endfor%}
+        {% endif%}
+        {% if store_maintenance %}
+            <div class="alert alert-danger">
+               Maintenance Odoo
+            </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </main>
+  </body>
+</html>

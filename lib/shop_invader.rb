@@ -39,7 +39,7 @@ module ShopInvader
     'da' => 'da_DK',
     'el' => 'el_GR',
     'es' => 'es_ES',
-    'ca' => 'it_IT',
+    'ca' => 'ca_ES',
     'fa-IR' => 'fa_IR',
     'fi-FI' => 'fi_FI',
     'it' => 'it_IT',
