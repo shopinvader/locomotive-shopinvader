@@ -41,6 +41,15 @@ module Spec
       last_response
     end
 
+    def sign_out(follow_redirect = false)
+      post '/account', {
+        'auth_action': 'sign_out',
+        'auth_content_type': 'customers',
+      }
+      follow_redirect! if follow_redirect
+      last_response
+    end
+
     def add_an_address(params, referer, follow_redirect = false, json = false)
       header 'Referer', referer
       if json
@@ -63,6 +72,10 @@ module Spec
           delete "/invader/addresses/#{address['id']}"
         end
       end
+    end
+
+    def session
+      last_request.env['rack.session']
     end
 
   end

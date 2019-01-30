@@ -141,10 +141,10 @@ module ShopInvader
       session.keys.each do | key |
         if key.start_with?('store_')
             cookie_key = key.gsub('store_', '')
-            payload[:request].env['steam.cookies'][cookie_key] = {
+            @cookie_service.set(cookie_key, {
                 value: '',
                 path: '/',
-                max_age: 0}
+                max_age: 0})
             session.delete(key)
         end
         if key.start_with?('erp_')
