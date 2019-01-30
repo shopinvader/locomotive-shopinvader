@@ -10,8 +10,10 @@ module Locomotive
 
       def define_built_in_functions(context, liquid_context)
         orig_define_built_in_functions(context, liquid_context)
-        SHOPINVADER_BUILT_IN_FUNCTIONS.each do |name|
-          context.define_function name, &send(:"#{name.underscore}_lambda", liquid_context)
+        if site.metafields.include?('erp')
+          SHOPINVADER_BUILT_IN_FUNCTIONS.each do |name|
+            context.define_function name, &send(:"#{name.underscore}_lambda", liquid_context)
+          end
         end
       end
 
