@@ -5,3 +5,12 @@ seo_title : Logged
 ---
 {% authorize "customers", "account" %}
 {% extends 'layouts/default' %}
+{% block header %}
+<form method="post" action="{% path_to account %}">
+   <input type="hidden" name="auth_action" value="sign_out" />
+   <input type="hidden" name="auth_content_type" value="customers" />
+   <button type="submit" class="btn btn-link" >
+     <i class="fa fa-power-off"></i>Sign Out
+   </button>
+</form>
+{% endblock %}

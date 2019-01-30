@@ -50,7 +50,7 @@ describe 'When I am logged in' do
       expect(last_response.status).to eq 200
       expect(last_response.body).to include "Osiris"
       expect(last_response.body).to include "Rue des treffles"
-        expect(last_response.body).to include "current page: /account/addresses"
+      expect(last_response.body).to include "current page: /account/addresses"
     end
 
     context 'with missing country' do
