@@ -1,0 +1,591 @@
+account_address_submit:
+  en: Submit
+  fr: Valider
+account_address_add:
+  en: Add an address
+  fr: Ajouter une adresse
+account_address_cancel:
+  en: Cancel
+  fr: Annuler
+account_address_update:
+  en: Shipping adresses
+  fr: Mes adresses de livraison
+account_order_address:
+  en: address
+  fr: Adresse
+account_order_empty:
+  en: You don't have orders :(
+  fr: Vous n'avez pas de commande
+account_order_qty:
+  en: Quantity
+  fr: Quantité
+account_order_title:
+  en: My sales orders
+  fr: Mes commandes
+account_order_payment :
+  en: Payment method
+  fr: Méthode de paiement
+account_order_subtotal:
+  en: Total
+  fr: Total
+account_order_shipping:
+  en: Shipping cost
+  fr: Frais de port
+account_quotation_invoicing_address:
+  en: Invoicing address
+  fr: Adresse de facturation
+account_quotation_shipping_address:
+  en: Shipping address
+  fr: Adresse de livraison
+
+account_quotation_total_title:
+  en: Total
+  fr: Total
+account_quotation_total_subtotal:
+  en: Total without tax
+  fr: Montant HT
+account_quotation_total_taxes:
+  en: Taxes
+  fr: Taxes
+account_quotation_total_amount:
+  en: Total VAT Inc
+  fr: Total T.T.C
+account_quotation_empty:
+  en: You don't have quotation :(
+  fr: Vous n'avez pas de devis
+account_quotation_title:
+  en: My quotations
+  fr: Mes devis
+account_quotation_lines:
+  en: More details
+  fr: Voir le devis
+account_quotation_name:
+  en: Quotation
+  fr: Devis
+account_quotation_payment:
+  en: Pay this quotation
+  fr: Payer ce devis
+account_quotation_cancel:
+  en: Return
+  fr: Retour
+account_quotation_status_estimating:
+  en: Estimation in progress
+  fr: En cours de chiffrage
+account_quotation_status_estimated:
+  en: Pending payment
+  fr: En attente de paiement
+account_quotation_shipping:
+  en: Shipping cost
+  fr: Frais de port
+account_profil_title:
+  en: My account profile
+  fr: Mes informations
+account_address_lists:
+  en: My shipping addresses
+  fr: Mes adresses de livraison
+account_password_reset:
+  en: Reset my password
+  fr: Réinitialiser mon mot de passe
+account_password_title:
+  en: Reset my password
+  fr: Changer de mot de passe
+account_rma_order:
+  en: Order
+  fr: Commande
+account_rma_return:
+  en: Product
+  fr: Produit
+account_rma_message :
+  en: Message
+  fr: Message
+account_rma_item:
+  en: Product
+  fr: Produit
+account_rma_qty:
+  en: Quantity
+  fr: Quantité
+account_rma_title:
+  en: Claims
+  fr: Retour marchandise
+account_rma_submit:
+  en: Submit
+  fr: Valider
+account_title:
+  en: Hello
+  fr: Bonjour
+account_signout:
+  en: Sign out
+  fr: Déconnexion
+header_cart:
+  en: My basket
+  fr: Mon panier
+header_login:
+  en: Sign in or register
+  fr: Mon compte
+currency_eur:
+  en: Euro
+  fr: Euro
+currency_chf:
+  en: Swiss franc
+  fr: Franc Suisse
+currency_gbp:
+  en: Pound sterling
+  fr: Livre sterling
+currency_usd:
+  en: US Dollars
+  fr: Dollars (USA)
+currency_cad:
+  en: Canadian Dollars
+  fr: Dollars (Canada)
+cart_address_add:
+  en: Add an address
+  fr: Ajouter une adresse
+cart_address_update:
+  en: Update
+  fr: Modifier l'adresse
+cart_address_delete:
+  en: Delete
+  fr: Supprimer l'adresse
+cart_checkout:
+  en: "Checkout"
+  fr: "Passer ma commande"
+cart_continue_shopping:
+  en: "Continue shopping"
+  fr: "Poursuivre mes achats"
+cart_customer_shipping:
+  en: My shipping address
+  fr: Mon adresse de livraison
+cart_head_price:
+  en: "Unit Price"
+  fr: "Prix"
+cart_head_qty:
+  en: "Quantity"
+  fr: "Quantité"
+cart_head_total:
+  en: "Item Total"
+  fr: "Total"
+cart_invoice_address:
+  en: Invoice address
+  fr: Adresse de facturation
+cart_item_added:
+  en: "1 Item Added to Cart"
+  fr: "Votre article a été ajouté au panier"
+cart_item_count_zero:
+  en: "{{ count }} item"
+  fr: "Aucun article"
+cart_item_count_one:
+  en: "{{ count }} item"
+  fr: "{{ count }} article"
+cart_item_count_two:
+  en: "{{ count }} items"
+  fr: "{{ count }} articles"
+cart_item_count_other:
+  en: "{{ count }} items"
+  fr: "{{ count }} articles"
+cart_item_desc:
+  en: "Items"
+  fr: "Articles"
+cart_order_ref:
+  en: Order number
+  fr: Référence
+cart_quantity:
+  en: Quatity
+  fr: Quantité
+cart_shipping_address:
+  en: Shipping adress
+  fr: Adresse de livraison
+cart_total_subtotal:
+  en: "Subtotal"
+  fr: "Sous-total"
+cart_total_total:
+  en: "Total"
+  fr: "Total"
+cart_total_vat:
+  en: "Sales Tax"
+  fr: "dont T.V.A."
+cart_total_shipping:
+  en: "Shipping"
+  fr: "Frais de livraison"
+cart_payment_secure:
+  en: Secured Payment
+  fr: Paiement sécurisé
+cart_title:
+  en: My cart
+  fr: Mon panier
+cart_password:
+  en: Password
+  fr: Mot de passe
+cart_reset_password:
+  en: Reset Password
+  fr: Mot de passe oublié ?
+cart_login:
+  en: Email
+  fr: Email
+cart_login_btn:
+  en: Login
+  fr: Connexion
+cart_without_account_btn:
+  en: Continue
+  fr: Continuer
+cart_step_step1:
+  en: Shopping cart
+  fr: Panier
+cart_step_step2:
+  en: Shipping address
+  fr: Coordonnées
+cart_step_step3:
+  en: Checkout
+  fr: Paiement
+cart_step_step4:
+  en: End
+  fr: Terminé
+cart_carrier_title:
+  en: Carrier
+  fr: Mode de livraison
+cart_carrier_unavailable:
+  en: No Shipping mode avaible
+  fr: Aucun mode de livraison n'est disponible.
+cart_comment_title:
+  en: Comment
+  fr: Commentaire
+cart_payment_title:
+  en: Payment
+  fr: Mode de paiement
+cart_payment_desc:
+  en: Choose your payment mode to checkout
+  fr: Sélectionnez votre mode de paiement pour finaliser votre commande.
+
+cart_payment_secure:
+  en: Payment Secured
+  fr: Vous êtes sur un espace sécurisé.
+cart_invoice_address_different:
+  en: Choose invoice address
+  fr: je souhaite une adresse de facturation différente
+
+cart_invoice_address:
+  en: Invoice address
+  fr: Address de facturaton
+cart_return:
+  en: Cancel
+  fr: Retour
+cart_submit:
+  en: Submit
+  fr: Valider
+cart_customer_invoice:
+  en:
+  fr: Je choisis mon adresse de facturation
+cart_free_delivery:
+  en: Free
+  fr: Offert
+cart_shipping_method:
+  en: Continue
+  fr: Continuer
+creditcard_lastname:
+  en: Name (as it appears on your card)
+  fr: Titulaire de la carte
+creditcard_number:
+  en: Card number
+  fr: Numéro de carte
+creditcard_expiry:
+  en: Expiration date
+  fr: Date d'expiration
+creditcard_cvc:
+  en: Security code
+  fr: Cryptogramme visuel
+creditcard_cvc_help:
+  en: 3 last numbers on back
+  fr: 3 derniers chiffres au dos de votre carte, à droite de la signature
+close :
+  en: Close
+  fr: Fermer
+email_resetpassword_subject:
+  en: Reset your password - ShopInvader
+  fr: Réinitilisation de votre mot de passe - ShopInvader
+filters:
+  en: Filters
+  fr: Filtrer
+filter_clear:
+  en: Clear All
+  fr: Effacer la recherche
+filter_price:
+  en: Price
+  fr: Prix
+home:
+  en: Home
+  fr: Accueil
+partner_email:
+  en: Email
+  fr: Adresse e-mail
+partner_name:
+  en: Name
+  fr: Nom
+partner_firstname:
+  en: First name
+  fr: Prénom
+partner_lastname:
+  en: Last name
+  fr: Nom
+partner_address1:
+  en: Adresse line 1
+  fr: Adresse
+partner_address2:
+  en: Address line 2
+  fr: Complément
+partner_zipcode:
+  en: Zip Code
+  fr: Code postal
+partner_city:
+  en: City
+  fr: Ville
+partner_country:
+  en: Country
+  fr: Pays
+partner_phone:
+  en: Phone
+  fr: Téléphone
+partner_business:
+  en: Company name
+  fr: Société
+partner_business_info:
+  en:
+  fr: "(livraison sur un lieu de travail)"
+per_page:
+  en: per page
+  fr: par page
+popular_product:
+  en: Popular product
+  fr: Les plus vues
+product_add_to_cart:
+  en: Add to cart
+  fr: Ajouter au panier
+product_display_variant:
+  en: View all versions
+  fr: Voir toutes les versions
+product_add_to_cart_discount:
+  en: Shop now !
+  fr: J'en profite !
+product_advice_title:
+  en: Help & Advice
+  fr: Aide & conseils
+product_code:
+  en: Product code
+  fr: Référence
+product_discount_label:
+  en: SAVE
+  fr: BON PLAN
+product_display_grid:
+  en: Grid
+  fr: Mosaïque
+product_display_list:
+  en: List
+  fr: Liste
+product_price_from:
+  en: Up to
+  fr: à partir de
+product_quantity:
+  en: Quantity
+  fr: Quantité
+product_advice_tab:
+  en: Advices
+  fr: Conseils
+product_advice_title:
+  en: Our advices
+  fr: Nos conseils
+product_reviews_tab:
+  en: Reviews
+  fr: Avis client
+product_reviews_title:
+  en: All Reviews
+  fr: Tous les avis client
+product_overview_tab:
+  en: Overview
+  fr: Détails
+product_overview_title:
+  en: Overview
+  fr: Les plus du produit
+product_spec_tab:
+  en: Details & Specs
+  fr: Spécification
+product_spec_title:
+  en: Details & Specs
+  fr: Spécification
+product_variant_title:
+  en: Product models
+  fr: Toutes les modèles
+product_stock_state_in_stock:
+  en: In-stock
+  fr: En stock
+product_vat_inc:
+  en: V.A.T. Inc.
+  fr: T.T.C.
+product_rating_average:
+  en: "Rating"
+  fr: "Note moyenne :"
+product_related_tab:
+  en: "Related Products"
+  fr: "Produits complémentaire"
+product_related_title:
+  en: "Customers who viewed this item bought …"
+  fr: "Les clients ayant vu ce produit ont également acheté"
+product_stock_state_in_stock:
+  en: In stock
+  fr: En stock
+product_stock_state_out_of_stock:
+  en: Out of stock
+  fr: Epuisé
+product_stock_state_resupplying:
+  en: Resupplying
+  fr: En cours de réapprovisionnement
+product_stock_state_in_limited_stock:
+  en: in stock
+  fr: en stock
+product_cross_sellings_tab:
+  en: Customers also shopped for
+  fr: More In This Collection
+product_cross_sellings_title:
+  en: More In This Collection
+  fr: More In This Collection
+product_up_sellings_tab:
+  en: products related to this item
+  fr: More In This Collection
+product_up_sellings_title:
+  en: Other product
+  fr: Autre produit
+product_variants:
+  en: More buying choices
+  fr: Plusieurs choix disponibles
+product_zoom:
+  en: Zoom
+  fr: Zoom
+rating_average_rate:
+  en: "Average rate"
+  fr: "Noté par nos clients"
+rating_count_other:
+  en: "{{count | round}} review"
+  fr: "{{count | round}} avis"
+rating_count_one:
+  en: "{{count | round}} review"
+  fr: "{{count | round}} avis"
+rating_count_two:
+  en: "{{count | round}} reviews"
+  fr: "{{count | round}} avis"
+rating_count_other:
+  en: "{{count | round}} reviews"
+  fr: "{{count | round}} avis"
+rating_comment_count_one:
+  en: "{{count | round}} customer comment this product"
+  fr: "{{count | round}} client a laissé un commentaire sur ce produit "
+rating_comment_count_two:
+  en: "{{count | round}} customers comment this product"
+  fr: "{{count | round}} clients ont laissé un commentaire sur ce produit "
+rating_comment_count_other:
+  en: "{{count | round}} customers comment this product"
+  fr: "{{count | round}} clients ont laissé un commentaire sur ce produit "
+rating_last_review:
+  en: Last review
+  fr: Avis le plus récent
+search_filter_title:
+  en: Search
+  fr: Rechercher
+search_total_count_zero:
+  en: "no result"
+  fr: "aucun résultat"
+search_total_count_one:
+  en: "{{ count }} result"
+  fr: "{{ count }} résultat"
+search_total_count_two:
+  en: "{{ count }} results"
+  fr: "{{ count }} résultats"
+search_total_count_other:
+  en: "{{ count }} results"
+  fr: "{{ count }} résultats"
+signin_email:
+  en: Email
+  fr: Email
+signin_password:
+  en: Password
+  fr: Mot de passe
+signin_password_confirm:
+    en: Confirm password
+    fr: Confirmer mon mot de passe
+signin_password_new:
+    en: New password
+    fr: Nouveau mot de passe
+signin_submit:
+  en: Register my account
+  fr: Créer mon compte
+signin_cancel:
+  en: Cancel
+  fr: Annuler
+signin_signin:
+  en: Sign in
+  fr: Connexion
+signin_reset:
+  en: Reset password
+  fr: Continuer
+signin_wrong:
+  en: Wrong credentials!
+  fr: Email ou mot de passe incorrect.
+signin_forgotpassword:
+  en: Reset password
+  fr: Mot de passe oublié ?
+signin_create_account:
+  en: Register my account
+  fr: Créer un compte
+search_product:
+  en: Products
+  fr: Produits
+search_product_empty:
+  en: No product found.
+  fr: Aucun produit trouvé.
+search_product_all:
+  en: View all results
+  fr: Voir tous les résultats
+search_category:
+  en: Categories
+  fr: Categories
+search_category_empty:
+  en: No category found.
+  fr: Aucune catégorie trouvée.
+store_advantage_shipping:
+  en: free shipping
+  fr: livraison gratuite
+store_advantage_hotline:
+  en: free Hotline
+  fr: Assistance gratuite
+store_advantage_price:
+  en: lowest price guarantee
+  fr: Les prix le plus bas !
+store_advantage_return:
+  en: easy return
+  fr: retour gratuit
+payment_method_stripe:
+  en: Credit card with Stripe
+  fr: Carte Bancaire
+payment_method_adyen:
+  en: Credit card with Adyen
+  fr: Carte Bancaire
+payment_method_bank_transfert:
+  en: Bank transfert
+  fr: Virement bancaire
+payment_method_check:
+  en: Check
+  fr: Chèque
+payment_method_stripe:
+  en: Credit card with Stripe
+  fr: Carte Bancaire
+payment_method_paypal:
+  en: PayPal
+  fr: PayPal
+recommandation_title:
+  en: Our new deals
+  fr: Nos bonnes affaires
+search_show_more:
+  en: more
+  fr: afficher plus
+show_category:
+  en: Show all product in category
+  fr: Voir la catégories
+show_more:
+  en: show more
+  fr: en savoir plus

@@ -1,0 +1,22 @@
+---
+handle: new-address
+slug: new-address
+---
+{% extends 'layouts/logged '%}
+
+{% block 'content' %}
+<form action="/invader/addresses" method="post">
+    <input type="hidden" name="invader_success_url" value="{% path_to addresses %}" />
+    <input type="hidden" name="invader_error_url" value="{% path_to new-address %}"/>
+    Nom: <input type="text" name="name">
+    Street: <input type="text" name="street">
+    Zip: <input type="text" name="zip">
+    City: <input type="text" name="city">
+    Country : <select class="form-control" name="country[id]">
+      {% for country in store.available_countries %}
+        <option value="{{country.id}}">{{country.name}}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" name="submit" class="btn btn-primary text-right" value="Confirm">
+</form>
+{% endblock %}

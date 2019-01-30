@@ -69,7 +69,7 @@ module Spec
 end
 
 def default_fixture_site_path
-  '/tmp/site'
+  'spec/integration/template'
 end
 
 Locomotive::Steam.configure do |config|

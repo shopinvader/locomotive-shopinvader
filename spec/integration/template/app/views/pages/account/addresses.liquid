@@ -1,0 +1,11 @@
+---
+handle: addresses
+slug: addresses
+---
+{% extends 'layouts/logged '%}
+
+{% block 'content' %}
+<div>Number of address: {{ store.addresses | size }}</div>
+<div>Address Information: {{ store.addresses | json }}</div>
+
+{% endblock %}

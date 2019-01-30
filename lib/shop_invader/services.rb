@@ -13,5 +13,9 @@ module Locomotive::Steam::Services
 
     end
 
+    register :erp_auth do
+      ShopInvader::ErpAuthService.new(request, erp, content_entry)
+    end
+
   end
 end

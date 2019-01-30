@@ -12,7 +12,7 @@ services:
       - VIRTUAL_PORT=8069
       - DEMO=True
     image: quay.io/akretion/shopinvader-odoo:${VERSION}-latest
-    links:
+    depends_on:
       - db
   shopinvader:
     build: .
@@ -25,7 +25,6 @@ services:
     volumes:
       - .:/workspace
       - ./bundle:/usr/local/bundle
-      - ./template:/tmp/site
-    links:
+    depends_on:
       - odoo
 version: '3'

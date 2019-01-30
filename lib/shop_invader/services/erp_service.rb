@@ -59,14 +59,6 @@ module ShopInvader
       session.delete('store_' + name)
     end
 
-    def download(path)
-      # TODO: give the right url + right headers
-      # https://github.com/lostisland/faraday
-      conn = Faraday.new(url: 'http://via.placeholder.com')
-      response = conn.get(path)
-      response.status == 200 ? response : nil
-    end
-
     def initialize_customer
       response = _call('POST', 'customer/sign_in', {})
       parse_response(response)
@@ -143,6 +135,22 @@ module ShopInvader
             }])
         end
         res
+    end
+
+    def clear_session
+      session.keys.each do | key |
+        if key.start_with?('store_')
+            cookie_key = key.gsub('store_', '')
+            payload[:request].env['steam.cookies'][cookie_key] = {
+                value: '',
+                path: '/',
+                max_age: 0}
+            session.delete(key)
+        end
+        if key.start_with?('erp_')
+            session.delete(key)
+        end
+      end
     end
 
     private

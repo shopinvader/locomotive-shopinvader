@@ -49,7 +49,7 @@ describe 'Authentication' do
         params[:name]               = 'Didier'
         params[:auth_entry][:email] = 'did+rspec@locomotivecms.com'
         sign_up(params, true)
-        expect(last_response.body).to include "Your customer account as been succefully created"
+        expect(last_response.body).to include "Account Created"
         expect(last_response.body).to include "Didier"
       end
 
@@ -58,9 +58,7 @@ describe 'Authentication' do
         let(:email)                 { 'sebastien.beau+rspec@akretion.com' }
         let(:password_confirmation) { 'easyone2' }
 
-        # TODO FIXME, we have an issue only during testing with the LocomotiveAction
-        # error: cannot convert Locomotive::Steam::Models::I18nField
-        xit 'renders the sign up page with an error message' do
+        it 'renders the sign up page with an error message' do
           sign_up(params)
           expect(last_response.status).to eq 200
           expect(last_response.body).to include '/account/register'
@@ -80,13 +78,13 @@ describe 'Authentication' do
       auth_password_field:  'password',
       auth_id:              'osiris@shopinvader.com',
       auth_password:        password,
-      auth_callback:        '/account/orders'
+      auth_callback:        '/account/customer'
     } }
 
     it 'renders the form' do
       get '/account'
       expect(last_response.body).to include '/account'
-      expect(last_response.body).not_to include "You've been signed out"
+      expect(last_response.body).to include "Account page, not logged"
     end
 
     describe 'press the sign in button' do
@@ -94,13 +92,13 @@ describe 'Authentication' do
       it 'redirects to the callback' do
         sign_in(params)
         expect(last_response.status).to eq 301
-        expect(last_response.location).to eq '/account/orders'
+        expect(last_response.location).to eq '/account/customer'
       end
 
       it 'displays the profile page as described in the params' do
         sign_in(params, true)
-        expect(last_response.body).to include "Osiris"
-        expect(last_response.body).to include "Happy to see you again ;)"
+        expect(last_response.body).to include "My name is: Osiris"
+        expect(last_response.body).to include "current page: /account/customer"
       end
 
       context 'wrong credentials' do
