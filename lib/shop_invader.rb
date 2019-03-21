@@ -1,11 +1,13 @@
 require 'locomotive/steam'
 require 'locomotive/steam/server'
 require 'algoliasearch'
+require 'elasticsearch'
 
 require 'shop_invader/version'
 require 'shop_invader/errors'
 require 'shop_invader/services'
 require 'shop_invader/services/algolia_service'
+require 'shop_invader/services/elastic_service'
 require 'shop_invader/services/erp_service'
 require 'shop_invader/services/erp_auth_service'
 require 'shop_invader/services/action_service'
