@@ -40,7 +40,6 @@ module ShopInvader
           site.locales.each do |locale|
             # crée un objet index pour le rechercher
             # lien de l'index: #{config['index']}_#{ShopInvader::LOCALES[locale.to_s]}
-
             Locomotive::Common::Logger.debug "[Elastic] find_all_products_and_categories"
 
             result = @client.search index: "#{config['index']}_#{ShopInvader::LOCALES[locale.to_s]}", body: { query: { match_all: {} } }
@@ -69,13 +68,8 @@ module ShopInvader
     end
 
     def find_all(name, conditions: nil, page: 1, per_page: 20)
-      Locomotive::Common::Logger.debug "[Elastic] find_all"
       Locomotive::Common::Logger.debug "[Elastic] conditions #{conditions}"
       Locomotive::Common::Logger.debug "[Elastic] conditions.length #{conditions.length}"
-
-      Locomotive::Common::Logger.debug "[Elastic] search of: #{name}"
-      Locomotive::Common::Logger.debug "[Elastic] index: #{find_index(name)}"
-
 
       # creating the body of the query
       #TODO handle page
@@ -90,23 +84,10 @@ module ShopInvader
       else
         body[:query] ={ match_all: {} }
       end
-
-
-      Locomotive::Common::Logger.debug "[Elastic] body: #{body}"
-
-
       response = @client.search(
         index: find_index(name),
         body: body
       )
-
-      #shows the full result in console
-      # Locomotive::Common::Logger.debug "[Elastic find_all] search all result: #{result}"
-
-      # hits = response["hits"]["hits"]
-      # Locomotive::Common::Logger.debug "[Elastic find_all] HITS HITS: #{hits}"
-      # Locomotive::Common::Logger.debug "[Elastic find_all] HITS HITS length: #{hits.length}"
-
       #display list of elements
       # hits.each {
       #   |x|
@@ -114,16 +95,11 @@ module ShopInvader
       #   Locomotive::Common::Logger.debug " #{x["_source"]} \n"
       # }
 
-      # todo see if need _parse_response
-
-      Locomotive::Common::Logger.debug "[Elastic find_all] response: #{response}"
       response = _parse_response(response)
-
       res = {
         data: response['hits']['hits'].map { |hit| hit['index_name'] = name; hit['_source'] },
         size: response['hits']['total']
       }
-
       res
     end
 
@@ -139,10 +115,12 @@ module ShopInvader
         role = @customer.role
       end
       role ||= @site.metafields['erp']['default_role']
-      response['hits'].each do |hit|
-        if hit.include?('price')
-          hit['price'] = hit['price'][role]
+      response['hits']['hits'].each do |hit|
+        if hit["_source"].include?('price')
+          Locomotive::Common::Logger.debug "[Elastic] foundprice"
+          hit["_source"]['price'] = hit["_source"]['price'][role]
         end
+        Locomotive::Common::Logger.debug "[Elastic] hit: #{hit}"
       end
       response
     end
