@@ -25,8 +25,6 @@ module ShopInvader
         end
 
         def fetch_collection(page: 1, per_page: 20)
-          Locomotive::Common::Logger.debug "[Elastic collection] fetch_collection"
-
           service.find_all(@name,
             conditions: @context['with_scope'],
             page:       page.to_i - 1,

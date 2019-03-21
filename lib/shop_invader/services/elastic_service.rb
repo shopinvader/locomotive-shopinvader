@@ -21,9 +21,6 @@ module ShopInvader
         @indices      = JSON.parse(site.metafields.dig('elasticsearch', 'indices') || '[]')
         @credentials  = site.metafields['elasticsearch'].slice('server_IP', 'server_Port').symbolize_keys
         @client       = Elasticsearch::Client.new hosts: 'http://'+@credentials[:server_IP]+':'+@credentials[:server_Port]
-
-        Locomotive::Common::Logger.debug "[Elastic] cluster health: #{ @client.cluster.health}"
-
       else
         @indices    = []
         @credentials= nil
@@ -68,15 +65,11 @@ module ShopInvader
     end
 
     def find_all(name, conditions: nil, page: 1, per_page: 20)
-      Locomotive::Common::Logger.debug "[Elastic] conditions #{conditions}"
-      Locomotive::Common::Logger.debug "[Elastic] conditions.length #{conditions.length}"
-
       # creating the body of the query
       #TODO handle page
       body = {
         size: per_page
       }
-
       #if there are conditions will do a specific search
       # else search all in that index
       if conditions.length > 0
@@ -88,12 +81,6 @@ module ShopInvader
         index: find_index(name),
         body: body
       )
-      #display list of elements
-      # hits.each {
-      #   |x|
-      #   Locomotive::Common::Logger.debug "[Elastic find_all] #{x["_source"]["id"]}  #{x["_source"]["name"]}"
-      #   Locomotive::Common::Logger.debug " #{x["_source"]} \n"
-      # }
 
       response = _parse_response(response)
       res = {
@@ -104,9 +91,9 @@ module ShopInvader
     end
 
 
-    # def find_by_key(name, key)
-    #   _find_by_key(find_index(name), name, key)
-    # end
+    def find_by_key(name, key)
+      _find_by_key(find_index(name), name, key)
+    end
 
     private
 
@@ -117,31 +104,52 @@ module ShopInvader
       role ||= @site.metafields['erp']['default_role']
       response['hits']['hits'].each do |hit|
         if hit["_source"].include?('price')
-          Locomotive::Common::Logger.debug "[Elastic] foundprice"
           hit["_source"]['price'] = hit["_source"]['price'][role]
         end
-        Locomotive::Common::Logger.debug "[Elastic] hit: #{hit}"
       end
       response
     end
 
-    # def _find_by_key(index, name, key)
-    #   response = index.search('', {
-    #     filters: "(url_key:#{key} OR redirect_url_key:#{key})"
-    #   })
-    #   response = _parse_response(response)
-    #   resource = nil
-    #   # look for the main product/category AND its variants
-    #   response['hits'].each do |hit|
-    #     hit['index_name'] = name
-    #     if resource.nil?
-    #       resource = hit
-    #     else
-    #       (resource['variants'] ||= []) << hit
-    #     end
-    #   end
-    #   resource
-    # end
+    def _find_by_key(index, name, key)
+      Locomotive::Common::Logger.debug "[Elastic] found_by_key"
+      Locomotive::Common::Logger.debug "[Elastic] given index: #{index}"
+
+
+      body = {
+        query: {
+          match: {
+            url_key: key
+          }
+        }
+      }
+      Locomotive::Common::Logger.debug "[Elastic] body : #{body}"
+      response = @client.search(
+        index: index,
+        body: body
+      )
+      # if response["hits"]["total"]==0
+      #   response=''
+      # end
+
+      Locomotive::Common::Logger.debug "[Elastic] response for #{name} : #{response}"
+
+      # response = index.search('', {
+      #   filters: "(url_key:#{key} OR redirect_url_key:#{key})"
+      # })
+      response = _parse_response(response)
+      resource = nil
+      # look for the main product/category AND its variants
+      response['hits']['hits'].each do |hit|
+        hit['index_name'] = name
+        if resource.nil?
+          resource = hit
+        else
+          (resource['variants'] ||= []) << hit
+        end
+      end
+      Locomotive::Common::Logger.debug "[Elastic] found_by_key ressource:#{resource}"
+      resource
+    end
 
     def find_index(name)
       settings = @indices.detect { |settings| settings['name'] == name }

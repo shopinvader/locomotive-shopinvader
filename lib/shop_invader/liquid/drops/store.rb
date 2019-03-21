@@ -26,8 +26,6 @@ module ShopInvader
           elsif store[meth]
             read_from_site(meth)
           elsif is_elastic_collection?(meth)
-
-            Locomotive::Common::Logger.debug "[Elastic] using elastic collection"
             ElasticCollection.new(meth)
           elsif is_algolia_collection?(meth)
             AlgoliaCollection.new(meth)

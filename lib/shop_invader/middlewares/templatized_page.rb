@@ -26,7 +26,8 @@ module ShopInvader
         match_routes.each do |route|
           rules = route.try(:last)
 
-          if rules && data = algolia.find_by_key(rules['index'], env['steam.path'])
+          # if rules && data = algolia.find_by_key(rules['index'], env['steam.path'])
+          if rules && data = elastic.find_by_key(rules['index'], env['steam.path'])
             return {
               name:     rules['name'],
               data:     data,
@@ -52,7 +53,7 @@ module ShopInvader
       end
 
       def match_routes
-        routes = site.metafields.dig('algolia', 'routes')
+        routes = site.metafields.dig('elasticsearch', 'routes')
         if routes
           routes = JSON.parse(routes)
 
@@ -67,6 +68,10 @@ module ShopInvader
 
       def page_finder
         services.page_finder
+      end
+
+      def elastic
+        services.elastic
       end
 
       def algolia
