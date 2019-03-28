@@ -50,8 +50,8 @@ module ShopInvader
 
       Locomotive::Common::Logger.debug "[Elastic] find_all conditions:#{conditions}"
       # creating the body of the query
-      #TODO handle page
       body = {
+        from: page,
         size: per_page
       }
       #if there are conditions will do a specific search
@@ -95,10 +95,8 @@ module ShopInvader
     end
 
     def _find_by_key(index, name, key)
-      Locomotive::Common::Logger.debug "[Elastic] found_by_key"
-      Locomotive::Common::Logger.debug "[Elastic] given index: #{index}"
-      Locomotive::Common::Logger.debug "[Elastic] given key: #{key}"
 
+      # TODO add redirect_url_key to the request
       body = {
         query:{
           bool:{
@@ -110,32 +108,21 @@ module ShopInvader
           }
         }
       }
-
-      body['size']=1
-      Locomotive::Common::Logger.debug "[Elastic] body : #{body}"
       response = @client.search(
         index: index,
         body: body
       )
-
-      Locomotive::Common::Logger.debug "[Elastic] response for #{name} : #{response}"
-
-      # response = index.search('', {
-      #   filters: "(url_key:#{key} OR redirect_url_key:#{key})"
-      # })
       response = _parse_response(response)
       resource = nil
-      
       # look for the main product/category AND its variants
       response['hits']['hits'].each do |hit|
         hit['index_name'] = name
         if resource.nil?
           resource = hit['_source']
         else
-          (resource['variants'] ||= []) << hit
+          (resource['variants'] ||= []) << hit['_source']
         end
       end
-      Locomotive::Common::Logger.debug "[Elastic] found_by_key ressource:#{resource}"
       resource
     end
 
