@@ -29,31 +29,42 @@ module ShopInvader
     end
 
     def find_all_products_and_categories
-      # pour tout les indices
-      Locomotive::Common::Logger.debug "[Elastic] find_all_products_and_categories"
       indices.map do |config|
-        # crée un hash
         {}.tap do |records|
-
           site.locales.each do |locale|
-            Locomotive::Common::Logger.debug "[Elastic] find_all_products_and_categories"
+            index   = "#{config['index']}_#{ShopInvader::LOCALES[locale.to_s]}".downcase
+            body =  { query: { match_all: {} } }
+            result = @client.search(
+              index: index,
+              scroll: '5m',
+              body: body
+            )
 
-            # result = @client.search index: "#{config['index']}_#{ShopInvader::LOCALES[locale.to_s]}", body: { query: { match_all: {} } }
+            # first search which also returns _scroll_id
+            result['hits']['hits'].each do |hit|
+              record = records[hit['_id']] ||= {}
+              record[locale] = { name: hit['_source']['name'], url: find_route(config['name']).gsub('*', hit['_source']['url_key']) }
+            end
 
-            Locomotive::Common::Logger.debug "[Elastic find_all_products_and_categories] search all result: #{result}"
+            # Uses the `scroll` API until empty results are returned
+            # https://www.elastic.co/guide/en/elasticsearch/reference/6.6/search-request-scroll.html
+            while result = @client.scroll(body: { scroll_id: result['_scroll_id'] }, scroll: '5m') and not result['hits']['hits'].empty? do
+              result['hits']['hits'].each do |hit|
+                record = records[hit['_id']] ||= {}
+                record[locale] = { name: hit['_source']['name'], url: find_route(config['name']).gsub('*', hit['_source']['url_key']) }
+              end
+            end
           end
         end.values
       end.flatten
     end
 
     def find_all(name, conditions: nil, page: 1, per_page: 20)
-
-      Locomotive::Common::Logger.debug "[Elastic] find_all conditions:#{conditions}"
-      # creating the body of the query
       body = {
         from: page,
         size: per_page
       }
+
       #if there are conditions will do a specific search
       # else search all in that index
       if conditions.length > 0
