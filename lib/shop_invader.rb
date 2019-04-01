@@ -48,7 +48,6 @@ module ShopInvader
     'nl' => 'nl_NL',
     'pl-PL' => 'pl_PL',
     'pt' => 'pt_PT',
-    'pt-BR' => 'it_IT',
     'ru' => 'ru_RU',
     'sv' => 'sv_SE',
     'uk' => 'uk_UA',
@@ -59,6 +58,11 @@ module ShopInvader
     'sk' => 'sk_SK',
     'sl' => 'sl_SL',
     'sr' => 'sr_RS',
+    'ar' => 'ar_SY',
+    'vi' => 'vi_VN',
+    'ko' => 'ko_KR',
+    'lt' => 'lt_LT',
+    'lv' => 'lv_LV',
   }
 
   def self.setup
