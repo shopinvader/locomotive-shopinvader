@@ -1,10 +1,12 @@
+require 'digest'
+
 module ShopInvader
   class ErpService
     FORWARD_HEADER = %w(ACCEPT ACCEPT_ENCODING ACCEPT_LANGUAGE HOST REFERER ACCEPT USER_AGENT)
     attr_reader :client
     attr_reader :session
 
-    def initialize(request, site, session, customer, locale)
+    def initialize(request, site, session, customer, locale, cookie_service)
       @customer = customer
       @site     = site
       @session  = session
@@ -12,6 +14,7 @@ module ShopInvader
       @client   = Faraday.new(
         url: site.metafields['erp']['api_url'],
         headers: headers)
+      @cookie_service = cookie_service
     end
 
     def call(method, path, params)
@@ -56,14 +59,6 @@ module ShopInvader
       session.delete('store_' + name)
     end
 
-    def download(path)
-      # TODO: give the right url + right headers
-      # https://github.com/lostisland/faraday
-      conn = Faraday.new(url: 'http://via.placeholder.com')
-      response = conn.get(path)
-      response.status == 200 ? response : nil
-    end
-
     def initialize_customer
       response = _call('POST', 'customer/sign_in', {})
       parse_response(response)
@@ -80,7 +75,11 @@ module ShopInvader
         end
         if res.include?('store_cache')
           res.delete('store_cache').each do | key, value |
-            session['store_' + key] = JSON.dump(value)
+            json = JSON.dump(value)
+            session['store_' + key] = json
+            # set a specific cookie for the version kept in cache
+            # this allow to vary the content cached by proxy like varnish
+            set_cookie_cache(key, json)
           end
         end
         # TODO we can remove this if when on odoo side we will have correct
@@ -113,6 +112,11 @@ module ShopInvader
       end
     end
 
+    def set_cookie_cache(key, json)
+      value = Digest::SHA256.hexdigest json
+      @cookie_service.set(key, {value: value, path: '/'})
+    end
+
     def catch_error(response)
         res = JSON.load(response.body)
         res.update(
@@ -131,6 +135,22 @@ module ShopInvader
             }])
         end
         res
+    end
+
+    def clear_session
+      session.keys.each do | key |
+        if key.start_with?('store_')
+            cookie_key = key.gsub('store_', '')
+            @cookie_service.set(cookie_key, {
+                value: '',
+                path: '/',
+                max_age: 0})
+            session.delete(key)
+        end
+        if key.start_with?('erp_')
+            session.delete(key)
+        end
+      end
     end
 
     private
@@ -173,7 +193,6 @@ module ShopInvader
           headers[:partner_email] = customer['email']
         end
       end
-
       headers
     end
 

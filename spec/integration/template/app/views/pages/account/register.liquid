@@ -1,0 +1,39 @@
+---
+handle: register
+slug: register
+---
+{% extends 'layouts/default '%}
+
+{% block 'content' %}
+
+{% if auth_entry.errors %}
+  <div class="alert alert-danger text-center alert-maintenance">
+    {{ auth_entry.errors | json }}
+  </div>
+{% endif %}
+
+<form action="{% path_to page %}" method="post">
+    <input type="hidden" name="auth_action" value="sign_up" />
+    <input type="hidden" name="auth_disable_email" value="true" />
+    <input type="hidden" name="auth_content_type" value="customers" />
+    <input type="hidden" name="auth_id_field" value="email" />
+    <input type="hidden" name="auth_password_field" value="password" />
+    <input type="hidden" name="auth_callback" value="{% path_to 'register_validation' %}" />
+    <input type="hidden" name="auth_entry[role]" value="{{site.metafields.erp.default_role}}">
+
+    Email: <input type="email" name="auth_entry[email]" value="seb+rspec@akretion.com" required="required">
+    Password: <input name="auth_entry[password]" type="text" value="password" required="required">
+    Password Confirm: <input name="auth_entry[password_confirmation]"  type="text" value="password" required="required">
+
+    Nom: <input type="text" name="name">
+    Street: <input type="text" name="street">
+    Zip: <input type="text" name="zip">
+    City: <input type="text" name="city">
+    Country : <select name="country[id]" class="form-control">
+      {% for country in store.available_countries %}
+        <option value="{{country.id}}">{{country.name}}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" name="submit" class="btn btn-primary text-right" value="Confirm">
+</form>
+{% endblock %}

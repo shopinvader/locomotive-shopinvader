@@ -1,0 +1,40 @@
+---
+handle: account
+slug: account
+---
+{% extends 'layouts/default' %}
+{% block "content" %}
+
+  {% action 'Redirection when customer is already logged' %}
+  if (getProp('current_customer')) {redirectTo('customer');}
+  {% endaction %}
+
+  {% if auth_entry.errors %}
+    <div class="alert alert-danger text-center alert-maintenance">
+      {{ auth_entry.errors | json }}
+    </div>
+  {% endif %}
+
+  {% if auth_wrong_credentials %}
+    <div class="alert alert-danger text-center alert-maintenance">
+      Wrong credentials!
+    </div>
+  {% endif %}
+
+  <h1>Account page, not logged</h1>
+  <div class="card-body">
+  <form action="{% path_to 'account_login' %}" method="post">
+    <input type="hidden" name="auth_action" value="sign_in" />
+    <input type="hidden" name="auth_content_type" value="customers" />
+    <input type="hidden" name="auth_id_field" value="email" />
+    <input type="hidden" name="auth_password_field" value="password" />
+    <input type="hidden" name="auth_callback" value="{% path_to customer %}" />
+    Email
+    <input type="email" name="auth_id" value="osiris@shopinvader.com" required="required">
+    Password
+    <input type="text" name="auth_password" value="password" required="required">
+    <a href="{% path_to reset_password_request %}" class="color-white">Reset Password</a>
+    <button type="submit" class="btn btn-dark btn-lg pull-right"><i class="fa fa-lock"></i>Sign in</button>
+  </form>
+  </div>
+{% endblock %}

@@ -21,7 +21,7 @@ describe 'When I am logged in' do
         })
     end
     let(:country) { {id: 74} }
-    let(:invader_error_url) { '/account/addresses-form' }
+    let(:invader_error_url) { '/account/new-address' }
     let(:address_params) { {
       city: 'Mizérieux',
       country: country,
@@ -36,20 +36,21 @@ describe 'When I am logged in' do
     it 'display the address page as describe in the params' do
       get '/account/addresses'
       expect(last_response.body).to include "Osiris"
-      expect(last_response.body).to include "My shipping addresses"
+      expect(last_response.body).to include "Number of address:"
     end
 
     it 'redirects to the success callback' do
-      add_an_address(address_params, '/account/addresses-form')
+      add_an_address(address_params, '/account/new-address')
       expect(last_response.status).to eq 302
       expect(last_response.location).to eq '/account/addresses'
     end
 
     it 'displays the address created' do
-      add_an_address(address_params, '/account/addresses-form', true)
+      add_an_address(address_params, '/account/new-address', true)
       expect(last_response.status).to eq 200
       expect(last_response.body).to include "Osiris"
       expect(last_response.body).to include "Rue des treffles"
+      expect(last_response.body).to include "current page: /account/addresses"
     end
 
     context 'with missing country' do
@@ -57,16 +58,16 @@ describe 'When I am logged in' do
       let(:country) { {} }
 
       it 'redirects to the invader_error_url' do
-        add_an_address(address_params, '/account/addresses-fake')
+        add_an_address(address_params, '/account/new-address')
         expect(last_response.status).to eq 302
-        expect(last_response.location).to eq '/account/addresses-form'
+        expect(last_response.location).to eq '/account/new-address'
       end
 
       it 'displays the form with the previous params' do
-        add_an_address(address_params, '/account/addresses-form', true)
+        add_an_address(address_params, '/account/new-address', true)
         expect(last_response.status).to eq 200
         expect(last_response.body).to include "BadRequest {'country': ['required field']}"
-        expect(last_response.body).to include "/account/addresses-form"
+        expect(last_response.body).to include "current page: /account/new-address"
       end
 
       context 'with no invader_error_url' do
@@ -74,9 +75,9 @@ describe 'When I am logged in' do
         let(:invader_error_url) { {} }
 
         it 'redirects to the referer' do
-          add_an_address(address_params, '/account/addresses-form')
+          add_an_address(address_params, '/account/new-address')
           expect(last_response.status).to eq 302
-          expect(last_response.location).to eq '/account/addresses-form'
+          expect(last_response.location).to eq '/account/new-address'
         end
       end
     end

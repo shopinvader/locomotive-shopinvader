@@ -8,7 +8,9 @@ module ShopInvader
         if env['steam.path'].start_with?('invader/')
           path = env['steam.path'].sub('invader/', '')
           response = erp.call_without_parsing(env['REQUEST_METHOD'], path, params)
-          if force_redirection || html_form_edition
+          if response.status == 200 && response.headers["content-type"] != "application/json"
+            _render_download(response)
+          elsif force_redirection || html_form_edition
             _process_redirection(response)
           else
             _render_json(response)
@@ -16,9 +18,22 @@ module ShopInvader
         end
       end
 
+      def _render_download(response)
+        headers = response.headers
+        @next_response = [
+            200,
+            {
+              'Content-Type' => headers['content-type'],
+              'Content-Disposition' => headers['content-disposition'],
+              'Content-Length' => headers['content-length'],
+            },
+            [response.body]
+        ]
+      end
+
       def _render_json(response)
         if response.status == 200
-          data = erp.parse_response(response)['data']
+          data = erp.parse_response(response)
           render_response(JSON.dump(data), 200, 'application/json')
         else
           # We do not catch the error here as this should be done
@@ -45,9 +60,6 @@ module ShopInvader
             redirect_to env['HTTP_REFERER'], 302
           end
         end
-
-        # TODO process pdf / binary file
-        #@next_response = [200, response[:headers].stringify_keys, [response[:body]]]
       end
 
       private
@@ -64,7 +76,7 @@ module ShopInvader
         # if you do a post/put/delete from the browse directly with a basic html form
         # we process it as an html edition and we will do the redirection
         # parsing the http_accept is done in a simple way here
- 		accept = parse_http_accept_header(request.get_header('HTTP_ACCEPT'))
+        accept = parse_http_accept_header(request.get_header('HTTP_ACCEPT'))
         if accept.size > 0
           accept[0][0] == "text/html" && (request.post? || request.delete? || request.put?)
         end

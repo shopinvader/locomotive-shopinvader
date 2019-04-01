@@ -41,6 +41,15 @@ module Spec
       last_response
     end
 
+    def sign_out(follow_redirect = false)
+      post '/account', {
+        'auth_action': 'sign_out',
+        'auth_content_type': 'customers',
+      }
+      follow_redirect! if follow_redirect
+      last_response
+    end
+
     def add_an_address(params, referer, follow_redirect = false, json = false)
       header 'Referer', referer
       if json
@@ -59,17 +68,21 @@ module Spec
       get '/invader/addresses?per_page=200&scope[address_type]=address'
       addresses = JSON.parse(last_response.body)
       if addresses
-        addresses.each do | address |
+        addresses['data'].each do | address |
           delete "/invader/addresses/#{address['id']}"
         end
       end
+    end
+
+    def session
+      last_request.env['rack.session']
     end
 
   end
 end
 
 def default_fixture_site_path
-  '/tmp/site'
+  'spec/integration/template'
 end
 
 Locomotive::Steam.configure do |config|

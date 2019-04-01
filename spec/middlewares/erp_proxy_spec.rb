@@ -10,21 +10,23 @@ RSpec.describe ShopInvader::Middlewares::ErpProxy do
   let(:response_data)       { {cart: {'name': 'SO00042'},
                                set_session: {'cart_id': 42},
                                'content-type' => 'application/json'} }
-  let(:response)            { instance_double('Response', body: JSON.dump(response_data), status: 200) }
+  let(:response)            { instance_double('Response', body: JSON.dump(response_data), status: 200, headers: {})}
   let(:session)             { {erp_cart_id: 42} }
   let(:app)                 { ->(env) { [200, env] } }
   let(:erp_service)         { instance_double('ErpService', call: response, parse_response: {'body': response_data})}
   let(:services)            { instance_double('Services', erp: erp_service) }
   let(:middleware)          { described_class.new(app) }
-
+  let(:site)                { instance_double('Site', locales: ['en', 'fr'], default_locale: 'en', metafields: {'erp': {}} ) }
 
 
   subject do
     env = env_for('http://models.example.com', {
+      'steam.site'            => site,
       'steam.services'        => services,
       'steam.path'            => path,
       'REQUEST_METHOD'        => 'POST',
       'steam.locale'          => 'fr',
+      'steam.cookies'         => {},
       params:                    params,
     })
     env['steam.request'] = Rack::Request.new(env)

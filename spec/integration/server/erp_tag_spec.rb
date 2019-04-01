@@ -8,7 +8,7 @@ describe 'When I am logged in' do
     run_server
   end
 
-  describe 'testing json api' do
+  describe 'testing page with erp drop' do
     before :all do
       sign_in({
         auth_action:          'sign_in',
@@ -31,30 +31,12 @@ describe 'When I am logged in' do
       zip: '42110',
     } }
 
-    it 'get on "/invader/addresses" return a json of existing address' do
-      get '/invader/addresses'
+    it 'get on "/erp-call-tag/addresses" return a json of existing address' do
+        get '/erp-call-tag/addresses'
       expect(last_response.status).to eq 200
       response = JSON.parse(last_response.body)
-      expect(response['data'][0]['name']).to eq 'Osiris'
+      expect(response[0]['name']).to eq 'Osiris'
     end
 
-    it 'post on "/invader/addresses" add an address and return it' do
-      add_an_address(address_params, '/invader/addresses', follow_redirect=false, json=true)
-      expect(last_response.status).to eq 200
-      response = JSON.parse(last_response.body)
-      expect(response['data'][0]['name']).to eq 'Osiris'
-    end
-
-    context 'with missing country' do
-
-      let(:country) { {} }
-
-      it 'post on "/invader/addresses" raise a 400 error' do
-        add_an_address(address_params, '/invader/addresses', follow_redirect=false, json=true)
-        expect(last_response.status).to eq 400
-        expect(last_response.body).to include 'Bad Request'
-      end
-
-    end
   end
 end

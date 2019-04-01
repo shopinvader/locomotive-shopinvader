@@ -1,0 +1,101 @@
+# Site metafield schema
+store:
+  label: My store
+  fields:
+    phone_number:
+      type: string
+    phone_number_link:
+      type: string
+    phone_number_hours:
+      type: string
+theme:
+  label: Theme
+  fields:
+    logo:
+      hint: "Displayed at the top right corner, right before the name of the site."
+      type: image
+    app_icon_sm:
+      hint: "Icon for mobile app Small format (192x192)"
+      type: image
+    app_icon_md:
+      hint: "Icon for mobile app Medium format (256x256)"
+      type: image
+    app_icon_lg:
+      hint: "Icon for mobile app Large format (384x384)"
+      type: image
+    app_icon_xl:
+      hint: "Icon for mobile app Extra large format (512x512)"
+      type: image
+    noimage:
+      hint: Default placeholder image (categories, products...)
+      type: image
+    user_icon:
+      type: image
+    cart_icon:
+      type: image
+algolia:
+  label: Algolia
+  fields:
+    application_id:
+      hint: "Algolia application ID"
+      type: string
+    api_key:
+      hint: "Algolia API Key"
+      type: string
+    indices:
+      hint: "Algolia indices"
+      type: string
+    routes:
+      hint: "Algolia routes"
+      type: string
+erp:
+  label: Odoo ERP Integration
+  fields:
+    api_key:
+      type: string
+    api_url:
+      type: string
+    default_role:
+      type: string
+google:
+  label: Google API Integration
+  fields:
+    maps_api_key:
+      hint: Google MAPS API Authentication for autocomplete address
+      type: string
+    analytics_id:
+      hint: Google Analytics ID
+      type: string
+
+payment:
+  label: Payment
+  fields:
+    stripe_api_key:
+      hint: "Stripe - API Key"
+      type: string
+    adyen_url:
+      hint: "Adyen - Hosted JS Library URL"
+      type: string
+smtp:
+  label: SMTP Parameters
+  fields:
+    sender:
+      type: string
+    address:
+      type: string
+    port:
+      type: integer
+    user_name:
+      type: string
+    password:
+      type: string
+    authentication:
+      type: string
+    enable_starttls_auto:
+      type: boolean
+_store:
+  fields:
+    available_countries:
+      type: string
+    all_filters:
+      type: string
