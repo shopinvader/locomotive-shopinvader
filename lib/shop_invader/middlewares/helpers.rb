@@ -6,9 +6,9 @@ module Locomotive::Steam
         alias_method :orig_render_response, :render_response
         alias_method :orig_inject_cookies, :inject_cookies
 
-        def render_response(content, code = 200, type = nil, no_cookies=false)
-          status, headers, body = orig_render_response(content, code, type, no_cookies)
-          if status == 200 && !no_cookies
+        def render_response(content, code = 200, type = nil)
+          status, headers, body = orig_render_response(content, code, type)
+          if status == 200
             set_200_header(headers)
           end
           @next_response = [status, headers, body]
