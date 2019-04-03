@@ -34,6 +34,7 @@ module ShopInvader
           site.locales.each do |locale|
             index   = "#{config['index']}_#{ShopInvader::LOCALES[locale.to_s]}".downcase
             body =  { query: { match_all: {} } }
+            body[:size]=100
             result = @client.search(
               index: index,
               scroll: '5m',
