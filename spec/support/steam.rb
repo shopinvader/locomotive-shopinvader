@@ -13,6 +13,21 @@ def build_services_for_algolia(application_id: '42', api_key: '42', indices: [])
   Locomotive::Steam::Services.build_instance(request)
 end
 
+def build_services_for_elasticsearch(server_IP: '1.1.1.1', server_Port: '9200', indices: [])
+  request = instance_double('Request', env: {})
+  site    = instance_double('Site', metafields: {
+    'elasticsearch' => {
+      'server_IP'  => server_IP,
+      'server_Port'  => server_Port,
+      'indices'  => indices
+    }
+  })
+
+  allow_any_instance_of(Locomotive::Steam::SiteFinderService).to receive(:find).and_return(site)
+
+  Locomotive::Steam::Services.build_instance(request)
+end
+
 def build_services_for_erp(api_url: 'http://models.example.com/shopinvader', api_key: '42', session: nil)
   request = instance_double('Request',
       env: {

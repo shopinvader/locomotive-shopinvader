@@ -48,6 +48,21 @@ algolia:
     routes:
       hint: "Algolia routes"
       type: string
+elasticsearch:
+  label: Elasticsearch
+  fields:
+    server_IP:
+      hint: "Elasticsearch server IP"
+      type: string
+    server_Port:
+      hint: "Elasticsearch server Port"
+      type: string
+    indices:
+      hint: "Elasticsearch indices"
+      type: string
+    routes:
+      hint: "Elasticsearch routes"
+      type: string
 erp:
   label: Odoo ERP Integration
   fields:
