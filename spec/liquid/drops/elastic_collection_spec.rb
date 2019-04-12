@@ -56,4 +56,4 @@ describe ShopInvader::Liquid::Drops::ElasticCollection do
 
   end
 
-end
+end 
