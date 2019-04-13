@@ -37,17 +37,21 @@ module Spec
 
     def sign_up(params, follow_redirect = false)
       post '/account/register', params
-      follow_redirect! if follow_redirect
+      follow_redirect! if follow_redirect && is_redirect
       last_response
     end
 
-    def sign_out(follow_redirect = false)
-      post '/account', {
+    def sign_out(follow_redirect = false, path='/account')
+      post path, {
         'auth_action': 'sign_out',
         'auth_content_type': 'customers',
       }
-      follow_redirect! if follow_redirect
+      follow_redirect! if follow_redirect && is_redirect
       last_response
+    end
+
+    def is_redirect
+      [301, 302].include?(last_response.status)
     end
 
     def add_an_address(params, referer, follow_redirect = false, json = false)

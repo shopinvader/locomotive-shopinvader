@@ -133,9 +133,8 @@ describe 'Authentication' do
        })
     end
 
-    it 'should redirect to account and drop cookies and session' do
+    it 'should drop cookies and session' do
       sign_out
-      expect(last_response.status).to eq 301
       expect(last_response.headers['Set-Cookie']).to include 'customer=; path=/; max-age=0'
       expect(last_response.headers['Set-Cookie']).to include 'cart=; path=/; max-age=0'
       expect(session).not_to include "erp_cart_id"
@@ -144,10 +143,11 @@ describe 'Authentication' do
       expect(session['authenticated_entry_id']).to eq ''
     end
 
-    it 'should be not logged' do
-      sign_out(true)
-      expect(last_response.body).to include 'current page: /account'
+    it 'should be not logged and rendering a page that request odoo addresses should not show addresses' do
+      sign_out(true, '/account_check_logout')
+      expect(last_response.body).to include 'current page: /account_check_logout'
       expect(last_response.body).to include "Account page, not logged"
+      expect(last_response.body).not_to include "Osiris"
     end
 
   end
