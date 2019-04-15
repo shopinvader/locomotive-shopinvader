@@ -61,7 +61,6 @@ module ShopInvader
     'ar' => 'ar_SY',
     'vi' => 'vi_VN',
     'ko' => 'ko_KR',
-    'lt' => 'lt_LT',
     'lv' => 'lv_LV',
   }
 
