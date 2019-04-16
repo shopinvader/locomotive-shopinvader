@@ -4,7 +4,7 @@ describe Locomotive::Steam::Middlewares::Sitemap do
 
   let(:site)            { instance_double('Site', locales: ['en', 'fr'], default_locale: 'en', metafields: {}, ) }
   let(:pages)           { [] }
-  let(:page_repository) { instance_double('PageRepository', published: pages) }
+  let(:page_repository) { instance_double('PageRepository', published: pages, :locale= => 'en') }
   let(:records)         { [] }
   let(:algolia)         { instance_double('AlgoliaService', find_all_products_and_categories: records) }
   let(:app)             { ->(env) { [200, env, 'app'] }}
@@ -24,7 +24,7 @@ describe Locomotive::Steam::Middlewares::Sitemap do
     describe 'no pages' do
 
       it 'renders a blank sitemap' do
-        is_expected.to eq [200, { 'Cache-Control' => 'max-age=0, private, must-revalidate', 'Content-Type' => 'text/plain' }, ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url>\n    <loc>http://localhost</loc>\n    <priority>1.0</priority>\n  </url>\n\n</urlset>\n"]]
+        is_expected.to eq [200, { 'Cache-Control' => 'max-age=0, private, must-revalidate', "Content-Type"=>'max-age=0, private, must-revalidate', 'Content-Type' => 'text/plain'  }, ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">\n\n</urlset>\n"]]
       end
 
     end

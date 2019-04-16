@@ -11,6 +11,7 @@ services:
       - VIRTUAL_HOST=shopinvader-odoo.dy
       - VIRTUAL_PORT=8069
       - DEMO=True
+      - ODOO_ADMIN_PASSWORD=test
     image: quay.io/akretion/shopinvader-odoo:${VERSION}-latest
     depends_on:
       - db

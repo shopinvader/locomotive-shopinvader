@@ -4,7 +4,7 @@ module ShopInvader
     # environment with all the variable inside
 	class SnippetPage < Locomotive::Steam::Middlewares::Renderer
 
-      include Locomotive::Steam::Middlewares::Helpers
+      include Locomotive::Steam::Middlewares::Concerns::Helpers
 
 
       def _call
