@@ -1,0 +1,134 @@
+[
+  {
+    "name": "TV Media Stand",
+    "url_key": "tv-media-stand",
+    "id": 1,
+    "main": true,
+    "price": {
+      "public_tax_exc": {
+        "tax_included": false,
+        "value": 100.0
+      },
+      "public_tax_inc": {
+        "tax_included": false,
+        "value": 120.0
+      }
+    },
+    "redirect_url_key": {
+    },
+    "categories": [
+      {
+        "id": 1,
+        "url_key": "furniture",
+        "name": "Furniture",
+        "level": 0
+      },
+      {
+        "id": 2,
+        "url_key": "furniture/living-room",
+        "name": "Living Room",
+        "level": 1
+      }
+    ],
+    "objectID": "1"
+  },
+  {
+    "name": "Mid-Century Armchair (Red)",
+    "url_key": "mid-century-armchair",
+    "id": 2,
+    "main": true,
+    "price": {
+      "public_tax_exc": {
+        "tax_included": false,
+        "value": 50.0
+      },
+      "public_tax_inc": {
+        "tax_included": false,
+        "value": 60.0
+      }
+    },
+    "redirect_url_key": {
+    },
+    "categories": [
+      {
+        "id": 1,
+        "url_key": "furniture",
+        "name": "Furniture",
+        "level": 0
+      },
+      {
+        "id": 2,
+        "url_key": "furniture/living-room",
+        "name": "Living Room",
+        "level": 1
+      }
+    ],
+    "objectID": "2"
+  },
+  {
+    "name": "Mid-Century Armchair (Blue)",
+    "url_key": "mid-century-armchair",
+    "id": 3,
+    "main": false,
+    "price": {
+      "public_tax_exc": {
+        "tax_included": false,
+        "value": 50.0
+      },
+      "public_tax_inc": {
+        "tax_included": false,
+        "value": 60.0
+      }
+    },
+    "redirect_url_key": {
+    },
+    "categories": [
+      {
+        "id": 1,
+        "url_key": "furniture",
+        "name": "Furniture",
+        "level": 0
+      },
+      {
+        "id": 2,
+        "url_key": "furniture/living-room",
+        "name": "Living Room",
+        "level": 1
+      }
+    ],
+    "objectID": "3"
+  },
+  {
+    "name": "Mid-Century Armchair (Yellow)",
+    "url_key": "mid-century-armchair",
+    "id": 3,
+    "main": false,
+    "price": {
+      "public_tax_exc": {
+        "tax_included": false,
+        "value": 50.0
+      },
+      "public_tax_inc": {
+        "tax_included": false,
+        "value": 60.0
+      }
+    },
+    "redirect_url_key": {
+    },
+    "categories": [
+      {
+        "id": 1,
+        "url_key": "furniture",
+        "name": "Furniture",
+        "level": 0
+      },
+      {
+        "id": 2,
+        "url_key": "furniture/living-room",
+        "name": "Living Room",
+        "level": 1
+      }
+    ],
+    "objectID": "4"
+  }
+]

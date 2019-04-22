@@ -1,0 +1,20 @@
+[
+  {
+    "url_key": "meuble",
+    "id": 1,
+    "objectID": "1",
+    "name": "Meuble"
+  },
+  {
+    "url_key": "meuble/salon",
+    "id": 2,
+    "objectID": "2",
+    "name": "Salon"
+  },
+  {
+    "url_key": "meuble/salle-de-bain",
+    "id": 3,
+    "objectID": "3",
+    "name": "Sale de bain"
+  }
+]

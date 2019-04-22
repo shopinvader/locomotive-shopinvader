@@ -12,7 +12,7 @@ end
 task :export_algolia do
   puts "\nExport Aloglia index\n".green
   Algolia.init(application_id: ENV['ALGOLIA_APP_ID'], api_key: ENV['ALGOLIA_API_KEY'])
-  ['locomotive_shopinvader_product', 'locomotive_shopinvader_category'].each do | index_name |
+  ['ci_shopinvader_variant', 'ci_shopinvader_category'].each do | index_name |
     ['fr_FR', 'en_US'].each do | lang |
       index_full_name = "#{index_name}_#{lang}"
       puts "\nExport Aloglia index #{index_full_name}\n".green
@@ -42,10 +42,11 @@ task :configure_algolia do
       index_full_name = "#{index_name}_#{lang}"
       puts "\nConfigure Aloglia index #{index_full_name}\n".green
       index = Algolia::Index.new("#{index_full_name}")
-      data = JSON.parse(File.read("spec/integration/search-engine-data/#{index_full_name}.json"))
+      index.clear_index()
+      data = JSON.parse(File.read("spec/integration/data/#{index_full_name}.json"))
       index.add_objects(data)
 
-      data = JSON.parse(File.read("spec/integration/search-engine-data/#{index_full_name}_setting.json"))
+      data = JSON.parse(File.read("spec/integration/data/#{index_name}_setting.json"))
       index.set_settings(data)
     end
   end

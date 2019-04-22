@@ -1,0 +1,20 @@
+[
+  {
+    "url_key": "furniture",
+    "id": 1,
+    "objectID": "1",
+    "name": "Furniture"
+  },
+  {
+    "url_key": "furniture/living-room",
+    "id": 2,
+    "objectID": "2",
+    "name": "Living room"
+  },
+  {
+    "url_key": "furniture/bathroom",
+    "id": 3,
+    "objectID": "3",
+    "name": "Bathroom"
+  }
+]

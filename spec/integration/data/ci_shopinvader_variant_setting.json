@@ -1,0 +1,21 @@
+{
+  "attributesForFaceting": [
+    "categories.id",
+    "main",
+    "url_key",
+    "redirect_url_key"
+  ],
+  "ranking": [
+    "typo",
+    "geo",
+    "words",
+    "filters",
+    "proximity",
+    "attribute",
+    "exact",
+    "custom"
+  ],
+  "customRanking": [
+    "desc(main)"
+  ]
+}

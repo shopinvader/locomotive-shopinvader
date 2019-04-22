@@ -11,7 +11,7 @@ domains: [example.org]
 # The locale listed first is the site's default locale
 # Locales are specified using ISO language codes
 # Possible locales include: en, de, fr, pl, pt-BR, it, nl, nb, es, ru, et, ja, zh-CN
-locales: [en]
+locales: [en, fr]
 
 seo_title: Shopinvader demo | May the discount be with you
 meta_keywords: "the Shopinvader  demo web store"
@@ -31,12 +31,12 @@ metafields:
     logo: "/samples/assets/shop-logo.png"
     noimage: "/samples/assets/no-image.jpg"
   algolia:
-    application_id: 'GH41KF783Z'
-    api_key: "75575d3910b3ac55428bcdfa1b0e6784"
+    application_id: 'C04JR8U8Y1'
+    api_key: "610bbcca628ecb66a8e3ec44483c9b33"
     indices: >
       [
-        { "name": "categories", "index": "demo_site_10_category" },
-        { "name": "products", "index": "demo_site_10_product" }
+        { "name": "categories", "index": "ci_shopinvader_category" },
+        { "name": "products", "index": "ci_shopinvader_variant" }
       ]
     routes: >
       [
