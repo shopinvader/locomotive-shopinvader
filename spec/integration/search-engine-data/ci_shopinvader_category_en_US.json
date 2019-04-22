@@ -1,0 +1,280 @@
+[
+  {
+    "meta_description": "Phasellus quis elit iaculis, vulputate lectus consectetur, scelerisque erat. Quisque ac rutrum lectus, et dapibus quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur vestibulum, velit id molestie placerat, ante orci molestie tortor, ac posuere neque mi eu velit. Cras eget semper eros. Fusce faucibus sapien non nibh varius, vehicula venenatis sem dictum. Ut vitae faucibus urna, a vestibulum libero. ",
+    "meta_keywords": "Phasellus quis elit iaculis, vulputate lectus consectetur, scelerisque erat. Quisque ac rutrum lectus, et dapibus quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur vestibulum, velit id molestie placerat, ante orci molestie tortor, ac posuere neque mi eu velit. Cras eget semper eros. Fusce faucibus sapien non nibh varius, vehicula venenatis sem dictum. Ut vitae faucibus urna, a vestibulum libero. ",
+    "subtitle": "Phasellus quis elit iaculis, vulputate lectus consectetur, scelerisque erat. Quisque ac rutrum lectus, et dapibus quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur vestibulum, velit id molestie placerat, ante orci molestie tortor, ac posuere neque mi eu velit. Cras eget semper eros. Fusce faucibus sapien non nibh varius, vehicula venenatis sem dictum. Ut vitae faucibus urna, a vestibulum libero. ",
+    "description": false,
+    "level": 1,
+    "seo_title": "Phasellus quis elit iaculis, vulputate lectus consectetur, scelerisque erat. Quisque ac rutrum lectus, et dapibus quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur vestibulum, velit id molestie placerat, ante orci molestie tortor, ac posuere neque mi eu velit. Cras eget semper eros. Fusce faucibus sapien non nibh varius, vehicula venenatis sem dictum. Ut vitae faucibus urna, a vestibulum libero. ",
+    "redirect_url_key": {
+    },
+    "short_description": false,
+    "childs": [
+
+    ],
+    "parent": {
+      "url_key": "furniture",
+      "name": "Furniture",
+      "parent": null,
+      "id": 21
+    },
+    "filters": [
+      {
+        "code": "attributes.color",
+        "help": false,
+        "name": "Color"
+      },
+      {
+        "code": "attributes.seat",
+        "help": false,
+        "name": "Seat"
+      }
+    ],
+    "images": {
+    },
+    "url_key": "furniture/living-room",
+    "id": 8,
+    "name": "Living room",
+    "objectID": "22"
+  },
+  {
+    "meta_description": "Phasellus quis elit iaculis, vulputate lectus consectetur, scelerisque erat. Quisque ac rutrum lectus, et dapibus quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur vestibulum, velit id molestie placerat, ante orci molestie tortor, ac posuere neque mi eu velit. Cras eget semper eros. Fusce faucibus sapien non nibh varius, vehicula venenatis sem dictum. Ut vitae faucibus urna, a vestibulum libero. ",
+    "meta_keywords": "Phasellus quis elit iaculis, vulputate lectus consectetur, scelerisque erat. Quisque ac rutrum lectus, et dapibus quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur vestibulum, velit id molestie placerat, ante orci molestie tortor, ac posuere neque mi eu velit. Cras eget semper eros. Fusce faucibus sapien non nibh varius, vehicula venenatis sem dictum. Ut vitae faucibus urna, a vestibulum libero. ",
+    "subtitle": "All furniture for your home",
+    "description": false,
+    "level": 0,
+    "seo_title": "Phasellus quis elit iaculis, vulputate lectus consectetur, scelerisque erat. Quisque ac rutrum lectus, et dapibus quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur vestibulum, velit id molestie placerat, ante orci molestie tortor, ac posuere neque mi eu velit. Cras eget semper eros. Fusce faucibus sapien non nibh varius, vehicula venenatis sem dictum. Ut vitae faucibus urna, a vestibulum libero. ",
+    "redirect_url_key": {
+    },
+    "short_description": false,
+    "childs": [
+      {
+        "childs": [
+
+        ],
+        "url_key": "furniture/living-room",
+        "name": "Living room",
+        "id": 22
+      }
+    ],
+    "parent": null,
+    "filters": [
+      {
+        "code": "product_brand_id",
+        "help": false,
+        "name": "Brand"
+      },
+      {
+        "code": "attributes.color",
+        "help": false,
+        "name": "Color"
+      }
+    ],
+    "images": {
+    },
+    "url_key": "furniture",
+    "id": 7,
+    "name": "Furniture",
+    "objectID": "21"
+  },
+  {
+    "meta_description": "",
+    "meta_keywords": "",
+    "subtitle": "Computer & laptop  accessories",
+    "description": "<h1>Occultum facinus esse potuerit, gaudebit;</h1>\n\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duo Reges: \nconstructio interrete. Ut in voluptate sit, qui epuletur, in dolore, qui\n torqueatur. <b>Obsecro, inquit, Torquate, haec dicit Epicurus?</b> Ut id aliis narrare gestiant? Non est enim vitium in oratione solum, sed etiam in moribus. De hominibus dici non necesse est. <i>Quid turpius quam sapientis vitam ex insipientium sermone pendere?</i>\n Quasi vero, inquit, perpetua oratio rhetorum solum, non etiam \nphilosophorum sit. Vulgo enim dicitur: Iucundi acti labores, nec male \nEuripidesconcludam, si potero, Latine; At tu eadem ista dic in iudicio \naut, si coronam times, dic in senatu. </p>",
+    "level": 1,
+    "seo_title": "",
+    "redirect_url_key": {
+    },
+    "short_description": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc de hominis summo bono quaeritur; Quae autem natura suae primae institutionis oblita est? <b>Duo Reges: constructio interrete.</b> <i>Equidem, sed audistine modo de Carneade?</i> Quae tamen a te agetur non melior, quam illae sunt, quas interdum optines. Sin aliud quid voles, postea.<code></code></p>",
+    "childs": [
+
+    ],
+    "parent": {
+      "url_key": "electronics-computers",
+      "name": "Electronics, Computers",
+      "parent": null,
+      "id": 17
+    },
+    "filters": [
+      {
+        "code": "product_brand_id",
+        "help": false,
+        "name": "Brand"
+      },
+      {
+        "code": "attributes.color",
+        "help": false,
+        "name": "Color"
+      },
+      {
+        "code": "attributes.screen_size",
+        "help": false,
+        "name": "Sreen size"
+      }
+    ],
+    "images": {
+    },
+    "url_key": "electronics-computers/accessories",
+    "id": 6,
+    "name": " Accessories",
+    "objectID": "20"
+  },
+  {
+    "meta_description": "",
+    "meta_keywords": "",
+    "subtitle": "Laptops and notebooks",
+    "description": "<p>Pellentesque erat dolor, accumsan eget venenatis vel, tincidunt \nsollicitudin lorem. Sed ac tortor mauris. Aenean porta, arcu id maximus \nmalesuada, eros elit vestibulum tellus, vitae malesuada elit elit id \nelit. Fusce lobortis imperdiet molestie. Nulla nisl lacus, imperdiet id \nmi in, varius cursus mauris. Pellentesque porttitor velit quis lorem \nlacinia, sollicitudin placerat lorem lobortis. Nullam id suscipit \nmauris, a rutrum tortor. Praesent imperdiet mattis augue, et bibendum \ntortor sagittis aliquet. In sit amet bibendum tellus, at porta dui. \nPhasellus scelerisque erat non neque varius scelerisque. Suspendisse eu \nnisl vel quam commodo efficitur. Aenean feugiat nibh purus, at tincidunt\n erat vestibulum in. Mauris in dui molestie, dapibus erat vel, \nullamcorper arcu.\n</p>",
+    "level": 1,
+    "seo_title": "Laptops and notebooks",
+    "redirect_url_key": {
+    },
+    "short_description": "<p>Fusce dapibus lacus vitae sem auctor volutpat. Maecenas sit amet \nbibendum est, nec laoreet sapien. Nam suscipit semper dolor quis \nelementum. Donec eu enim blandit.</p>",
+    "childs": [
+
+    ],
+    "parent": {
+      "url_key": "electronics-computers",
+      "name": "Electronics, Computers",
+      "parent": null,
+      "id": 17
+    },
+    "filters": [
+      {
+        "code": "product_brand_id",
+        "help": false,
+        "name": "Brand"
+      },
+      {
+        "code": "attributes.color",
+        "help": false,
+        "name": "Color"
+      },
+      {
+        "code": "attributes.memory",
+        "help": false,
+        "name": "Memory"
+      },
+      {
+        "code": "attributes.processor",
+        "help": false,
+        "name": "Processor"
+      },
+      {
+        "code": "attributes.screen_size",
+        "help": false,
+        "name": "Sreen size"
+      }
+    ],
+    "images": {
+    },
+    "url_key": "electronics-computers/laptops",
+    "id": 4,
+    "name": "Laptops ",
+    "objectID": "18"
+  },
+  {
+    "meta_description": "",
+    "meta_keywords": "",
+    "subtitle": "Electronics, Computers & Office",
+    "description": "<p>\n<span style=\"font-weight: bold;\">Lorem ipsum dolor sit amet</span></p><p> consectetur adipiscing elit. Vestibulum id \ndui <span style=\"font-weight: bold;\">eget</span> enim suscipit laoreet. Vestibulum sapien arcu, elementum ornare\n suscipit sed, mollis at nibh. Donec ullamcorper convallis diam, \nmolestie ultricies diam fermentum eu. Nulla in mauris non lectus \nconvallis viverra. Integer gravida ultricies molestie. In fermentum \naliquet elit sodales malesuada. Vestibulum iaculis leo nunc. Nunc \nscelerisque tristique quam, sit amet porttitor tortor. Donec ac massa \nmassa. Pellentesque sed scelerisque sapien.\n</p>\n<p>\nMauris mollis, velit quis mattis fringilla, tellus neque <span style=\"font-weight: bold;\">pharetra</span> mi, \nconsequat volutpat massa metus sit amet elit. Aliquam erat volutpat. \nAenean vel nisi in lorem ultricies dignissim et a leo. Donec non nisi \nleo. Cras sed sem convallis, facilisis est ut, hendrerit orci. Etiam \nplacerat mollis volutpat. Quisque mattis nec erat eget malesuada.\n</p>\n<p>\nVestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere\n cubilia Curae; Vestibulum sagittis viverra luctus. Donec condimentum \nfacilisis lectus, sed mollis erat ultrices non. Vestibulum malesuada at \njusto eu tristique. Aenean <span style=\"font-weight: bold;\">bibendum</span> nunc urna, a rutrum odio hendrerit \neu. Fusce feugiat ornare ipsum a venenatis. Suspendisse ut imperdiet \nrisus. Suspendisse potenti.\n</p>",
+    "level": 0,
+    "seo_title": "",
+    "redirect_url_key": {
+    },
+    "short_description": "<p>Donec ac condimentum nisi. Phasellus ante quam, ullamcorper eget elit \neget, euismod elementum lectus. Aenean pulvinar eros in lorem aliquet, \nquis vulputate diam interdum. Praesent hendrerit eros erat, eu pharetra \nfelis iaculis et. Vestibulum dui orci, fringilla vitae lectus ac, \nfringilla iaculis erat.\n</p>",
+    "childs": [
+      {
+        "childs": [
+
+        ],
+        "url_key": "electronics-computers/laptops",
+        "name": "Laptops ",
+        "id": 18
+      },
+      {
+        "childs": [
+
+        ],
+        "url_key": "electronics-computers/accessories",
+        "name": " Accessories",
+        "id": 20
+      }
+    ],
+    "parent": null,
+    "filters": [
+
+    ],
+    "images": {
+    },
+    "url_key": "electronics-computers",
+    "id": 3,
+    "name": "Electronics, Computers",
+    "objectID": "17"
+  },
+  {
+    "meta_description": "",
+    "meta_keywords": "",
+    "subtitle": "All apple accessorices",
+    "description": false,
+    "level": 1,
+    "seo_title": "",
+    "redirect_url_key": [
+      "apple-accessories"
+    ],
+    "short_description": "<p>test</p>",
+    "childs": [
+
+    ],
+    "parent": {
+      "url_key": "apple-products",
+      "name": "Apple Products",
+      "parent": null,
+      "id": 12
+    },
+    "filters": [
+
+    ],
+    "images": {
+    },
+    "url_key": "apple-products/apple-accessories",
+    "id": 1,
+    "name": "Apple Accessories",
+    "objectID": "16"
+  },
+  {
+    "meta_description": "",
+    "meta_keywords": "",
+    "subtitle": "Apple",
+    "description": false,
+    "level": 0,
+    "seo_title": "",
+    "redirect_url_key": {
+    },
+    "short_description": false,
+    "childs": [
+      {
+        "childs": [
+
+        ],
+        "url_key": "apple-products/apple-accessories",
+        "name": "Apple Accessories",
+        "id": 16
+      }
+    ],
+    "parent": null,
+    "filters": [
+      {
+        "code": "attributes.color",
+        "help": false,
+        "name": "Color"
+      }
+    ],
+    "images": {
+    },
+    "url_key": "apple-products",
+    "id": 2,
+    "name": "Apple Products",
+    "objectID": "12"
+  }
+]
