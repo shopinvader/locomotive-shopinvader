@@ -26,13 +26,13 @@ describe 'Connected to the search engine' do
     it 'get on "mid-century-armchair" return the product "Mid-Century Armchair (Red) and with the variant"' do
         get 'mid-century-armchair'
       expect(last_response.status).to eq 200
-      expect(last_response.body).to eq "Mid-Century Armchair (Red) Mid-Century Armchair (Yellow) Mid-Century Armchair (Blue)\n"
+      expect(last_response.body).to eq "Mid-Century Armchair (Red) Mid-Century Armchair (Blue) Mid-Century Armchair (Yellow)\n"
     end
 
     it 'get on "fr/fauteuil-mid-century" return the french category "Fauteuil Mid-Century (Rouge) with the variant"' do
       get 'fr/fauteuil-mid-century'
       expect(last_response.status).to eq 200
-      expect(last_response.body).to eq "Fauteuil Mid-Century (Rouge) Fauteuil Mid-Century (Jaune) Fauteuil Mid-Century (Bleu)\n"
+      expect(last_response.body).to eq "Fauteuil Mid-Century (Rouge) Fauteuil Mid-Century (Bleu) Fauteuil Mid-Century (Jaune)\n"
     end
   end
 

@@ -64,8 +64,8 @@ task :configure_elastic do
         client.indices.delete index: index_full_name
       end
 
-      mappings = JSON.parse(File.read("spec/integration/data/#{index_name}_mapping.json"))
-      client.indices.create index: index_full_name, body: { mappings: mappings }
+      settings = JSON.parse(File.read("spec/integration/data/#{index_name}_elastic_setting.json"))
+      client.indices.create index: index_full_name, body: settings
 
       data = JSON.parse(File.read("spec/integration/data/#{index_full_name}.json"))
       body = []

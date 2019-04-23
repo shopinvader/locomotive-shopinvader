@@ -1,7 +1,0 @@
-{
-  "properties": {
-    "url_key": {
-      "type":  "keyword"
-    }
-  }
-}

@@ -11,7 +11,7 @@ module ShopInvader
       'ne'  => '!='
     }.freeze
 
-    attr_reader :indices, :site
+    attr_reader :indices, :site, :routes
 
     def initialize(site, customer, locale)
       @site         = site
@@ -21,10 +21,12 @@ module ShopInvader
         @indices      = JSON.parse(site.metafields.dig('algolia', 'indices') || '[]')
         @credentials  = site.metafields['algolia'].slice('application_id', 'api_key').symbolize_keys
         @client       = Algolia::Client.new(@credentials)
+        @routes       = JSON.parse(site.metafields.dig('algolia', 'routes') || '[]')
       else
         @indices    = []
         @credentials= nil
         @client     = nil
+        @routes     = []
       end
     end
 

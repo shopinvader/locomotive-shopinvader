@@ -11,7 +11,7 @@ module ShopInvader
       'ne'  => '!='
     }.freeze
 
-    attr_reader :indices, :site
+    attr_reader :indices, :site, :routes
 
     def initialize(site, customer, locale)
       @site         = site
@@ -20,9 +20,11 @@ module ShopInvader
       if site.metafields['elasticsearch']
         @indices      = JSON.parse(site.metafields.dig('elasticsearch', 'indices') || '[]')
         @client       = Elasticsearch::Client.new hosts: @site.metafields.dig('elasticsearch', 'url')
+        @routes       = JSON.parse(site.metafields.dig('elasticsearch', 'routes') || '[]')
       else
         @indices    = []
         @client     = nil
+        @routes     = []
       end
     end
 
