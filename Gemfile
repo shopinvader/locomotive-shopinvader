@@ -6,6 +6,7 @@ gemspec
 gem 'locomotivecms_steam', github: 'akretion/steam', branch: 'master-pending-merge'
 #gem 'locomotivecms_steam', path: '/gems/steam'
 gem 'faraday'
+gem 'algoliasearch'
 
 group :test do
   gem 'simplecov',      require: false
