@@ -23,6 +23,8 @@ services:
       - PGDATABASE=odoodb
       - ALGOLIA_APP_ID=C04JR8U8Y1
       - ALGOLIA_API_KEY=610bbcca628ecb66a8e3ec44483c9b33
+      - ELASTIC_IP=127.0.0.1
+      - ELASTIC_PORT=9200
     volumes:
       - .:/workspace
       - ./bundle:/usr/local/bundle

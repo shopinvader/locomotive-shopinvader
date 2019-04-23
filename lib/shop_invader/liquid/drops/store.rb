@@ -25,6 +25,8 @@ module ShopInvader
             data
           elsif store[meth]
             read_from_site(meth)
+          elsif is_elastic_collection?(meth)
+            ElasticCollection.new(meth)
           elsif is_algolia_collection?(meth)
             AlgoliaCollection.new(meth)
           elsif is_plural?(meth)
@@ -38,6 +40,10 @@ module ShopInvader
 
         def is_plural?(value)
           value.singularize != value
+        end
+
+        def is_elastic_collection?(name)
+          service.elastic.indices.any? { |index| index['name'] == name }
         end
 
         def is_algolia_collection?(name)
