@@ -19,11 +19,9 @@ module ShopInvader
       @locale       = ShopInvader::LOCALES[locale.to_s]
       if site.metafields['elasticsearch']
         @indices      = JSON.parse(site.metafields.dig('elasticsearch', 'indices') || '[]')
-        @credentials  = site.metafields['elasticsearch'].slice('server_IP', 'server_Port').symbolize_keys
-        @client       = Elasticsearch::Client.new hosts: 'http://'+@credentials[:server_IP]+':'+@credentials[:server_Port]
+        @client       = Elasticsearch::Client.new hosts: @site.metafields.dig('elasticsearch', 'url')
       else
         @indices    = []
-        @credentials= nil
         @client     = nil
       end
     end

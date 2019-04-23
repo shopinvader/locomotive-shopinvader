@@ -2,6 +2,7 @@ require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 require 'colorize'
 require 'algoliasearch'
+require 'elasticsearch'
 require 'json'
 
 task :clear do
@@ -51,6 +52,31 @@ task :configure_algolia do
     end
   end
 end
+
+task :configure_elastic do
+  puts "\nConfigure elastic indexes\n".green
+  client = Elasticsearch::Client.new url: 'http://elastic:9200', log: true
+  ['ci_shopinvader_variant', 'ci_shopinvader_category'].each do | index_name |
+    ['fr_FR', 'en_US'].each do | lang |
+      index_full_name = "#{index_name}_#{lang}".downcase
+      puts "\nConfigure Elastic index #{index_full_name}\n".green
+      if client.indices.exists? index: index_full_name
+        client.indices.delete index: index_full_name
+      end
+
+      mappings = JSON.parse(File.read("spec/integration/data/#{index_name}_mapping.json"))
+      client.indices.create index: index_full_name, body: { mappings: mappings }
+
+      data = JSON.parse(File.read("spec/integration/data/#{index_full_name}.json"))
+      body = []
+      data.each do | vals |
+        body << {index: { _index: index_full_name.downcase, _id: vals['id'], data: vals}}
+      end
+      client.bulk body: body
+    end
+  end
+end
+
 
 RSpec::Core::RakeTask.new(:export_algolia) do
  Rake::Task["export_algolia"].invoke

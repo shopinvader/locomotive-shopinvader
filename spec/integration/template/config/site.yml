@@ -44,12 +44,11 @@ metafields:
           ["*", { "name": "product", "template_handle": "product", "index": "products" } ]
       ]
   elasticsearch:
-    server_IP: '127.0.0.1'
-    server_Port: "9200"
+    url: http://elastic:9200
     indices: >
       [
-        { "name": "categories", "index": "demo_elasticsearch_backend_shopinvader_category", "type":"odoo"},
-        { "name": "products", "index": "demo_elasticsearch_backend_shopinvader_variant", "type":"odoo"}
+        { "name": "categories", "index": "ci_shopinvader_category"},
+        { "name": "products", "index": "ci_shopinvader_variant"}
       ]
     routes: >
       [
