@@ -4,4 +4,4 @@ published: true
 handle: product
 ---
 
-{{ product.name }}
+{{ product.name }}{% for variant in product.variants %} {{ variant.name }}{% endfor %}

@@ -3,18 +3,22 @@
     "url_key": "meuble",
     "id": 1,
     "objectID": "1",
-    "name": "Meuble"
+    "name": "Meuble",
+    "level": 0
   },
   {
     "url_key": "meuble/salon",
     "id": 2,
     "objectID": "2",
-    "name": "Salon"
+    "name": "Salon",
+    "level": 1
+
   },
   {
     "url_key": "meuble/salle-de-bain",
     "id": 3,
     "objectID": "3",
-    "name": "Sale de bain"
+    "name": "Sale de bain",
+    "level": 1
   }
 ]

@@ -1,0 +1,9 @@
+---
+handle: store_products_with_paginate
+slug: store_products_with_paginate
+---
+{% paginate store.products by 3 %}
+{% for product in paginate.collection %} {{ product.name }}{% endfor %}
+total page: {{ paginate.total_pages }}
+total entries: {{ paginate.total_entries }}
+{% endpaginate %}

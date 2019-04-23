@@ -16,6 +16,7 @@
     "custom"
   ],
   "customRanking": [
-    "desc(main)"
+    "desc(main)",
+    "asc(id)"
   ]
 }
