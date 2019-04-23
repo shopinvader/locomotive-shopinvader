@@ -20,7 +20,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - docker-compose -f ci.docker-compose.yml run --rm --service-ports shopinvader rake spec
+  - docker-compose -f ci.docker-compose.yml run --rm --service-ports shopinvader bundle exec rake spec
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
