@@ -1,0 +1,20 @@
+{
+  "attributesForFaceting": [
+    "url_key",
+    "redirect_url_key",
+    "level"
+  ],
+  "ranking": [
+    "typo",
+    "geo",
+    "words",
+    "filters",
+    "proximity",
+    "attribute",
+    "exact",
+    "custom"
+  ],
+  "customRanking": [
+    "asc(id)"
+  ]
+}

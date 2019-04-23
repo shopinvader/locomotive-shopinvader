@@ -1,0 +1,5 @@
+---
+handle: store_categories_with_level_0
+slug: store_categories_with_level_0
+---
+{% with_scope level: 0 %}{% for categ in store.categories %} {{ categ.name }}{% endfor %}{% endwith_scope %}

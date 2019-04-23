@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<url>
+    <loc>http://example.org/</loc>
+    <lastmod>2019-04-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr" />
+  </url>
+<url>
+      <loc>http://example.org/furniture</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/meuble" />
+    </url>
+    <url>
+      <loc>http://example.org/furniture/living-room</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/meuble/salon" />
+    </url>
+    <url>
+      <loc>http://example.org/furniture/bathroom</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/meuble/salle-de-bain" />
+    </url>
+    <url>
+      <loc>http://example.org/tv-media-stand</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/meuble-tv" />
+    </url>
+    <url>
+      <loc>http://example.org/mid-century-armchair</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/fauteuil-mid-century" />
+    </url>
+    <url>
+      <loc>http://example.org/mid-century-armchair</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/fauteuil-mid-century" />
+    </url>
+    <url>
+      <loc>http://example.org/mid-century-armchair</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/fauteuil-mid-century" />
+    </url></urlset>

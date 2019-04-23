@@ -1,0 +1,7 @@
+---
+title: Product
+published: true
+handle: product
+---
+
+{{ product.name }}{% for variant in product.variants %} {{ variant.name }}{% endfor %}

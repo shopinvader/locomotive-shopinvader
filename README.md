@@ -1,6 +1,6 @@
 # ShopInvader
 
-[![Build Status](https://travis-ci.org/akretion/locomotive_shopinvader.svg?branch=v3.4.x)](https://travis-ci.org/akretion/locomotive_shopinvader) [![Code Climate](https://codeclimate.com/github/akretion/locomotive_shopinvader/badges/gpa.svg)](https://codeclimate.com/github/akretion/locomotive_shopinvader)[![Test Coverage](https://api.codeclimate.com/v1/badges/2aa860bd2b735c93ebd8/test_coverage)](https://codeclimate.com/github/akretion/locomotive_shopinvader/test_coverage)
+[![Build Status](https://travis-ci.org/shopinvader/locomotive-shopinvader.svg?branch=v4.0.x)](https://travis-ci.org/shopinvader/locomotive-shopinvader) [![Maintainability](https://api.codeclimate.com/v1/badges/b4c4298859a66e24c168/maintainability)](https://codeclimate.com/github/shopinvader/locomotive-shopinvader/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/b4c4298859a66e24c168/test_coverage)](https://codeclimate.com/github/shopinvader/locomotive-shopinvader/test_coverage)
 
 ## Installation
 
