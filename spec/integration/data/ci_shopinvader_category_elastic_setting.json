@@ -10,6 +10,9 @@
       "url_key": {
         "type":  "keyword"
       },
+      "redirect_url_key": {
+        "type":  "keyword"
+      },
       "id": {
         "type":  "integer"
       }

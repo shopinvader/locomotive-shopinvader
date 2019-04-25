@@ -1,7 +1,8 @@
 module ShopInvader
   class AlgoliaService
 
-    KEY_ATTRIBUTES = %w(url_key redirect_url_key).freeze
+    include ShopInvader::Services::Concerns::SearchEngine
+
     NUMERIC_OPERATORS = {
       nil   => '=',
       'gt'  => '>',
@@ -16,8 +17,8 @@ module ShopInvader
     def initialize(site, customer, locale)
       @site         = site
       @customer     = customer
-      @locale       = ShopInvader::LOCALES[locale.to_s]
-      if site.metafields['algolia']
+      @locale       = locale
+      if is_configured?
         @indices      = JSON.parse(site.metafields.dig('algolia', 'indices') || '[]')
         @credentials  = site.metafields['algolia'].slice('application_id', 'api_key').symbolize_keys
         @client       = Algolia::Client.new(@credentials)
@@ -28,6 +29,10 @@ module ShopInvader
         @client     = nil
         @routes     = []
       end
+    end
+
+    def is_configured?
+     !!@site.metafields['algolia']
     end
 
     def find_all_products_and_categories
@@ -54,7 +59,7 @@ module ShopInvader
       end.flatten
     end
 
-    def find_all(name, conditions: nil, page: 1, per_page: 20)
+    def find_all(name, conditions: nil, page: 0, per_page: 20)
       response = find_index(name).search('',
         build_params(conditions || {}).merge({
           page:         page,
@@ -106,14 +111,7 @@ module ShopInvader
     end
 
     def find_index(name)
-      settings = @indices.detect { |settings| settings['name'] == name }
-      build_index(settings)
-    end
-
-    def build_index(settings)
-      name = settings['index']
-      Locomotive::Common::Logger.debug "[Algolia] build index #{name}_#{@locale}"
-      Algolia::Index.new("#{name}_#{@locale}", @client)
+      Algolia::Index.new(find_index_name(name), @client)
     end
 
     def build_params(conditions)
@@ -125,7 +123,11 @@ module ShopInvader
               params[:numericFilters] << "#{name} #{NUMERIC_OPERATORS[op] || '='} #{value}"
             else
               [*value].each do |_value|
-                params[:facetFilters] << "#{op == 'nin' ? 'NOT ' : ''}#{name}:#{_value}"
+                if _value.is_a?(Numeric) && op == 'nin'
+                  params[:numericFilters] << "#{name} != #{_value}"
+                else
+                  params[:facetFilters] << "#{op == 'ne' ? 'NOT ' : ''}#{name}:#{_value}"
+                end
               end
             end
           end
@@ -133,17 +135,11 @@ module ShopInvader
       end
     end
 
-    def build_attr(name, value)
-      if value.is_a?(Hash)
-        result = []
-        value.each do | key, val |
-           subname = "#{name}.#{key}"
-           result.concat(build_attr(subname, val))
-        end
-        result
-      else
-        [[name, value]]
-      end
+    # For compatibility reason for now we do not use the generic method
+    # as we want to keep the case sensitive
+    # we be removed soon
+    def build_index_name(index, locale)
+      "#{index}_#{ShopInvader::LOCALES[locale.to_s]}"
     end
 
     def find_route(index_name)

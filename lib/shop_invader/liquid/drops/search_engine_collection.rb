@@ -2,7 +2,7 @@ module ShopInvader
   module Liquid
     module Drops
 
-      class AlgoliaCollection < ::Liquid::Drop
+      class SearchEngineCollection < ::Liquid::Drop
 
         delegate :first, :last, :each, :each_with_index, :empty?, :any?, :map, :size, :count, to: :collection
 
@@ -33,7 +33,7 @@ module ShopInvader
         end
 
         def service
-          @context.registers[:services].algolia
+          @context.registers[:services].search_engine
         end
 
       end

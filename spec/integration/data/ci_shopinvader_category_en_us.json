@@ -11,7 +11,11 @@
     "id": 2,
     "objectID": "2",
     "name": "Living room",
-    "level": 1
+    "level": 1,
+    "redirect_url_key": [
+      "furniture/living-room-redirect",
+      "furniture/living-room-second-redirect"
+    ]
   },
   {
     "url_key": "furniture/bathroom",

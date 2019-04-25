@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe ShopInvader::Liquid::Drops::ElasticCollection do
+describe ShopInvader::Liquid::Drops::SearchEngineCollection do
 
-  let(:services)  { build_services_for_elasticsearch(indices: '[]') }
+  let(:services)  { build_services_for_algolia(indices: '[]') }
   let(:context)   { ::Liquid::Context.new({}, {}, { services: services }) }
   let(:drop)      { described_class.new('product').tap { |d| d.context = context } }
 
@@ -10,8 +10,8 @@ describe ShopInvader::Liquid::Drops::ElasticCollection do
 
     subject { drop.total_entries }
 
-    it 'calls the elastic service to return the collection' do
-      expect(services.elastic).to receive(:find_all).with('product',
+    it 'calls the algolia service to return the collection' do
+      expect(services.algolia).to receive(:find_all).with('product',
         conditions: nil,
         page: 0,
         per_page: 20).and_return(size: 42, data: %w(a b c))
@@ -24,8 +24,8 @@ describe ShopInvader::Liquid::Drops::ElasticCollection do
 
     subject { drop.first }
 
-    it 'grabs the first element of the collection (elastic index)' do
-      expect(services.elastic).to receive(:find_all).and_return(size: 42, data: %w(a b c))
+    it 'grabs the first element of the collection (Algolia index)' do
+      expect(services.algolia).to receive(:find_all).and_return(size: 42, data: %w(a b c))
       is_expected.to eq('a')
     end
 
@@ -35,8 +35,8 @@ describe ShopInvader::Liquid::Drops::ElasticCollection do
 
     subject { drop.size }
 
-    it 'calls the elastic service to get the size of the collection' do
-      expect(services.elastic).to receive(:find_all).and_return(size: 42, data: %w(a b c))
+    it 'calls the algolia service to get the size of the collection' do
+      expect(services.algolia).to receive(:find_all).and_return(size: 42, data: %w(a b c))
       is_expected.to eq(3)
     end
 
@@ -46,8 +46,8 @@ describe ShopInvader::Liquid::Drops::ElasticCollection do
 
     subject { drop.send(:paginate, 1, 4) }
 
-    it 'calls the elastic service to get a paginated list' do
-      expect(services.elastic).to receive(:find_all).with('product',
+    it 'calls the algolia service to get a paginated list' do
+      expect(services.algolia).to receive(:find_all).with('product',
         conditions: nil,
         page: 0,
         per_page: 4).and_return('paginated list')
@@ -56,4 +56,4 @@ describe ShopInvader::Liquid::Drops::ElasticCollection do
 
   end
 
-end 
+end

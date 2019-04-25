@@ -130,5 +130,38 @@
       }
     ],
     "objectID": "4"
+  },
+  {
+    "name": "Laundry basket",
+    "url_key": "laundry-basket",
+    "id": 5,
+    "main": true,
+    "price": {
+      "public_tax_exc": {
+        "tax_included": false,
+        "value": 30.0
+      },
+      "public_tax_inc": {
+        "tax_included": false,
+        "value": 36.0
+      }
+    },
+    "redirect_url_key": {
+    },
+    "categories": [
+      {
+        "id": 1,
+        "url_key": "furniture",
+        "name": "Furniture",
+        "level": 0
+      },
+      {
+        "id": 3,
+        "url_key": "furniture/bathroom",
+        "name": "Bathroom",
+        "level": 1
+      }
+    ],
+    "objectID": "5"
   }
 ]

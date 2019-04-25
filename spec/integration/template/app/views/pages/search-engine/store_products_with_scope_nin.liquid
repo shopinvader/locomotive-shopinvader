@@ -1,0 +1,9 @@
+---
+handle: store_products_with_scope_nin
+slug: store_products_with_scope_nin
+---
+{% with_scope price.nin: {public_tax_exc: { value: [50, 100] } } %}
+{% for product in store.products %}
+  {{ product.name }}
+{% endfor %}
+{% endwith_scope %}

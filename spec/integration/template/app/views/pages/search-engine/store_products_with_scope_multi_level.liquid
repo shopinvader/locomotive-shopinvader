@@ -1,0 +1,9 @@
+---
+handle: store_products_with_scope_multi_level
+slug: store_products_with_scope_multi_level
+---
+{% with_scope categories: {id: 2}, main: true %}
+{% for product in store.products %}
+  {{ product.name }}
+{% endfor %}
+{% endwith_scope %}

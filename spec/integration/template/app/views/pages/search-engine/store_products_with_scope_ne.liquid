@@ -1,0 +1,9 @@
+---
+handle: store_products_with_scope_ne
+slug: store_products_with_scope_ne
+---
+{% with_scope categories: { id: 1 }, price.ne: {public_tax_exc: { value: 50 } } %}
+{% for product in store.products %}
+  {{ product.name }}
+{% endfor %}
+{% endwith_scope %}

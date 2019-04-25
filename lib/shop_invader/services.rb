@@ -12,13 +12,12 @@ module Locomotive::Steam::Services
     end
 
     register :search_engine do
-      ShopInvader::SearchEngineService.new(current_site, elastic, algolia)
+      ShopInvader::SearchEngineService.new(current_site, locale, elastic, algolia)
     end
 
     register :erp do
       ShopInvader::ErpService.new(
           request, current_site, request.env['rack.session'], request.env['authenticated_entry'], locale, cookie)
-
     end
 
     register :erp_auth do

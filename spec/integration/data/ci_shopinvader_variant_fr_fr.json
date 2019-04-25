@@ -19,14 +19,14 @@
     "categories": [
       {
         "id": 1,
-        "url_key": "furniture",
-        "name": "Furniture",
+        "url_key": "meuble",
+        "name": "Meuble",
         "level": 0
       },
       {
         "id": 2,
-        "url_key": "furniture/living-room",
-        "name": "Living Room",
+        "url_key": "meuble/salon",
+        "name": "Salon",
         "level": 1
       }
     ],
@@ -52,14 +52,14 @@
     "categories": [
       {
         "id": 1,
-        "url_key": "furniture",
-        "name": "Furniture",
+        "url_key": "meuble",
+        "name": "Meuble",
         "level": 0
       },
       {
         "id": 2,
-        "url_key": "furniture/living-room",
-        "name": "Living Room",
+        "url_key": "meuble/salon",
+        "name": "Salon",
         "level": 1
       }
     ],
@@ -85,14 +85,14 @@
     "categories": [
       {
         "id": 1,
-        "url_key": "furniture",
-        "name": "Furniture",
+        "url_key": "meuble",
+        "name": "Meuble",
         "level": 0
       },
       {
         "id": 2,
-        "url_key": "furniture/living-room",
-        "name": "Living Room",
+        "url_key": "meuble/salon",
+        "name": "Salon",
         "level": 1
       }
     ],
@@ -118,17 +118,50 @@
     "categories": [
       {
         "id": 1,
-        "url_key": "furniture",
-        "name": "Furniture",
+        "url_key": "meuble",
+        "name": "Meuble",
         "level": 0
       },
       {
         "id": 2,
-        "url_key": "furniture/living-room",
-        "name": "Living Room",
+        "url_key": "meuble/salon",
+        "name": "Salon",
         "level": 1
       }
     ],
     "objectID": "4"
+  },
+  {
+    "name": "Panier à Linge",
+    "url_key": "panier-linge",
+    "id": 5,
+    "main": true,
+    "price": {
+      "public_tax_exc": {
+        "tax_included": false,
+        "value": 30.0
+      },
+      "public_tax_inc": {
+        "tax_included": false,
+        "value": 36.0
+      }
+    },
+    "redirect_url_key": {
+    },
+    "categories": [
+      {
+        "id": 1,
+        "url_key": "meuble",
+        "name": "Meuble",
+        "level": 0
+      },
+      {
+        "id": 3,
+        "url_key": "meuble/salle-de-bain",
+        "name": "Sale de bain",
+        "level": 1
+      }
+    ],
+    "objectID": "5"
   }
 ]

@@ -44,7 +44,7 @@ task :configure_algolia do
       puts "\nConfigure Aloglia index #{index_full_name}\n".green
       index = Algolia::Index.new("#{index_full_name}")
       index.clear_index()
-      data = JSON.parse(File.read("spec/integration/data/#{index_full_name}.json"))
+      data = JSON.parse(File.read("spec/integration/data/#{index_full_name.downcase}.json"))
       index.add_objects(data)
 
       data = JSON.parse(File.read("spec/integration/data/#{index_name}_setting.json"))
@@ -77,17 +77,10 @@ task :configure_elastic do
   end
 end
 
-
-RSpec::Core::RakeTask.new(:export_algolia) do
- Rake::Task["export_algolia"].invoke
-end
-
-RSpec::Core::RakeTask.new(:configure_algolia) do
- Rake::Task["configure_algolia"].invoke
-end
-
 RSpec::Core::RakeTask.new(:spec) do
  Rake::Task["clear"].invoke
+ Rake::Task["configure_algolia"].invoke
+ Rake::Task["configure_elastic"].invoke
 end
 
-#task default: :spec
+task default: :spec
