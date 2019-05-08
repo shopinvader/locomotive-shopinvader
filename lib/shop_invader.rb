@@ -89,7 +89,7 @@ module ShopInvader
     ActiveSupport::Notifications.subscribe('steam.auth.signed_in') do |name, start, finish, id, payload|
       service = Locomotive::Steam::Services.build_instance(payload[:request])
       if should_notify_erp(payload)
-        payload[:request].env['authenticated_entry'] = payload[:entry]
+        payload[:request].env['steam.authenticated_entry'] = payload[:entry]
         service.erp_auth.signed_in(payload[:entry])
       end
     end
@@ -97,7 +97,7 @@ module ShopInvader
     ActiveSupport::Notifications.subscribe('steam.auth.reset_password') do |name, start, finish, id, payload|
       service = Locomotive::Steam::Services.build_instance(payload[:request])
       if should_notify_erp(payload)
-        payload[:request].env['authenticated_entry'] = payload[:entry]
+        payload[:request].env['steam.authenticated_entry'] = payload[:entry]
         service.erp_auth.reset_password(payload[:entry])
       end
     end

@@ -50,7 +50,7 @@ module Locomotive::Steam
         end
 
         def customer
-          @customer ||= request.env['authenticated_entry']
+          @customer ||= request.env['steam.authenticated_entry']
         end
 
         def default_role
