@@ -22,7 +22,7 @@ require 'shop_invader/steam_patches'
 require 'faraday'
 
 def should_notify_erp(payload)
-  payload[:request].env['steam.site'].metafields.include?('erp') && payload[:entry].content_type.name.downcase == 'customers'
+  payload[:request].env['steam.site'].metafields.include?('erp') && payload[:entry].content_type.slug.downcase == 'customers'
 end
 
 module ShopInvader
