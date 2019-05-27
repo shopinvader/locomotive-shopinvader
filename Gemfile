@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in shop_invader.gemspec
 gemspec
 
-gem 'locomotivecms_steam', github: 'akretion/steam', branch: 'master-pending-merge'
+gem 'locomotivecms_steam', github: 'akretion/steam', branch: 'fix-impersonnate'
 #gem 'locomotivecms_steam', path: '/gems/steam'
 gem 'faraday'
 gem 'algoliasearch'

@@ -8,7 +8,7 @@ module Locomotive::Steam::Services
     end
 
     register :algolia do
-      ShopInvader::AlgoliaService.new(current_site, request.env['authenticated_entry'], locale)
+      ShopInvader::AlgoliaService.new(current_site, request.env['steam.authenticated_entry'], locale)
     end
 
     register :search_engine do
@@ -17,7 +17,7 @@ module Locomotive::Steam::Services
 
     register :erp do
       ShopInvader::ErpService.new(
-          request, current_site, request.env['rack.session'], request.env['authenticated_entry'], locale, cookie)
+        request, current_site, request.env['rack.session'], request.env['steam.authenticated_entry'], locale, cookie)
     end
 
     register :erp_auth do
