@@ -12,19 +12,11 @@ describe ShopInvader::Liquid::Drops::Store do
 
   describe 'asking for a store object' do
 
-    context "the collection exists in elastic" do
+    context "the collection exists in search engine" do
 
       let(:indices) { '[{"name": "category" }]' }
 
-      it { expect(drop.before_method('category')).to be_an_instance_of(ShopInvader::Liquid::Drops::ElasticCollection) }
-
-    end
-
-    context "the collection exists in algolia" do
-
-      let(:indices) { '[{"name": "category" }]' }
-
-      it { expect(drop.before_method('category')).to be_an_instance_of(ShopInvader::Liquid::Drops::AlgoliaCollection) }
+      it { expect(drop.before_method('category')).to be_an_instance_of(ShopInvader::Liquid::Drops::SearchEngineCollection) }
 
     end
 
