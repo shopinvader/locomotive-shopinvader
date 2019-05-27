@@ -7,8 +7,13 @@ module ShopInvader
       def _call
         if env['steam.page'].not_found? && resource = find_resource
           if redirect_to_main_variant?(resource)
-            # TODO FIXME issue with local
-            redirect_to('/' + resource[:data]['url_key'], 301)
+            same_locale = locale == default_locale
+            if site.prefix_default_locale || !same_locale
+              redirect_url = "/#{locale}/#{resource[:data]['url_key']}"
+            else
+              redirect_url = "/#{resource[:data]['url_key']}"
+            end
+            redirect_to(redirect_url, 301)
             return
           end
 
