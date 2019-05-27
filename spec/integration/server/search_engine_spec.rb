@@ -45,6 +45,21 @@ describe 'Connected to the search engine' do
         end
       end
 
+      describe 'testing a redirection on product page' do
+        it 'get on "old-url-tv-media-stand" return the product 301"' do
+          get 'old-url-tv-media-stand'
+          expect(last_response.status).to eq 301
+          expect(last_response.location).to eq "/tv-media-stand"
+        end
+
+        it 'get on "fr/ancienne-url-meuble-tv" return a 301 on the right french product"' do
+          get 'fr/ancienne-url-meuble-tv'
+          expect(last_response.status).to eq 301
+          expect(last_response.location).to eq "/fr/meuble-tv"
+        end
+      end
+
+
       describe 'Rendering the sitemap' do
         it 'should include search engine content' do
           get 'sitemap.xml'

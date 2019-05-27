@@ -14,8 +14,9 @@
         "value": 120.0
       }
     },
-    "redirect_url_key": {
-    },
+    "redirect_url_key": [
+        "ancienne-url-meuble-tv"
+    ],
     "categories": [
       {
         "id": 1,
@@ -47,8 +48,8 @@
         "value": 60.0
       }
     },
-    "redirect_url_key": {
-    },
+    "redirect_url_key": [
+    ],
     "categories": [
       {
         "id": 1,
@@ -80,8 +81,8 @@
         "value": 60.0
       }
     },
-    "redirect_url_key": {
-    },
+    "redirect_url_key": [
+    ],
     "categories": [
       {
         "id": 1,
@@ -113,8 +114,8 @@
         "value": 60.0
       }
     },
-    "redirect_url_key": {
-    },
+    "redirect_url_key": [
+    ],
     "categories": [
       {
         "id": 1,
@@ -146,8 +147,8 @@
         "value": 36.0
       }
     },
-    "redirect_url_key": {
-    },
+    "redirect_url_key": [
+    ],
     "categories": [
       {
         "id": 1,
