@@ -50,6 +50,11 @@ describe 'Connected to the search engine' do
           get 'sitemap.xml'
           expect(last_response.status).to eq 200
           path = File.expand_path('../../data/expected_sitemap.xml', __FILE__)
+          # uncomment this to regenerate the expected_sitemap
+          # check the new generated file before commit
+          #File.open(path, 'w') do | file |
+          #  file.write(last_response.body)
+          #end
           data = File.read(path)
           expect(last_response.body).to eq data
         end

@@ -137,7 +137,7 @@ module ShopInvader
 
     # For compatibility reason for now we do not use the generic method
     # as we want to keep the case sensitive
-    # we be removed soon
+    # will be removed soon
     def build_index_name(index, locale)
       "#{index}_#{ShopInvader::LOCALES[locale.to_s]}"
     end
