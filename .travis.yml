@@ -1,4 +1,4 @@
-sudo: required
+sudo: false
 services:
   - docker
 
@@ -6,7 +6,7 @@ language: python
 
 before_install:
   - mkdir .db
-  - sudo pip install docker-compose
+  - pip install docker-compose
   - docker-compose -f ci.docker-compose.yml run --rm --service-ports odoo odoo --stop-after-init
   - docker-compose -f ci.docker-compose.yml run --rm --service-ports shopinvader bundle install
 
