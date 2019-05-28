@@ -71,6 +71,8 @@ describe 'Connected to the search engine' do
           #  file.write(last_response.body)
           #end
           data = File.read(path)
+          # we hack the date
+          data.sub!("<lastmod>2019-05-27</lastmod>", "<lastmod>#{Date.today.to_s}</lastmod>")
           expect(last_response.body).to eq data
         end
       end
