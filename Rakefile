@@ -55,6 +55,7 @@ end
 
 task :configure_elastic do
   puts "\nConfigure elastic indexes\n".green
+  `dockerize -timeout 180s -wait http://elastic:9200`
   client = Elasticsearch::Client.new url: 'http://elastic:9200', log: true
   ['ci_shopinvader_variant', 'ci_shopinvader_category'].each do | index_name |
     ['fr_FR', 'en_US'].each do | lang |

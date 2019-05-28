@@ -11,7 +11,7 @@ services:
     environment:
       - discovery.type=single-node
     volumes:
-      - ./esdata:/usr/share/elasticsearch/data
+      - esdata:/usr/share/elasticsearch/data
   odoo:
     environment:
       - DB_NAME=db
@@ -29,7 +29,6 @@ services:
       - PGUSER=odoo
       - PGDATABASE=db
       - ALGOLIA_APP_ID=C04JR8U8Y1
-      - ALGOLIA_API_KEY=${ALGOLIA_API_KEY}
       - ELASTIC_IP=127.0.0.1
       - ELASTIC_PORT=9200
     volumes:
@@ -38,4 +37,6 @@ services:
     depends_on:
       - odoo
       - elastic
+volumes:
+  esdata:
 version: '3'
