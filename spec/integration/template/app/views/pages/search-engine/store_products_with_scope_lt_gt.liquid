@@ -1,0 +1,9 @@
+---
+handle: store_products_with_scope_lt_gt
+slug: store_products_with_scope_lt_gt
+---
+{% with_scope price.gt: { public_tax_exc: { value: 40 } }, price.lt: { public_tax_exc: { value: 70 } } %}
+{% for product in store.products %}
+  {{ product.name }}
+{% endfor %}
+{% endwith_scope %}

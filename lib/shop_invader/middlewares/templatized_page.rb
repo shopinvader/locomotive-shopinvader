@@ -7,8 +7,13 @@ module ShopInvader
       def _call
         if env['steam.page'].not_found? && resource = find_resource
           if redirect_to_main_variant?(resource)
-            # TODO FIXME issue with local
-            redirect_to('/' + resource[:data]['url_key'], 301)
+            same_locale = locale == default_locale
+            if site.prefix_default_locale || !same_locale
+              redirect_url = "/#{locale}/#{resource[:data]['url_key']}"
+            else
+              redirect_url = "/#{resource[:data]['url_key']}"
+            end
+            redirect_to(redirect_url, 301)
             return
           end
 
@@ -26,7 +31,7 @@ module ShopInvader
         match_routes.each do |route|
           rules = route.try(:last)
 
-          if rules && data = algolia.find_by_key(rules['index'], env['steam.path'])
+          if rules && data = search_engine.find_by_key(rules['index'], env['steam.path'])
             return {
               name:     rules['name'],
               data:     data,
@@ -52,11 +57,8 @@ module ShopInvader
       end
 
       def match_routes
-        routes = site.metafields.dig('algolia', 'routes')
-        if routes
-          routes = JSON.parse(routes)
-
-          routes.find_all do |(path, _)|
+        if search_engine.routes
+          search_engine.routes.find_all do |(path, _)|
             regexp = Regexp.new("\\A#{path.gsub('*', '.*')}\\Z")
             regexp.match(env['steam.path'])
           end
@@ -69,8 +71,8 @@ module ShopInvader
         services.page_finder
       end
 
-      def algolia
-        services.algolia
+      def search_engine
+        services.search_engine
       end
 
     end

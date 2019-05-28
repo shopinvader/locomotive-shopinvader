@@ -7,6 +7,7 @@ gem 'locomotivecms_steam', github: 'akretion/steam', branch: 'fix-impersonnate'
 #gem 'locomotivecms_steam', path: '/gems/steam'
 gem 'faraday'
 gem 'algoliasearch'
+gem 'elasticsearch'
 
 group :test do
   gem 'simplecov',      require: false

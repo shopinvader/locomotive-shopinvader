@@ -2,12 +2,19 @@ services:
   db:
     environment:
       - POSTGRES_USER=odoo
-      - POSTGRES_DB=odoodb
+      - POSTGRES_DB=db
     volumes:
       - .db/:/var/lib/postgresql/data
     image: quay.io/akretion/postgresql:10
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - ./esdata:/usr/share/elasticsearch/data
   odoo:
     environment:
+      - DB_NAME=db
       - VIRTUAL_HOST=shopinvader-odoo.dy
       - VIRTUAL_PORT=8069
       - DEMO=True
@@ -20,12 +27,15 @@ services:
     environment:
       - PGHOST=db
       - PGUSER=odoo
-      - PGDATABASE=odoodb
+      - PGDATABASE=db
       - ALGOLIA_APP_ID=C04JR8U8Y1
-      - ALGOLIA_API_KEY=610bbcca628ecb66a8e3ec44483c9b33
+      - ALGOLIA_API_KEY=${ALGOLIA_API_KEY}
+      - ELASTIC_IP=127.0.0.1
+      - ELASTIC_PORT=9200
     volumes:
       - .:/workspace
       - ./bundle:/usr/local/bundle
     depends_on:
       - odoo
+      - elastic
 version: '3'

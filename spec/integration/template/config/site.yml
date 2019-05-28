@@ -43,6 +43,18 @@ metafields:
           ["*", { "name": "category", "template_handle": "category", "index": "categories" } ],
           ["*", { "name": "product", "template_handle": "product", "index": "products" } ]
       ]
+  elasticsearch:
+    url: http://elastic:9200
+    indices: >
+      [
+        { "name": "categories", "index": "ci_shopinvader_category"},
+        { "name": "products", "index": "ci_shopinvader_variant"}
+      ]
+    routes: >
+      [
+          ["*", { "name": "category", "template_handle": "category", "index": "categories" } ],
+          ["*", { "name": "product", "template_handle": "product", "index": "products" } ]
+      ]
   erp:
     api_key: "12345"
     api_url: http://odoo:8069/shopinvader

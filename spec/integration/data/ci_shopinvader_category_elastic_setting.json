@@ -1,0 +1,21 @@
+{
+  "settings" : {
+    "index" : {
+      "sort.field" : ["id"],
+      "sort.order" : ["asc"]
+    }
+  },
+  "mappings": {
+    "properties": {
+      "url_key": {
+        "type":  "keyword"
+      },
+      "redirect_url_key": {
+        "type":  "keyword"
+      },
+      "id": {
+        "type":  "integer"
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ShopInvader::Liquid::Drops::AlgoliaCollection do
+describe ShopInvader::Liquid::Drops::SearchEngineCollection do
 
   let(:services)  { build_services_for_algolia(indices: '[]') }
   let(:context)   { ::Liquid::Context.new({}, {}, { services: services }) }

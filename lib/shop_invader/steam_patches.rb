@@ -38,7 +38,8 @@ require 'locomotive/steam/middlewares/sitemap'
 
 module Locomotive::Steam::Middlewares
   class Sitemap < ThreadSafe
-    include ShopInvader::Middlewares::Concerns::Sitemap::Algolia
+    # TODO check in metafield to use correct sitemap
+    include ShopInvader::Middlewares::Concerns::Sitemap::SearchEngine
   end
 end
 

@@ -2,6 +2,7 @@ require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 require 'colorize'
 require 'algoliasearch'
+require 'elasticsearch'
 require 'json'
 
 task :clear do
@@ -43,7 +44,7 @@ task :configure_algolia do
       puts "\nConfigure Aloglia index #{index_full_name}\n".green
       index = Algolia::Index.new("#{index_full_name}")
       index.clear_index()
-      data = JSON.parse(File.read("spec/integration/data/#{index_full_name}.json"))
+      data = JSON.parse(File.read("spec/integration/data/#{index_full_name.downcase}.json"))
       index.add_objects(data)
 
       data = JSON.parse(File.read("spec/integration/data/#{index_name}_setting.json"))
@@ -52,16 +53,34 @@ task :configure_algolia do
   end
 end
 
-RSpec::Core::RakeTask.new(:export_algolia) do
- Rake::Task["export_algolia"].invoke
-end
+task :configure_elastic do
+  puts "\nConfigure elastic indexes\n".green
+  client = Elasticsearch::Client.new url: 'http://elastic:9200', log: true
+  ['ci_shopinvader_variant', 'ci_shopinvader_category'].each do | index_name |
+    ['fr_FR', 'en_US'].each do | lang |
+      index_full_name = "#{index_name}_#{lang}".downcase
+      puts "\nConfigure Elastic index #{index_full_name}\n".green
+      if client.indices.exists? index: index_full_name
+        client.indices.delete index: index_full_name
+      end
 
-RSpec::Core::RakeTask.new(:configure_algolia) do
- Rake::Task["configure_algolia"].invoke
+      settings = JSON.parse(File.read("spec/integration/data/#{index_name}_elastic_setting.json"))
+      client.indices.create index: index_full_name, body: settings
+
+      data = JSON.parse(File.read("spec/integration/data/#{index_full_name}.json"))
+      body = []
+      data.each do | vals |
+        body << {index: { _index: index_full_name.downcase, _id: vals['id'], data: vals}}
+      end
+      client.bulk body: body
+    end
+  end
 end
 
 RSpec::Core::RakeTask.new(:spec) do
  Rake::Task["clear"].invoke
+ Rake::Task["configure_algolia"].invoke
+ Rake::Task["configure_elastic"].invoke
 end
 
-#task default: :spec
+task default: :spec

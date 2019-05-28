@@ -3,8 +3,16 @@ require 'locomotive/steam/services'
 module Locomotive::Steam::Services
   class Instance
 
+    register :elastic do
+      ShopInvader::ElasticService.new(current_site, request.env['authenticated_entry'], locale)
+    end
+
     register :algolia do
       ShopInvader::AlgoliaService.new(current_site, request.env['steam.authenticated_entry'], locale)
+    end
+
+    register :search_engine do
+      ShopInvader::SearchEngineService.new(current_site, locale, elastic, algolia)
     end
 
     register :erp do

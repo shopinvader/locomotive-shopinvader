@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 <url>
     <loc>http://example.org/</loc>
-    <lastmod>2019-04-23</lastmod>
+    <lastmod>2019-05-27</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr" />
   </url>
 <url>
@@ -24,6 +24,10 @@
     <url>
       <loc>http://example.org/mid-century-armchair</loc>
       <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/fauteuil-mid-century" />
+    </url>
+    <url>
+      <loc>http://example.org/laundry-basket</loc>
+      <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/panier-linge" />
     </url>
     <url>
       <loc>http://example.org/mid-century-armchair</loc>
