@@ -94,7 +94,8 @@ module ShopInvader
 
     def _find_by_key(index, name, key)
       response = index.search('', {
-        filters: "(url_key:#{key} OR redirect_url_key:#{key})"
+        filters: "(url_key:#{key} OR redirect_url_key:#{key})",
+        distinct: 0,
       })
       response = _parse_response(response)
       resource = nil
