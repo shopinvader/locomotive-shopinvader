@@ -1,5 +1,6 @@
 module ShopInvader
   class SearchEngineService
+    attr_reader :adapter
 
     def initialize(site, locale, elastic, algolia)
       @locale    = ShopInvader::LOCALES[locale.to_s]

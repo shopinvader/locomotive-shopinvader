@@ -41,7 +41,8 @@ module ShopInvader
         end
 
         def is_search_engine_collection?(name)
-          service.search_engine.indices.any? { |index| index['name'] == name }
+
+          service.search_engine.adapter && service.search_engine.indices.any? { |index| index['name'] == name }
         end
 
         def service
