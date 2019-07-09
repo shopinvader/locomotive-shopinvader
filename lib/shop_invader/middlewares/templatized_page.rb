@@ -57,7 +57,7 @@ module ShopInvader
       end
 
       def match_routes
-        if search_engine.routes
+        if search_engine.adapter && search_engine.routes
           search_engine.routes.find_all do |(path, _)|
             regexp = Regexp.new("\\A#{path.gsub('*', '.*')}\\Z")
             regexp.match(env['steam.path'])

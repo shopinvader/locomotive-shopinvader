@@ -123,5 +123,20 @@ describe 'Connected to the search engine' do
 
       end
     end
+
+  end
+
+  describe "# Testing No Backend" do
+
+    before do
+      allow_any_instance_of(ShopInvader::ElasticService).to receive(:is_configured?).and_return(false)
+      allow_any_instance_of(ShopInvader::AlgoliaService).to receive(:is_configured?).and_return(false)
+    end
+
+    it 'get page that do not exist should return a 404' do
+      get 'missing-page'
+      expect(last_response.status).to eq 404
+    end
+
   end
 end
