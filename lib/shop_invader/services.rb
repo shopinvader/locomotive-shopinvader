@@ -4,7 +4,7 @@ module Locomotive::Steam::Services
   class Instance
 
     register :elastic do
-      ShopInvader::ElasticService.new(current_site, request.env['authenticated_entry'], locale)
+      ShopInvader::ElasticService.new(current_site, request.env['steam.authenticated_entry'], locale)
     end
 
     register :algolia do
