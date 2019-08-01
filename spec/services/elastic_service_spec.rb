@@ -27,6 +27,13 @@ RSpec.describe ShopInvader::ElasticService do
       end
     end
 
+    context "with nested in" do
+      let(:conditions) { { 'attributes.in' => {'color': ['red', 'yellow'] } } }
+
+      it 'returns 1 terms filter"' do
+        expect(subject).to eq(:bool => {:filter=>[{:terms=>{"attributes.color"=>["red", "yellow"]}}], :must_not=>[]})
+      end
+    end
 
     context "with nested facet filter" do
       let(:conditions) { { 'attributes' => {'color': 'red'} } }

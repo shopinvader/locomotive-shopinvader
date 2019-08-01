@@ -142,6 +142,8 @@ module ShopInvader
               end
             elsif %w(gt gte lt lte).include?(op)
               params[:bool][:filter] << { range: { name => { op => value } } }
+            elsif op == "in"
+              params[:bool][:filter] << { terms: { name => value } }
             else
               params[:bool][:filter] << { term: { name => value } }
             end
