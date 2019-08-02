@@ -133,6 +133,9 @@ module ShopInvader
 
     def build_params(conditions)
       { bool: { filter: [], must_not: [] }}.tap do |params|
+        if conditions.key?('raw_es_query')
+            return conditions['raw_es_query']
+        end
         conditions.each do |key, value|
           name, op = key.split('.')
           build_attr(name, value).each do | name, value |

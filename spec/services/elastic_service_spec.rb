@@ -83,5 +83,13 @@ RSpec.describe ShopInvader::ElasticService do
       end
     end
 
+    context "with raw query" do
+     let(:conditions) { { 'raw_es_query' => {:bool => {:filter=>[{:terms=>{"attributes.color"=>["red", "yellow"]}}]} } } }
+
+      it 'returns 2 range filter"' do
+        expect(subject).to eq(:bool => {:filter=>[{:terms=>{"attributes.color"=>["red", "yellow"]}}]} )
+      end
+    end
+
   end
 end
