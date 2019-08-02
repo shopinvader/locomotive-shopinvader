@@ -27,6 +27,13 @@ RSpec.describe ShopInvader::ElasticService do
       end
     end
 
+    context "with nested in" do
+      let(:conditions) { { 'attributes.in' => {'color': ['red', 'yellow'] } } }
+
+      it 'returns 1 terms filter"' do
+        expect(subject).to eq(:bool => {:filter=>[{:terms=>{"attributes.color"=>["red", "yellow"]}}], :must_not=>[]})
+      end
+    end
 
     context "with nested facet filter" do
       let(:conditions) { { 'attributes' => {'color': 'red'} } }
@@ -73,6 +80,14 @@ RSpec.describe ShopInvader::ElasticService do
 
       it 'returns all filter"' do
         expect(subject).to eq(:bool => {:filter=>[{:term=>{"categories.id"=>5}}, {:term=>{"attributes.color"=>"red"}}, {:range=>{"price.value"=>{"gt"=>10}}}], :must_not=>[{:term=>{"attributes.color"=>"red"}}, {:term=>{"attributes.color"=>"yellow"}}]})
+      end
+    end
+
+    context "with raw query" do
+     let(:conditions) { { 'raw_es_query' => {:bool => {:filter=>[{:terms=>{"attributes.color"=>["red", "yellow"]}}]} } } }
+
+      it 'returns 2 range filter"' do
+        expect(subject).to eq(:bool => {:filter=>[{:terms=>{"attributes.color"=>["red", "yellow"]}}]} )
       end
     end
 
