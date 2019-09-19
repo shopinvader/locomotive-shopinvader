@@ -31,7 +31,7 @@ module ShopInvader
       indices.map do |config|
         {}.tap do |records|
           site.locales.each do |locale|
-            index   = "#{config['index']}_#{ShopInvader::LOCALES[locale.to_s]}".downcase
+            index   = build_index_name(config['index'], locale.to_s)
             body =  {
               query: { match_all: {} },
               sort: @default_sort[config['name']] || []
