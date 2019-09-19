@@ -14,10 +14,12 @@ module ShopInvader
         @indices      = JSON.parse(site.metafields.dig('elasticsearch', 'indices') || '[]')
         @client       = Elasticsearch::Client.new hosts: @site.metafields.dig('elasticsearch', 'url')
         @routes       = JSON.parse(site.metafields.dig('elasticsearch', 'routes') || '[]')
+        @default_sort = JSON.parse(site.metafields.dig('elasticsearch', 'default_sort_order') || '{}')
       else
         @indices    = []
         @client     = nil
         @routes     = []
+        @default_sort = []
       end
     end
 
@@ -30,7 +32,10 @@ module ShopInvader
         {}.tap do |records|
           site.locales.each do |locale|
             index   = "#{config['index']}_#{ShopInvader::LOCALES[locale.to_s]}".downcase
-            body =  { query: { match_all: {} } }
+            body =  {
+              query: { match_all: {} },
+              sort: @default_sort[config['name']] || []
+            }
             body[:size]=100
             result = @client.search(
               index: index,
@@ -62,7 +67,8 @@ module ShopInvader
       body = {
         from: page * per_page,
         size: per_page,
-        track_total_hits: true
+        track_total_hits: true,
+        sort: @default_sort[name] || []
       }
 
       if conditions
