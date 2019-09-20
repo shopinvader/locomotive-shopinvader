@@ -37,6 +37,13 @@ module Locomotive::Steam
 
         def inject_cookies(headers)
           if is_erp_connected_site
+            # Context: Varnish will cache the page with a Vary on the role
+            # As a new user do not have any cookies
+            # if we want to serve a cached page, we have to cache a page without role cookie
+            # as a page without role cookie is the same a page with the default role
+            # it's better to never set the "default" role in cookie and instead
+            # set an empty cookie for the default role
+            # This is why we remove the cookie if the user have the same as the default value
             role = customer && customer.role
             if role != default_role
               # TODO make the max_age configurable maybe we should use the same age as the main cookie

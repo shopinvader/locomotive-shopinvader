@@ -11,6 +11,8 @@ before_install:
   - docker-compose -f ci.docker-compose.yml run --rm --service-ports shopinvader bundle install
 
 env:
+  global:
+    - CC_TEST_REPORTER_ID=c97b2af21886dbc32a599a689922a3bcb53e89d725f8d20c5e7ddb332b55bede
   matrix:
     - VERSION="10.0"
 

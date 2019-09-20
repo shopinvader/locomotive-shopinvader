@@ -32,11 +32,12 @@ services:
       - ELASTIC_IP=127.0.0.1
       - ELASTIC_PORT=9200
     volumes:
-      - .:/workspace
+      - .:/home/travis/build/shopinvader/locomotive-shopinvader
       - ./bundle:/usr/local/bundle
     depends_on:
       - odoo
       - elastic
+    working_dir: /home/travis/build/shopinvader/locomotive-shopinvader
 volumes:
   esdata:
 version: '3'
