@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Specify your gem's dependencies in shop_invader.gemspec
 gemspec
 
-gem 'locomotivecms_steam', github: 'akretion/steam', branch: 'fix-impersonnate'
-#gem 'locomotivecms_steam', path: '/gems/steam'
+gem 'locomotivecms_steam', github: 'locomotivecms/steam'
 gem 'faraday'
 gem 'algoliasearch'
 gem 'elasticsearch'

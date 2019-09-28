@@ -2,11 +2,38 @@ require 'spec_helper'
 
 RSpec.describe ShopInvader::ElasticService do
 
-  let(:metafields)  { { 'elasticsearch' => { } } }
-  let(:site)      { instance_double('Site', metafields: metafields, locales: ['en']) }
+  let(:metafields)  { { 'elasticsearch' => { 'url' => 'http://elastic' }} }
+  let(:metafields_schema) { [{'name' => 'elasticsearch'}] }
+  let(:site)      { instance_double('Site', metafields: metafields, metafields_schema: metafields_schema, locales: ['en']) }
   let(:customer)  { nil }
   let(:locale)    { 'fr' }
   let(:service)   { described_class.new(site, customer, locale) }
+
+  describe 'Test if it is configured' do
+
+    subject { service.send(:is_configured?) }
+
+    context "Elasticsearch is configured" do
+      it 'returns True (configured)' do
+        expect(subject).to eq(true)
+      end
+    end
+
+    context "Elasticsearch is configured but metafield is missing" do
+      let(:metafields_schema) { [] }
+
+      it 'returns False (not configured)' do
+        expect(subject).to eq(false)
+      end
+    end
+
+    context "Elasticsearch is not configured but metafield exist" do
+      let(:metafields)  { {} }
+      it 'returns False (not configured)' do
+        expect(subject).to eq(false)
+      end
+    end
+  end
 
   describe '#build_index_name for local fr' do
 
