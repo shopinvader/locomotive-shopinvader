@@ -13,10 +13,37 @@ RSpec.describe ShopInvader::AlgoliaService do
     },
     'erp' => { 'default_role' => 'public_tax_inc' }
   } }
-  let(:site)      { instance_double('Site', metafields: metafields, locales: ['en']) }
+  let(:metafields_schema) { [{'name' => 'algolia'}] }
+  let(:site)      { instance_double('Site', metafields: metafields, metafields_schema: metafields_schema, locales: ['en']) }
   let(:customer)  { nil }
   let(:locale)    { 'fr' }
   let(:service)   { described_class.new(site, customer, locale) }
+
+  describe 'Test if it is configured' do
+
+    subject { service.send(:is_configured?) }
+
+    context "Algolia is configured" do
+      it 'returns True (configured)' do
+        expect(subject).to eq(true)
+      end
+    end
+
+    context "Algolia is configured but metafield is missing" do
+      let(:metafields_schema) { [] }
+
+      it 'returns False (not configured)' do
+        expect(subject).to eq(false)
+      end
+    end
+
+    context "Algolia is not configured but metafield exist" do
+      let(:metafields)  { {} }
+      it 'returns False (not configured)' do
+        expect(subject).to eq(false)
+      end
+    end
+  end
 
   describe '#build_index_name for local fr' do
 

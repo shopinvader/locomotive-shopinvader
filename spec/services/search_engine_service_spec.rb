@@ -5,7 +5,8 @@ RSpec.describe ShopInvader::SearchEngineService do
   let(:indices)     { '[{ "name": "products", "index": "ci_shopinvader_variant" }, { "name": "categories", "index": "ci_shopinvader_category" }]' }
   let(:routes)      { '[]' }
   let(:metafields)  { {} }
-  let(:site)      { instance_double('Site', metafields: metafields, locales: ['en']) }
+  let(:metafields_schema)  { {} }
+  let(:site)      { instance_double('Site', metafields: metafields, metafields_schema: metafields_schema, locales: ['en']) }
   let(:customer)  { nil }
   let(:locale)    { 'en' }
   let(:elastic)   { ShopInvader::ElasticService.new(site, customer, locale) }
@@ -25,6 +26,7 @@ RSpec.describe ShopInvader::SearchEngineService do
             'routes'          => routes
             }
           } }
+        let(:metafields_schema) { [{'name' => 'elasticsearch'}] }
 
       elsif backend == 'algolia'
 
@@ -37,6 +39,7 @@ RSpec.describe ShopInvader::SearchEngineService do
             'routes'          => routes
             }
           } }
+        let(:metafields_schema) { [{'name' => 'algolia'}] }
 
       end
 
