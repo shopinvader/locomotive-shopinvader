@@ -33,6 +33,14 @@ RSpec.describe ShopInvader::ElasticService do
         expect(subject).to eq(false)
       end
     end
+
+    context "Elasticsearch is empty but metafield exist" do
+      let(:metafields)  { {'elasticsearch' => {'url' => ''}} }
+      it 'returns False (not configured)' do
+        expect(subject).to eq(false)
+      end
+    end
+
   end
 
   describe '#build_index_name for local fr' do

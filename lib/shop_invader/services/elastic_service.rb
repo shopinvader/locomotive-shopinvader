@@ -24,7 +24,7 @@ module ShopInvader
     end
 
     def is_configured?
-      !!(@site.metafields_schema.find { |s| s['name'] == 'elasticsearch' } && @site.metafields.dig('elasticsearch', 'url'))
+      (@site.metafields_schema.find { |s| s['name'] == 'elasticsearch' } && @site.metafields.dig('elasticsearch', 'url') || '') != ''
     end
 
     def find_all_products_and_categories

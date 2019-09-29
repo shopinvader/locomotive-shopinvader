@@ -32,7 +32,7 @@ module ShopInvader
     end
 
     def is_configured?
-      !!(@site.metafields_schema.find { |s| s['name'] == 'algolia' } && @site.metafields.dig('algolia', 'application_id'))
+      (@site.metafields_schema.find { |s| s['name'] == 'algolia' } && @site.metafields.dig('algolia', 'application_id') || '') != ''
     end
 
     def find_all_products_and_categories
