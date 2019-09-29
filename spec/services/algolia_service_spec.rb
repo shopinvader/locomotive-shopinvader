@@ -43,6 +43,14 @@ RSpec.describe ShopInvader::AlgoliaService do
         expect(subject).to eq(false)
       end
     end
+
+    context "Algolia is empty and metafield exist" do
+      let(:metafields)  { {'algolia' => {'application_id' => ''}} }
+      it 'returns False (not configured)' do
+        expect(subject).to eq(false)
+      end
+    end
+
   end
 
   describe '#build_index_name for local fr' do
