@@ -1,5 +1,7 @@
 require 'digest'
 
+ODOO_SESSION = {}
+
 module ShopInvader
   class ErpService
     include ShopInvader::Services::Concerns::LocaleMapping
@@ -206,8 +208,16 @@ module ShopInvader
           else
             content_type = 'application/x-www-form-urlencoded'
           end
-          client.headers.update({'Content-Type': content_type})
-          client.send(method.downcase, path, params)
+          client.headers.update({
+              'Content-Type': content_type,
+              'Cookie': "session_id=#{ODOO_SESSION[@site._id]}"
+          })
+          response = client.send(method.downcase, path, params)
+          cookies = Rack::Utils.parse_cookies_header(response.headers['set-cookie'])
+          if cookies["session_id"]
+            ODOO_SESSION[@site._id] = cookies['session_id']
+          end
+          response
         rescue
           log_error 'Odoo Error: server have an internal error, active maintenance mode'
           raise ShopInvader::ErpMaintenance.new('ERP under maintenance')
