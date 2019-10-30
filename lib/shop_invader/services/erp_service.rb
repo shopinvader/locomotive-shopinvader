@@ -182,7 +182,7 @@ module ShopInvader
     def get_header_for_request(locale, request)
       headers = {
         api_key: @site.metafields['erp']['api_key'],
-        acept_language: map_locale(locale.to_s),
+        accept_language: map_locale(locale.to_s),
       }
       add_client_header(request, headers)
       add_header_info_from_session(headers)
