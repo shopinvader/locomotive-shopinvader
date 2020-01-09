@@ -1,0 +1,18 @@
+--find-links https://wheelhouse.acsone.eu/manylinux1
+--extra-index https://wheelhouse.acsone.eu/shopinvader-simple/
+--extra-index https://wheelhouse.odoo-community.org/oca-simple/
+
+# odoo + shopinvader
+-r https://raw.githubusercontent.com/odoo/odoo/12.0/requirements.txt
+https://nightly.odoo.com/12.0/nightly/src/odoo_12.0.latest.zip
+https://github.com/OCA/openupgradelib/archive/master.tar.gz
+odoo12_addon_shopinvader_demo_app
+
+
+# Used to initialize and update the odoo database with the
+# shopinvader_demor_app
+click-odoo-contrib
+
+# Get ir.config.paramter from odoo.cfg to ease the configuration
+# of odoo from the docker-compose file
+odoo12_addon_server_environment_ir_config_parameter
