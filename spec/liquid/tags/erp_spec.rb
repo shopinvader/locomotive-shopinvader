@@ -42,15 +42,15 @@ describe Locomotive::Steam::Liquid::Tags::Consume do
     end
 
     describe 'validates syntax with params' do
-      let(:source)  { "{% erp get 'sale_order' with 42 %}" }
-      let(:params)    { ['GET', 'sale_order', 42]}
+      let(:source)  { "{% erp get 'sale_order' with foo: 'bar' %}" }
+      let(:params)    { ['GET', 'sale_order', {'foo': 'bar'}]}
       it { expect { subject }.not_to raise_exception }
       it { is_expected.to eq '' }
     end
 
     describe 'validates syntax with params and result and render it' do
-      let(:source)  { "{% erp get 'sale_order' as sale with 42 %}{{ sale }}" }
-      let(:params)    { ['GET', 'sale_order', 42]}
+      let(:source)  { "{% erp get 'sale_order' as sale with foo: 'bar' %}{{ sale }}" }
+      let(:params)    { ['GET', 'sale_order', {'foo': 'bar'}]}
       it { expect { subject }.not_to raise_exception }
       it { is_expected.to eq '{"name"=>"SO42", "total"=>42}' }
     end
@@ -66,7 +66,7 @@ describe Locomotive::Steam::Liquid::Tags::Consume do
       it { is_expected.to eq '' }
     end
 
-    describe 'validates a basic syntax with post' do
+    describe 'validbtes a basic syntax with post' do
       let(:method)    { 'post' }
       it { expect { subject }.not_to raise_exception }
       it { is_expected.to eq '' }
