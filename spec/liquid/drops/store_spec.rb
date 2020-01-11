@@ -16,19 +16,19 @@ describe ShopInvader::Liquid::Drops::Store do
 
       let(:indices) { '[{"name": "category" }]' }
 
-      it { expect(drop.before_method('category')).to be_an_instance_of(ShopInvader::Liquid::Drops::SearchEngineCollection) }
+      it { expect(drop.liquid_method_missing('category')).to be_an_instance_of(ShopInvader::Liquid::Drops::SearchEngineCollection) }
 
     end
 
     context "the collection do not exist in algolia so it's an ErpCollection" do
 
-      it { expect(drop.before_method('categories')).to be_an_instance_of(ShopInvader::Liquid::Drops::ErpCollection) }
+      it { expect(drop.liquid_method_missing('categories')).to be_an_instance_of(ShopInvader::Liquid::Drops::ErpCollection) }
 
     end
 
     context "the object is a singleton and do not exist in algolia so it's an ErpItem" do
 
-      it { expect(drop.before_method('category')).to be_an_instance_of(ShopInvader::Liquid::Drops::ErpItem) }
+      it { expect(drop.liquid_method_missing('category')).to be_an_instance_of(ShopInvader::Liquid::Drops::ErpItem) }
 
     end
 

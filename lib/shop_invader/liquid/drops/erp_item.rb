@@ -8,7 +8,7 @@ module ShopInvader
           @name = name
         end
 
-        def before_method(meth)
+        def liquid_method_missing(meth)
           fetch_resource[meth]
         end
 

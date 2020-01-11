@@ -16,7 +16,7 @@ module ShopInvader
       #
       class Store < ::Liquid::Drop
 
-        def before_method(meth)
+        def liquid_method_missing(meth)
           if ONLY_SESSION_STORE.include?(meth)
             data = service.erp.is_cached?(meth) && service.erp.read_from_cache(meth)
             if ONLY_ONE_TIME.include?(meth)
