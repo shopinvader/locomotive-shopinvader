@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+import os
+import subprocess
+
+
+db_name = os.getenv("DB_NAME")
+
+if db_name:
+    for database in db_name.split(","):
+        subprocess.check_call(
+            ["click-odoo-update", "--if-exists", "-d", database, "--i18n-overwrite"]
+        )
+        subprocess.check_call(
+            [
+                "click-odoo-initdb",
+                "--unless-exists",
+                "-n",
+                database,
+                "-m",
+                "shopinvader_demo_app,server_environment_ir_config_parameter",
+            ]
+        )
+

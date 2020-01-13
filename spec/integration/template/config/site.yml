@@ -56,7 +56,7 @@ metafields:
           ["*", { "name": "product", "template_handle": "product", "index": "products" } ]
       ]
   erp:
-    api_key: "12345"
+    api_key: "key1"
     api_url: http://odoo:8069/shopinvader
     default_role: default
   payment:

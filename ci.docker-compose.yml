@@ -13,13 +13,27 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
   odoo:
+    build:
+      context: odoo
+      dockerfile: Dockerfile-${ODOO_VERSION}
     environment:
-      - DB_NAME=db
-      - VIRTUAL_HOST=shopinvader-odoo.dy
-      - VIRTUAL_PORT=8069
-      - DEMO=True
-      - ODOO_ADMIN_PASSWORD=test
-    image: quay.io/akretion/shopinvader-odoo:${VERSION}-latest
+      RUNNING_ENV: demo
+      DB_USER: odoo
+      DB_PASSWORD: odoo
+      DB_NAME: odoo-shopinvader-demo
+      DB_HOST: db
+      DB_FILTER: odoo-shopinvader-demo
+      SERVER_WIDE_MODULES: web,queue_job
+      ODOO_QUEUE_JOB_CHANNEL: =root:4,root.search_engine:4,root.search_engine.recompute_json:4,root.search_engine.prepare_batch_export:4
+      ADMIN_PASSWD: admin
+      UNACCENT: "true"
+      LIMIT_TIME_CPU: 900
+      LIMIT_TIME_REAL: 1800
+      MAX_CRON_THREADS: 1
+      LOG_LEVEL: info
+      ADDITIONAL_ODOO_RC: |-
+        [ir.config_parameter]
+        report.url=http://odoo:8069
     depends_on:
       - db
   shopinvader:
@@ -27,7 +41,7 @@ services:
     environment:
       - PGHOST=db
       - PGUSER=odoo
-      - PGDATABASE=db
+      - PGDATABASE=odoo-shopinvader-demo
       - ALGOLIA_APP_ID=C04JR8U8Y1
       - ELASTIC_IP=127.0.0.1
       - ELASTIC_PORT=9200

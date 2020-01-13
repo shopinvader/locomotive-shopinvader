@@ -14,8 +14,8 @@ describe ShopInvader::Liquid::Drops::ErpItem do
 
     it 'calls the erp service to return an item' do
       expect(services.erp).to receive(:call).with('GET', 'cart', nil).and_return(response)
-      expect(subject.before_method('name')).to eq 42
-      expect(subject.before_method('total')).to eq 300
+      expect(subject.liquid_method_missing('name')).to eq 42
+      expect(subject.liquid_method_missing('total')).to eq 300
     end
 
   end

@@ -28,9 +28,16 @@ describe Locomotive::Steam::Liquid::Tags::PathTo do
 
     it { is_expected.to eq '/ipad-pro' }
 
-    context 'with a different template' do
+    context 'with a different template (old syntax)' do
 
       let(:source) { "{% path_to product, with: on_sale_product %}" }
+      it { is_expected.to eq '/on-sale/ipad-pro' }
+
+    end
+
+    context 'with a different template' do
+
+      let(:source) { "{% path_to product, with: 'on_sale_product' %}" }
       it { is_expected.to eq '/on-sale/ipad-pro' }
 
     end

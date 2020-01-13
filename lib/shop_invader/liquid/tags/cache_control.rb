@@ -11,7 +11,7 @@ module Locomotive
           def initialize(tag_name, markup, options)
             if markup =~ SyntaxVary
               @cache_key = $1.try(:gsub, /['"]/, '')
-              @params = parse_options_from_string($2)
+              @params = $2.split(",").map{|p| ::Liquid::Expression.parse(p.strip())}
             elsif markup =~ Syntax
               @cache_key = $1.try(:gsub, /['"]/, '')
             else
@@ -24,7 +24,7 @@ module Locomotive
           def render(context)
             @context = context
             if @params
-              request.env['steam.cache_vary'] = @params.interpolate(context)
+              request.env['steam.cache_vary'] = @params.map{|p| context.evaluate(p)}
             end
             duration = cache_config[@cache_key]
             if duration

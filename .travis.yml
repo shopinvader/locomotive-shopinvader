@@ -14,7 +14,9 @@ env:
   global:
     - CC_TEST_REPORTER_ID=c97b2af21886dbc32a599a689922a3bcb53e89d725f8d20c5e7ddb332b55bede
   matrix:
-    - VERSION="10.0"
+    # TODO FIX Odoo installation in 10
+    #- ODOO_VERSION="10"
+    - ODOO_VERSION="12"
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter

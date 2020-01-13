@@ -4,6 +4,9 @@ module Locomotive
       module Tags
 
         class Erp < ::Liquid::Tag
+
+          include Concerns::Attributes
+
           Base = "(#{::Liquid::VariableSignature}+)\s*(#{::Liquid::QuotedString}|#{::Liquid::VariableSignature}+)"
           Syntax = /#{Base}/o
           SyntaxWith = /#{Base}\s*with\s*(.*)?/o
@@ -14,10 +17,10 @@ module Locomotive
             syntax_error = false
             if markup =~ SyntaxAsWith
               @method_name, service_path, @to = $1, $2, $3
-              @params = parse_options_from_string($4)
+              parse_attributes($4)
             elsif markup =~ SyntaxWith
               @method_name, service_path = $1, $2
-              @params = parse_options_from_string($3)
+              parse_attributes($3)
             elsif markup =~ SyntaxAs
               @method_name, service_path, @to = $1, $2, $3
             elsif markup =~ Syntax
@@ -43,14 +46,14 @@ module Locomotive
           end
 
           def render(context)
+            if @attributes
+              evaluate_attributes(context)
+            end
             @context = context
             if instance_variable_defined?(:@variable_service_path)
               @service_path = context[@variable_service_path]
             end
-            if @params
-              @params = interpolate_options(@params, context)
-            end
-            result = service.call(@method_name, @service_path, @params)
+            result = service.call(@method_name, @service_path, @attributes)
             if @to
               context.scopes.last[@to] = result
             end

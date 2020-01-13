@@ -7,8 +7,8 @@ module ShopInvader
 
           def render_path(context, &block)
             handle = context[@handle] || @handle
-
             if handle.is_a?(Hash) && handle['url_key'].present?
+              evaluate_attributes(context)
               set_vars_from_context(context)
               build_fullpath_from_index_name(handle['index_name'], handle['url_key'])
             else
