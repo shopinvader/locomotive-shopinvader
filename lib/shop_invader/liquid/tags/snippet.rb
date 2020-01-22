@@ -7,7 +7,6 @@ module Locomotive
 
           def render(context)
             @context = context
-            @template_name = evaluate_snippet_name(context)
             if not defined?(Rails)
                 # We are using wagon without varnish
                 # esi_include is automatically processed like an include
