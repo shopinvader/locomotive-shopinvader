@@ -24,13 +24,15 @@ module Locomotive
           private
 
           def snippet_path
+            template_name = @context.evaluate(@template_name_expr)
+
             default_locale = site.default_locale.to_sym
             same_locale = locale == default_locale
 
             if site.prefix_default_locale || !same_locale
-              "/#{locale}/snippet/#{@template_name}"
+              "/#{locale}/snippet/#{template_name}"
             else
-              "/snippet/#{@template_name}"
+              "/snippet/#{template_name}"
             end
           end
 
