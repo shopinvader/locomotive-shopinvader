@@ -55,6 +55,14 @@ describe Locomotive::Steam::Liquid::Tags::Consume do
       it { is_expected.to eq '{"name"=>"SO42", "total"=>42}' }
     end
 
+    describe 'validates syntax with dynamic params and result and render it' do
+      let(:assigns) { { 'params' => Locomotive::Steam::Liquid::Drops::Params.new({ foo: 'bar' }) } }
+      let(:source)  { "{% erp get 'sale_order' as sale with foo: params.foo %}{{ sale }}" }
+      let(:params)    { ['GET', 'sale_order', {'foo': 'bar'}]}
+      it { expect { subject }.not_to raise_exception }
+      it { is_expected.to eq '{"name"=>"SO42", "total"=>42}' }
+    end
+
     describe 'raises an error if the syntax is incorrect' do
       let(:source)  { "{% erp get as sale with 42 %}{{ sale }}" }
       it { expect { subject }.to raise_exception(Liquid::SyntaxError) }
