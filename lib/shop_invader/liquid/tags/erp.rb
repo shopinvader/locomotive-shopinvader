@@ -46,7 +46,7 @@ module Locomotive
           end
 
           def render(context)
-            if @attributes
+            if @raw_attributes
               evaluate_attributes(context)
             end
             @context = context
