@@ -3,10 +3,18 @@ module ShopInvader
     class ErpProxy < Locomotive::Steam::Middlewares::ThreadSafe
 
       include Locomotive::Steam::Middlewares::Concerns::Helpers
+      include Locomotive::Steam::Middlewares::Concerns::Recaptcha
 
       def _call
         if env['steam.path'].start_with?('invader/')
           path = env['steam.path'].sub('invader/', '')
+          if recaptcha_required(path) && !is_recaptcha_verified?(params["g-recaptcha-response"])
+            if force_redirection || html_form_edition
+              return _process_error_redirection
+            else
+              return render_response("{'recaptcha_invalid': true}", 403, 'application/json')
+            end
+          end
           response = erp.call_without_parsing(env['REQUEST_METHOD'], path, params)
           if response.status == 200 && response.headers["content-type"] != "application/json"
             _render_download(response)
@@ -16,6 +24,15 @@ module ShopInvader
             _render_json(response)
           end
         end
+      end
+
+      def recaptcha_required(path)
+        JSON.parse(site.metafields.dig('erp', 'api_required_recaptcha') || '[]').each do | config |
+          if env['REQUEST_METHOD'].upcase() == config["method"].upcase() && config["actions"].include?(path)
+            return true
+          end
+        end
+        false
       end
 
       def _render_download(response)
@@ -54,11 +71,15 @@ module ShopInvader
           end
         else
           erp.catch_error(response)
-          if params.include?('invader_error_url')
-            redirect_to params['invader_error_url'], 302
-          else
-            redirect_to env['HTTP_REFERER'], 302
-          end
+          _process_error_redirection
+        end
+      end
+
+      def _process_error_redirection
+        if params.include?('invader_error_url')
+          redirect_to params['invader_error_url'], 302
+        else
+          redirect_to env['HTTP_REFERER'], 302
         end
       end
 
