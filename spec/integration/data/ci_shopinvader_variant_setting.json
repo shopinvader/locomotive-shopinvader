@@ -3,7 +3,8 @@
     "categories.id",
     "main",
     "url_key",
-    "redirect_url_key"
+    "redirect_url_key",
+    "price.public_tax_exc.value"
   ],
   "ranking": [
     "typo",

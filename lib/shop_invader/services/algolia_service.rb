@@ -121,13 +121,20 @@ module ShopInvader
           build_attr(name, value).each do | name, value |
             if value.is_a?(Numeric)
               params[:numericFilters] << "#{name} #{NUMERIC_OPERATORS[op] || '='} #{value}"
+            elsif op == 'in'
+              params[:facetFilters] << value.collect { |x| "#{name}:#{x}" }
             else
               [*value].each do |_value|
                 if _value.is_a?(Numeric) && op == 'nin'
                   params[:numericFilters] << "#{name} != #{_value}"
                 else
-                  params[:facetFilters] << "#{op == 'ne' ? 'NOT ' : ''}#{name}:#{_value}"
+                  if ['ne', 'nin'].include?(op)
+                     params[:facetFilters] << "NOT #{name}:#{_value}"
+                  else
+                     params[:facetFilters] << "#{name}:#{_value}"
+                  end
                 end
+
               end
             end
           end

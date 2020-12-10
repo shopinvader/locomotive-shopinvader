@@ -121,6 +121,12 @@ describe 'Connected to the search engine' do
           expect(last_response.body).to eq "\n\n  Laundry basket\n\n\n"
         end
 
+        it 'store.products with scope with in filter should return 2 products' do
+          get 'search-engine/store_products_with_scope_in'
+          expect(last_response.status).to eq 200
+          expect(last_response.body).to eq "\n\n  TV Media Stand\n\n  Mid-Century Armchair (Red)\n\n  Mid-Century Armchair (Blue)\n\n  Mid-Century Armchair (Yellow)\n\n\n"
+        end
+
       end
     end
 
