@@ -111,7 +111,15 @@ RSpec.describe ShopInvader::AlgoliaService do
       let(:conditions) { { 'attributes.nin' => {'color': ['red', 'yellow'] } } }
 
       it 'returns 2 must not filter"' do
-        expect(subject).to eq({:facetFilters=>["attributes.color:red", "attributes.color:yellow"], :numericFilters=>[]})
+        expect(subject).to eq({:facetFilters=>["NOT attributes.color:red", "NOT attributes.color:yellow"], :numericFilters=>[]})
+      end
+    end
+
+    context "with nested in" do
+      let(:conditions) { { 'attributes.in' => {'color': ['red', 'yellow'] } } }
+
+      it 'returns 2 must not filter"' do
+        expect(subject).to eq({:facetFilters=>[["attributes.color:red", "attributes.color:yellow"]], :numericFilters=>[]})
       end
     end
 
