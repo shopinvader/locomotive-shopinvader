@@ -8,7 +8,7 @@ module ShopInvader
       def _call
         if env['steam.path'].start_with?('invader/')
           path = env['steam.path'].sub('invader/', '')
-          if recaptcha_required(path) && !is_recaptcha_verified?(params["g-recaptcha-response"])
+          if recaptcha_required(path) && !is_recaptcha_verified?(params.delete("g-recaptcha-response"))
             if force_redirection || html_form_edition
               return _process_error_redirection
             else
