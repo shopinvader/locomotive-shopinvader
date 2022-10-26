@@ -1,4 +1,4 @@
-FROM quay.io/akretion/docky-ruby:latest
+FROM ghcr.io/akretion/docky-ruby:latest
 
 RUN DEBIAN_FRONTEND=noninteractive \
     && apt-get update \

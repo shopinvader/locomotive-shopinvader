@@ -3,9 +3,10 @@ services:
     environment:
       - POSTGRES_USER=odoo
       - POSTGRES_DB=db
+      - POSTGRES_PASSWORD=odoo
     volumes:
-      - .db/:/var/lib/postgresql/data
-    image: quay.io/akretion/postgresql:10
+      - db/:/var/lib/postgresql/data
+    image: postgres:13
   elastic:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
     environment:
@@ -46,12 +47,13 @@ services:
       - ELASTIC_IP=127.0.0.1
       - ELASTIC_PORT=9200
     volumes:
-      - .:/home/travis/build/shopinvader/locomotive-shopinvader
+      - .:/home/runner/work/locomotive-shopinvader/locomotive-shopinvader
       - ./bundle:/usr/local/bundle
     depends_on:
       - odoo
       - elastic
-    working_dir: /home/travis/build/shopinvader/locomotive-shopinvader
+    working_dir: /home/runner/work/locomotive-shopinvader/locomotive-shopinvader
 volumes:
   esdata:
+  db:
 version: '3'

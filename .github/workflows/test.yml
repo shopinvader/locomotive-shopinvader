@@ -14,9 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        odoo_version: ["12.0"]
-        server_version: ["14.0"]
-        client_version: ["14.0", "12.0", "10.0", "8.0"]
+        odoo_version: ["12"]
     env:
       ODOO_VERSION: ${{ matrix.odoo_version }}
     steps:
