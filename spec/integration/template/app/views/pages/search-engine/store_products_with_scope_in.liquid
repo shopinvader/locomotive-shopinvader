@@ -2,7 +2,7 @@
 handle: store_products_with_scope_in
 slug: store_products_with_scope_in
 ---
-{% with_scope price.in: {public_tax_exc: { value: [50, 100] } } %}
+{% with_scope price.in: {public_tax_exc: { value: [50.0, 100.0] } } %}
 {% for product in store.products %}
   {{ product.name }}
 {% endfor %}
