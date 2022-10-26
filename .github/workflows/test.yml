@@ -14,11 +14,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        odoo_version: ["12.0"]
-        server_version: ["14.0"]
-        client_version: ["14.0", "12.0", "10.0", "8.0"]
+        odoo_version: ["12"]
     env:
       ODOO_VERSION: ${{ matrix.odoo_version }}
+      ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
     steps:
       - uses: actions/checkout@v3
         with:
