@@ -10,8 +10,9 @@ module ShopInvader
 
     attr_reader :client
     attr_reader :session
+    attr_reader :request
 
-    def initialize(request, site, session, customer, locale, cookie_service)
+    def initialize(request, site, session, customer, locale, cookie_service, entry_service)
       @customer = customer
       @site     = site
       @session  = session
@@ -20,6 +21,8 @@ module ShopInvader
         url: site.metafields['erp']['api_url'],
         headers: headers)
       @cookie_service = cookie_service
+      @entry_service = entry_service
+      @request = request
     end
 
     def call(method, path, params)
@@ -69,6 +72,21 @@ module ShopInvader
       parse_response(response)
     end
 
+    def authenticate_customer(email)
+      entry = @entry_service.all('customers', 'email' => email)
+
+      if entry.nil?
+        log "Invalid email '#{email}' for customer, skip impersonate"
+      else
+        entry = entry.first
+        session[:authenticated_entry_type]  = 'customers'
+        session[:authenticated_entry_id]    = entry&._id.to_s
+
+        request.env['steam.authenticated_entry'] = entry
+        request.env['steam.liquid_assigns']["current_customer"] = entry
+      end
+    end
+
     def parse_response(response)
       headers = response.headers
       if headers['content-type'] == 'application/json'
@@ -86,6 +104,9 @@ module ShopInvader
             # this allow to vary the content cached by proxy like varnish
             set_cookie_cache(key, json)
           end
+        end
+        if res.include?('force_authenticate_customer')
+          authenticate_customer(res['force_authenticate_customer'])
         end
         # TODO we can remove this if when on odoo side we will have correct
         # response encapsulation
