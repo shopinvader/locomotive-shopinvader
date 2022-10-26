@@ -1,0 +1,34 @@
+name: test Odoo addons
+
+on:
+  pull_request:
+    branches:
+      - "v4.0.x*"
+  push:
+    branches:
+      - "v4.0.x"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        odoo_version: ["12.0"]
+        server_version: ["14.0"]
+        client_version: ["14.0", "12.0", "10.0", "8.0"]
+    env:
+      ODOO_VERSION: ${{ matrix.odoo_version }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - name: Make db folder
+        run: mkdir .db
+      - name: Init Odoo Database
+        run: docker-compose -f ci.docker-compose.yml run --rm --service-ports odoo odoo --stop-after-init
+      - name: Install Shopinvader Gems
+        run: docker-compose -f ci.docker-compose.yml run --rm --service-ports shopinvader bundle install
+      - name: Run Test
+        run: docker-compose -f ci.docker-compose.yml run -e ALGOLIA_API_KEY=$ALGOLIA_API_KEY --rm --service-ports shopinvader bundle exec rake spec
+      - uses: codecov/codecov-action@v2
