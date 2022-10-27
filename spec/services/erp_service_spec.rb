@@ -31,7 +31,7 @@ RSpec.describe ShopInvader::ErpService do
   let(:locale)    { 'fr' }
   let(:customer)  { nil }
   let(:site)      { instance_double('Site', metafields: metafields, _id:42) }
-  let(:request)   { instance_double('Request', get_header: 'foo', ip: '42.42.42.42') }
+  let(:request)   { instance_double('Request', get_header: 'foo', ip: '42.42.42.42', env: {}) }
   let(:service)   { described_class.new(request, site, session, customer, locale, cookie_service)}
 
 
