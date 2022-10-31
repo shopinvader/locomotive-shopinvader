@@ -17,7 +17,7 @@ module Locomotive::Steam::Services
 
     register :erp do
       ShopInvader::ErpService.new(
-        request, current_site, request.env['rack.session'], request.env['steam.authenticated_entry'], locale, cookie)
+        request, current_site, request.env['rack.session'], request.env['steam.authenticated_entry'], locale, cookie, content_entry)
     end
 
     register :erp_auth do

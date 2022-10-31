@@ -8,6 +8,7 @@ gem 'locomotivecms_steam', '=1.6.0'
 gem 'faraday'
 gem 'algoliasearch'
 gem 'elasticsearch'
+gem 'rack-utm'
 
 group :test do
   gem 'simplecov',      require: false

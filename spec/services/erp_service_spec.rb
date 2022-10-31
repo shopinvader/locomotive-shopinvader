@@ -21,6 +21,8 @@ RSpec.describe ShopInvader::ErpService do
   let(:response)            { instance_double('Response', body: JSON.dump(erp_response), status: erp_response_status, headers: erp_response_headers) }
   let(:client)              { instance_double('FaradayClient', get: response, headers: headers) }
   let(:cookie_service)      { instance_double('CookieService', set: true) }
+  let(:customer_entry)      { instance_double('CustomerEntry', _id: 1234567) }
+  let(:entry_service)       { instance_double('ContentEntryService', all: [customer]) }
 
   let(:metafields)  { {
     'erp' => {
@@ -32,7 +34,7 @@ RSpec.describe ShopInvader::ErpService do
   let(:customer)  { nil }
   let(:site)      { instance_double('Site', metafields: metafields, _id:42) }
   let(:request)   { instance_double('Request', get_header: 'foo', ip: '42.42.42.42', env: {}) }
-  let(:service)   { described_class.new(request, site, session, customer, locale, cookie_service)}
+  let(:service)   { described_class.new(request, site, session, customer, locale, cookie_service, entry_service)}
 
 
   describe '#call GET' do
@@ -61,6 +63,14 @@ RSpec.describe ShopInvader::ErpService do
       it 'should store the data in the session' do
         is_expected.to eq({"data"=>{"name"=>"SO00042"}, "size"=>1})
         expect(session).to eq(expected_session)
+      end
+    end
+    context "The response ask for customer authentication" do
+      let(:erp_response)       { {'data' => {'name' => 'SO00042'},
+                                  'size' => 1,
+                                  'store_cache' => {'cart': {'name' => 'SO00042'}}} }
+      it "Custoer should be logged" do
+        is_expected.to eq({"data"=>{"name"=>"SO00042"}, "size"=>1})
       end
     end
   end
