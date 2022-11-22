@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe ShopInvader::SearchEngineService do
 
-  let(:indices)     { '[{ "name": "products", "index": "ci_shopinvader_variant" }, { "name": "categories", "index": "ci_shopinvader_category" }]' }
+  let(:indices)     { '[{ "name": "products", "index": "ci_shopinvader_variant", "have_variant": true }, { "name": "categories", "index": "ci_shopinvader_category" }]' }
   let(:routes)      { '[]' }
   let(:metafields)  { {} }
   let(:metafields_schema)  { {} }
@@ -50,7 +50,7 @@ RSpec.describe ShopInvader::SearchEngineService do
         subject { service.find_all_products_and_categories }
 
         it 'returns all the products and categories in all the site locales' do
-          expect(subject.size).to eq(8)
+          expect(subject.size).to eq(6)
           expect(subject.first.keys).to eq(['en'])
           expect(subject.first['en'].keys).to eq([:name, :url])
         end

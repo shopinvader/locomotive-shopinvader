@@ -31,12 +31,16 @@ module ShopInvader
       indices.map do |config|
         {}.tap do |records|
           site.locales.each do |locale|
-            index   = build_index_name(config['index'], locale.to_s)
-            body =  {
-              query: { match_all: {} },
-              sort: @default_sort[config['name']] || []
+            index = build_index_name(config['index'], locale.to_s)
+            # If you index contain main item only this item will be indexed
+            # If you add a key noindex on your index, this item will be skip from the sitemap
+            body = {
+              query: { bool: { must_not: [{ match: { main: false } }, { match: { noindex: true } } ] } },
+              sort: @default_sort[config['name']] || [],
+              _source: ['name', 'url_key'],
             }
-            body[:size]=100
+
+            body[:size] = 1000
             result = @client.search(
               index: index,
               scroll: '5m',

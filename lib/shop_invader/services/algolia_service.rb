@@ -44,6 +44,9 @@ module ShopInvader
             if config['have_variant']
                 filter = 'main: true'
             end
+            if config['have_noindex']
+                filter = 'noindex: false'
+            end
             params = {
                query: '',
                attributesToRetrieve: 'name,objectID,url_key',

@@ -28,12 +28,4 @@
     <url>
       <loc>http://example.org/laundry-basket</loc>
       <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/panier-linge" />
-    </url>
-    <url>
-      <loc>http://example.org/mid-century-armchair</loc>
-      <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/fauteuil-mid-century" />
-    </url>
-    <url>
-      <loc>http://example.org/mid-century-armchair</loc>
-      <xhtml:link rel="alternate" hreflang="fr" href="http://example.org/fr/fauteuil-mid-century" />
     </url></urlset>

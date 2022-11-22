@@ -36,7 +36,7 @@ metafields:
     indices: >
       [
         { "name": "categories", "index": "ci_shopinvader_category" },
-        { "name": "products", "index": "ci_shopinvader_variant" }
+        { "name": "products", "index": "ci_shopinvader_variant", "have_variant": true }
       ]
     routes: >
       [
