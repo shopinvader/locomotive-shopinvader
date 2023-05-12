@@ -126,14 +126,13 @@ module ShopInvader
       response = @client.search(
         index: find_index_name(name),
         body: body,
-        # by default the size is 10
+        # by default the size is 10 in elastic
         # which restrict to 10 variant
         # we put a really high limit of variant
         # because we do not want to have a limit
-        # if we have more then 10000 variants
-        # we certainly will have some perf issue before
-        # so we will latter see how to manage this case
-        size: 10000,
+        # In case of performance issue you can change
+        # the way you render the template and change the variant_size
+        size: @site.metafields.dig('elasticsearch', 'variant_size') || 10000,
       )
       response = _parse_response(response)
       resource = nil
