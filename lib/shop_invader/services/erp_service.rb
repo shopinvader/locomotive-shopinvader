@@ -140,7 +140,8 @@ module ShopInvader
 
     def set_cookie_cache(key, json)
       value = Digest::SHA256.hexdigest json
-      @cookie_service.set(key, {value: value, path: '/'})
+      # TODO make the max_age configurable maybe we should use the same age as the main cookie
+      @cookie_service.set(key, {value: value, path: '/', max_age: 1.year})
     end
 
     def catch_error(response)
