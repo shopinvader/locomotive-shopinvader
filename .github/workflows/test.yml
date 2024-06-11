@@ -25,9 +25,11 @@ jobs:
       - name: Make db folder
         run: mkdir .db
       - name: Init Odoo Database
-        run: docker-compose -f ci.docker-compose.yml run --rm --service-ports odoo odoo --stop-after-init
+        run: docker compose -f ci.docker-compose.yml run --rm --service-ports odoo odoo --stop-after-init
+      - name: Flag as safe
+        run: git config --global --add safe.directory /home/runner/work/locomotive-shopinvader/locomotive-shopinvader
       - name: Install Shopinvader Gems
-        run: docker-compose -f ci.docker-compose.yml run --rm --service-ports shopinvader bundle install
+        run: docker compose -f ci.docker-compose.yml run --rm --service-ports shopinvader bundle install
       - name: Run Test
-        run: docker-compose -f ci.docker-compose.yml run -e ALGOLIA_API_KEY=$ALGOLIA_API_KEY --rm --service-ports shopinvader bundle exec rake spec
+        run: docker compose -f ci.docker-compose.yml run -e ALGOLIA_API_KEY=$ALGOLIA_API_KEY --rm --service-ports shopinvader bundle exec rake spec
       - uses: codecov/codecov-action@v2
