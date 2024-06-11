@@ -49,8 +49,8 @@ module ShopInvader
 
             # first search which also returns _scroll_id
             result['hits']['hits'].each do |hit|
-              record = records[hit['_id']] ||= {}
               if hit['_source']['url_key']
+                record = records[hit['_id']] ||= {}
                 record[locale] = { name: hit['_source']['name'], url: find_route(config['name']).gsub('*', hit['_source']['url_key']) }
               end
             end
@@ -59,8 +59,8 @@ module ShopInvader
             # https://www.elastic.co/guide/en/elasticsearch/reference/6.6/search-request-scroll.html
             while result = @client.scroll(body: { scroll_id: result['_scroll_id'] }, scroll: '5m') and not result['hits']['hits'].empty? do
               result['hits']['hits'].each do |hit|
-                record = records[hit['_id']] ||= {}
                 if hit['_source']['url_key']
+                  record = records[hit['_id']] ||= {}
                   record[locale] = { name: hit['_source']['name'], url: find_route(config['name']).gsub('*', hit['_source']['url_key']) }
                 end
               end
