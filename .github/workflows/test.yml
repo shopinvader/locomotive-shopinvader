@@ -26,6 +26,8 @@ jobs:
         run: mkdir .db
       - name: Init Odoo Database
         run: docker compose -f ci.docker-compose.yml run --rm --service-ports odoo odoo --stop-after-init
+      - name: Flag as safe
+        run: git config --global --add safe.directory /home/runner/work/locomotive-shopinvader/locomotive-shopinvader
       - name: Install Shopinvader Gems
         run: docker compose -f ci.docker-compose.yml run --rm --service-ports shopinvader bundle install
       - name: Run Test
