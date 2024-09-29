@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        odoo_version: ["12"]
+        odoo_version: ["12", "14"]
     env:
       ODOO_VERSION: ${{ matrix.odoo_version }}
       ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
@@ -25,9 +25,9 @@ jobs:
       - name: Make db folder
         run: mkdir .db
       - name: Init Odoo Database
-        run: docker-compose -f ci.docker-compose.yml run --rm --service-ports odoo odoo --stop-after-init
+        run: docker compose -f ci.docker-compose.yml run --rm --service-ports odoo odoo --stop-after-init
       - name: Install Shopinvader Gems
-        run: docker-compose -f ci.docker-compose.yml run --rm --service-ports shopinvader bundle install
+        run: docker compose -f ci.docker-compose.yml run --rm --service-ports shopinvader bundle install
       - name: Run Test
-        run: docker-compose -f ci.docker-compose.yml run -e ALGOLIA_API_KEY=$ALGOLIA_API_KEY --rm --service-ports shopinvader bundle exec rake spec
+        run: docker compose -f ci.docker-compose.yml run -e ALGOLIA_API_KEY=$ALGOLIA_API_KEY --rm --service-ports shopinvader bundle exec rake spec
       - uses: codecov/codecov-action@v2
