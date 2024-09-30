@@ -44,9 +44,10 @@ services:
       - PGUSER=odoo
       - PGDATABASE=odoo-shopinvader-demo
       - PGPASSWORD=odoo
-      - ALGOLIA_APP_ID=C04JR8U8Y1
+      - ALGOLIA_APP_ID=GH41KF783Z
       - ELASTIC_IP=127.0.0.1
       - ELASTIC_PORT=9200
+      - ALGOLIA_API_KEY=$ALGOLIA_API_KEY
     volumes:
       - .:/home/runner/work/locomotive-shopinvader/locomotive-shopinvader
       - ./bundle:/usr/local/bundle

@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Specify your gem's dependencies in shop_invader.gemspec
 gemspec
 
-gem 'locomotivecms_steam', '=1.6.0'
+gem 'locomotivecms_steam', github: 'locomotivecms/steam', branch: 'master'
 gem 'faraday'
 gem 'algoliasearch'
 gem 'elasticsearch'

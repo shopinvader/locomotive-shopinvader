@@ -17,7 +17,7 @@ module Locomotive::Steam
         private
 
         def set_200_header(headers)
-          headers['Cache-Control'] = env['steam.cache_control'] || "max-age=0, private, must-revalidate"
+          headers['cache-control'] = env['steam.cache_control'] || "max-age=0, private, must-revalidate"
 
           # Always inject a vary on accept-language for the header
           # if the site have multiple lang on the home page
