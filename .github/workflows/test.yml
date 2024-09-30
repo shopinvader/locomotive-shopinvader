@@ -17,7 +17,8 @@ jobs:
         odoo_version: ["12", "14"]
     env:
       ODOO_VERSION: ${{ matrix.odoo_version }}
-      ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+      ALGOLIA_API_KEY: fooo
+        # ${{ secrets.ALGOLIA_API_KEY }}
     steps:
       - uses: actions/checkout@v3
         with:
