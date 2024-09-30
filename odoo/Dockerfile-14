@@ -2,7 +2,7 @@ FROM ghcr.io/acsone/odoo-bedrock:14.0-py39-latest
 
 RUN set -e \
   && apt update \
-  && apt -y install --no-install-recommends postgresql-client git \
+  && apt -y install --no-install-recommends postgresql-client libpq-dev  git \
   && apt -y clean \
   && rm -rf /var/lib/apt/lists/*
 
