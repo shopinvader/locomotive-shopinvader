@@ -31,8 +31,8 @@ metafields:
     logo: "/samples/assets/shop-logo.png"
     noimage: "/samples/assets/no-image.jpg"
   algolia:
-    application_id: 'C04JR8U8Y1'
-    api_key: "610bbcca628ecb66a8e3ec44483c9b33"
+    application_id: 'GH41KF783Z'
+    api_key: "ALGOLIA-API-KEY"
     indices: >
       [
         { "name": "categories", "index": "ci_shopinvader_category" },

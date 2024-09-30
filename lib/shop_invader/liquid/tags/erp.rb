@@ -5,22 +5,25 @@ module Locomotive
 
         class Erp < ::Liquid::Tag
 
-          include Concerns::Attributes
+          include Concerns::AttributesParser
 
           Base = "(#{::Liquid::VariableSignature}+)\s*(#{::Liquid::QuotedString}|#{::Liquid::VariableSignature}+)"
           Syntax = /#{Base}/o
           SyntaxWith = /#{Base}\s*with\s*(.*)?/o
           SyntaxAs = /#{Base}\s*as\s*(#{::Liquid::VariableSignature}+)/o
           SyntaxAsWith = /#{Base}\s*as\s*(#{::Liquid::VariableSignature}+)\s*with\s*(.*)?/o
+          attr_reader :attributes, :attributes_var_name
 
           def initialize(tag_name, markup, options)
+            super
+
             syntax_error = false
             if markup =~ SyntaxAsWith
               @method_name, service_path, @to = $1, $2, $3
-              parse_attributes($4)
+              @attributes = parse_markup($4)
             elsif markup =~ SyntaxWith
               @method_name, service_path = $1, $2
-              parse_attributes($3)
+              @attributes = parse_markup($3)
             elsif markup =~ SyntaxAs
               @method_name, service_path, @to = $1, $2, $3
             elsif markup =~ Syntax
@@ -46,16 +49,20 @@ module Locomotive
           end
 
           def render(context)
-            if @raw_attributes
-              evaluate_attributes(context)
-            end
             @context = context
-            if instance_variable_defined?(:@variable_service_path)
-              @service_path = context[@variable_service_path]
-            end
-            result = service.call(@method_name, @service_path, @attributes)
-            if @to
-              context.scopes.last[@to] = result
+            context.stack do
+              if @attributes
+                attrs = evaluate_attributes(context)
+              else
+                attrs = nil
+              end
+              if instance_variable_defined?(:@variable_service_path)
+                @service_path = context[@variable_service_path]
+              end
+              result = service.call(@method_name, @service_path, attrs)
+              if @to
+                context.scopes.last[@to] = result
+              end
             end
             nil
           end
