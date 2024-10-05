@@ -55,7 +55,7 @@ RSpec.describe ShopInvader::Middlewares::ErpProxy do
     context "In json" do
       it 'return a 403' do
         expect(services.recaptcha).to receive(:verify).with('foo').and_return(false)
-        is_expected.to eq [403, {"Content-Type"=>"application/json"}, ["{'recaptcha_invalid': true}"]]
+        is_expected.to eq [403, {"content-type"=>"application/json"}, ["{'recaptcha_invalid': true}"]]
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe ShopInvader::Middlewares::ErpProxy do
       let(:path)   { 'invader/customer/create' }
       it 'return a 403' do
         expect(services.recaptcha).to receive(:verify).with('foo').and_return(false)
-        is_expected.to eq [403, {"Content-Type"=>"application/json"}, ["{'recaptcha_invalid': true}"]]
+        is_expected.to eq [403, {"content-type"=>"application/json"}, ["{'recaptcha_invalid': true}"]]
       end
     end
 
@@ -73,7 +73,7 @@ RSpec.describe ShopInvader::Middlewares::ErpProxy do
 
       it 'return a redirection' do
         expect(services.recaptcha).to receive(:verify).with('foo').and_return(false)
-        is_expected.to eq [302, {"Content-Type"=>"text/html", "Location"=>"http://bar"}, []]
+        is_expected.to eq [302, {"content-type"=>"text/html", "location"=>"http://bar"}, []]
       end
     end
 
@@ -82,7 +82,7 @@ RSpec.describe ShopInvader::Middlewares::ErpProxy do
       let(:params) { {'invader_error_url': 'http://bar', 'g-recaptcha-response': 'foo'} }
       it 'return a redirection' do
         expect(services.recaptcha).to receive(:verify).with('foo').and_return(false)
-        is_expected.to eq [302, {"Content-Type"=>"text/html", "Location"=>"http://bar"}, []]
+        is_expected.to eq [302, {"content-type"=>"text/html", "location"=>"http://bar"}, []]
       end
     end
   end

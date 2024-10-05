@@ -94,6 +94,5 @@ Locomotive::Steam.configure do |config|
   config.adapter        = { name: :filesystem, path: default_fixture_site_path }
   config.asset_path     = File.expand_path(File.join(default_fixture_site_path, 'public'))
   config.serve_assets   = true
-  config.minify_assets  = true
 end
 

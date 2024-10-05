@@ -93,8 +93,8 @@ describe 'Authentication' do
         sign_in(params)
         expect(last_response.status).to eq 301
         expect(last_response.location).to eq '/account/customer'
-        expect(last_response.headers['Set-Cookie']).to include 'customer='
-        expect(last_response.headers['Set-Cookie']).to include 'cart='
+        expect(last_response.headers['Set-Cookie'][1]).to include 'cart='
+        expect(last_response.headers['Set-Cookie'][2]).to include 'customer='
         # TODO FIX ODOO in order to get back this test green
         #expect(session).to include "erp_cart_id"
         expect(session).to include "store_customer"

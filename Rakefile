@@ -7,6 +7,7 @@ require 'json'
 
 task :clear do
   puts "\nClear partner generated from previous test\n".green
+  `psql -c "DELETE FROM shopinvader_partner WHERE record_id in (SELECT id FROM res_partner WHERE email ILIKE '%rspec%' OR name ILIKE '%RSPEC')"`
   `psql -c "DELETE FROM res_partner WHERE email ILIKE '%rspec%' OR name ILIKE '%RSPEC'"`
 end
 
