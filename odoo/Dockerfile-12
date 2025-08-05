@@ -1,5 +1,5 @@
 FROM ghcr.io/acsone/odoo-bedrock:12.0-py37-focal-latest
-
+RUN sed -i "s/apt.postgresql.org/apt-archive.postgresql.org/"  /etc/apt/sources.list.d/pgdg.list
 RUN set -e \
   && apt update \
   && apt -y install --no-install-recommends postgresql-client git \
