@@ -16,7 +16,7 @@ module ShopInvader
             end
           end
           response = erp.call_without_parsing(env['REQUEST_METHOD'], path, params)
-          if response.status == 200 && response.headers["content-type"] != "application/json"
+          if response.status == 200 && !response.headers["content-type"]&.include?('application/json')
             _render_download(response)
           elsif force_redirection || html_form_edition
             _process_redirection(response)
