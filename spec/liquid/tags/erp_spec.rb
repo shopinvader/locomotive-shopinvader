@@ -38,7 +38,7 @@ describe Locomotive::Steam::Liquid::Tags::Consume do
     describe 'validates syntax with result and render it' do
       let(:source)  { "{% erp get 'sale_order' as sale %}{{ sale }}" }
       it { expect { subject }.not_to raise_exception }
-      it { is_expected.to eq '{"name"=>"SO42", "total"=>42}' }
+      it { is_expected.to eq '{"name" => "SO42", "total" => 42}' }
     end
 
     describe 'validates syntax with params' do
@@ -52,7 +52,7 @@ describe Locomotive::Steam::Liquid::Tags::Consume do
       let(:source)  { "{% erp get 'sale_order' as sale with foo: 'bar' %}{{ sale }}" }
       let(:params)    { ['GET', 'sale_order', {'foo'=> 'bar'}]}
       it { expect { subject }.not_to raise_exception }
-      it { is_expected.to eq '{"name"=>"SO42", "total"=>42}' }
+      it { is_expected.to eq '{"name" => "SO42", "total" => 42}' }
     end
 
     describe 'validates syntax with dynamic params and result and render it' do
@@ -60,7 +60,7 @@ describe Locomotive::Steam::Liquid::Tags::Consume do
       let(:source)  { "{% erp get 'sale_order' as sale with foo: params.foo %}{{ sale }}" }
       let(:params)    { ['GET', 'sale_order', {'foo'=> 'bar'}]}
       it { expect { subject }.not_to raise_exception }
-      it { is_expected.to eq '{"name"=>"SO42", "total"=>42}' }
+      it { is_expected.to eq '{"name" => "SO42", "total" => 42}' }
     end
 
     describe 'raises an error if the syntax is incorrect' do

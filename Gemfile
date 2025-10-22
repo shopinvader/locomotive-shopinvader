@@ -10,6 +10,8 @@ gem 'algoliasearch'
 gem 'elasticsearch'
 gem 'rack-utm'
 
+gem 'mutex_m'
+
 group :test do
   gem 'simplecov',      require: false
   gem 'codecov',        require: false
