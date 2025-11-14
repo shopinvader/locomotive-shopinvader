@@ -35,6 +35,31 @@ metafields:
 
 ```
 
+### Configure recaptcha for shopinvader endpoint
+
+For configuring the recaptcha you need first to add the new field api_required_recaptcha
+
+
+```
+erp:
+  label: Odoo ERP Integration
+  fields:
+    api_required_recaptcha:
+      type: string
+```
+
+Then you need to configure the method and patch that need a recaptcha
+
+```
+metafields:
+  erp:
+    api_required_recaptcha: >
+      [
+        {"method": "post", "actions": ["customer", "customer/create"]}
+      ]
+```
+
+
 **Notes:**
 
 - your customer content type should have a role attribute (possible values: public, pro, ...etc).
