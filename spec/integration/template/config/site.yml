@@ -31,7 +31,7 @@ metafields:
     logo: "/samples/assets/shop-logo.png"
     noimage: "/samples/assets/no-image.jpg"
   algolia:
-    application_id: 'BKJBRWH0K7'
+    application_id: 'M3YIMN319Y'
     api_key: "ALGOLIA-API-KEY"
     indices: >
       [
