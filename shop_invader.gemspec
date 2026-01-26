@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'algoliasearch', '~> 1.13.0'
+  spec.add_dependency 'algoliasearch', '~> 1.27.5'
   spec.add_dependency 'jwt', '~> 2.2.1'
   spec.add_dependency 'faraday', '~> 1.0'
   spec.add_dependency 'elasticsearch', '~> 6.2.0'
