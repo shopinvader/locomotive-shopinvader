@@ -44,7 +44,7 @@ services:
       - PGUSER=odoo
       - PGDATABASE=odoo-shopinvader-demo
       - PGPASSWORD=odoo
-      - ALGOLIA_APP_ID=BKJBRWH0K7
+      - ALGOLIA_APP_ID=M3YIMN319Y
       - ELASTIC_IP=127.0.0.1
       - ELASTIC_PORT=9200
       - ALGOLIA_API_KEY=$ALGOLIA_API_KEY
